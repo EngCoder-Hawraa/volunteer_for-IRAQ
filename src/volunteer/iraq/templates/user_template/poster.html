@@ -1,0 +1,176 @@
+{% extends 'user_template/base_template.html' %}
+{% load static %}
+
+{% block custom_css %}
+  <style>
+  .loading{
+    position:absolute;
+    margin-right:50%;
+    top:110%;
+    transform: translate(-50%,-50%);
+    display:flex;
+
+  } 
+  .loading li{
+    list-style:none;
+    width:20px;
+    height:20px;
+    background: #ffeb3b;
+    margin:0px 0px 30px 5px;
+    border-radius:50%;
+    animation: animate 1.4s linear infinite;
+  }
+
+@keyframes animate
+{
+    0%
+    {
+      transform: translateY(0);
+    }
+    60%
+    {
+    transform: translateY(0);
+    } 
+    80%
+    {
+    transform: translateY(-20);
+    } 
+    100%
+    {
+    transform: translateY(0);
+    } 
+}
+
+
+.loading li:nth-child(1){
+  animation-delay:0;
+}
+.loading li:nth-child(2){
+  animation-delay:-1.2s;
+}
+.loading li:nth-child(3){
+  animation-delay:-1s;
+}
+.loading li:nth-child(4){
+  animation-delay:-.8s;
+}
+.loading li:nth-child(5){
+  animation-delay:-.6s;
+}
+
+
+  </style>
+
+{% endblock custom_css %}
+
+
+
+{% block main_content %}
+
+<div class="" style="background-color:#F6F7F9;padding-top:40px;">
+  <div class="Boxshadow bg-white pt-3 row" style="margin-right:20px;margin-left:10px;border-radius:10px">
+    <p class="font-weight-bolder pt-4" style="color:#6F2DBD;margin-right:45%;margin-left:10%"> تصفح الفرص التطوعية</p>
+    <div class="row" style="margin-right:32%;">
+      <div class="col-sm-1">
+        <a  href="{% url 'poster1' %}" style="width:60px;height:60px;border:3px solid #3BA2FB;" class="p-3 nav-link rounded-circle Boxshadow mt-2">الكل</a>
+      </div>
+      <div class="col-sm-1">
+        <a  href="{% url 'search_PosterEdu_results1' %}"><img style="width:60px;height:60px;border:3px solid #3BA2FB; " class="rounded-circle Boxshadow mt-2" src="{% static 'iraq/images/Education.png' %}"  alt="Cinque Terre"></a>
+      </div>
+      <div class="col-sm-1">
+        <a  href="{% url 'search_PosterEnv_results1' %}"><img style="width:60px;height:60px;border:3px solid #3BA2FB;" class="rounded-circle Boxshadow mt-2" src="{% static 'iraq/images/Enviroment.png' %}"  alt="Cinque Terre"></a>
+      </div>
+      <div class="col-sm-1">
+        <a href="{% url 'search_PosterHea_results1' %}"><img style="width:60px;height:60px;border:3px solid #3BA2FB;" class="rounded-circle Boxshadow mt-2" src="{% static 'iraq/images/health.png' %}"  alt="Cinque Terre"></a>
+      </div>
+      <div class="col-sm-1">
+        <a  href="{% url 'search_PosterArt_results' %}"><img style="width:60px;height:60px;border:3px solid #3BA2FB;" class="rounded-circle Boxshadow mt-2" src="{% static 'iraq/images/art.png' %}"  alt="Cinque Terre"></a>
+      </div>
+      <div class="col-sm-1">
+        <a  href="{% url 'search_PosterOth_results1' %}"><img style="width:60px;height:60px;border:3px solid #3BA2FB; " class="rounded-circle Boxshadow mt-2" src="{% static 'iraq/images/others.png' %}"  alt="Cinque Terre"></a>
+      </div>
+    </div> 
+      <img style="width:100px;height:200px;margin-top:-100px" class="mr-5" src="{% static 'iraq/images/Poster.png' %}"  alt="Cinque Terre">
+     
+    <div class="row" style="margin-top:-120px;margin-right:42%;">
+      <a  class="nav-link pt-4" href="{% url 'search_PosterEdu_results1' %}" method="get" style="margin-top:10px" name="q">تعليم</a>
+      <a  class="nav-link pt-4"  href="{% url 'search_PosterEnv_results1' %}"><p style="margin-top:10px;">بيئة</p></a>
+      <a  class="nav-link pt-4" href="{% url 'search_PosterHea_results1' %}"><p style="margin-top:10px">صحة</p></a>
+      <a  class="nav-link pt-4" href="{% url 'search_PosterArt_results1' %}" ><p style="margin-top:10px">فنون</p></a>
+      <a  class="nav-link pt-4" href="{% url 'search_PosterOth_results1' %}" ><p style="margin-top:10px">أخرى</p></a>
+    </div> 
+</div>
+
+  <div class="row">
+    <p class="pt-4 font-weight-bolder" style="color: #6F2DBD;margin-right:100px"> جميع الفرص التطوعية</p>
+    <span style="background-color: #44A5E4; color:white;border:4px solid white;margin-right:50px;font-size:15px"  data-placement="top" title="عدد الاعلانات" class="bg-warning float-right mt-2  badge rounded-circle pt-3 pb-3 pr-4 pl-4 Boxshadow">{{num_poster}}</span>
+    
+  </div>
+{% if posters %}
+  {% for poster in posters %} 
+  <div class="Boxshadow text-center mt-3 pb-4 bg-white" style="margin-left:10px;border-radius: 8px;margin-right:20px">
+    <div class="row">
+      <div class="m-auto">
+          <div class=" mt-2">
+           <div class="row container mt-5 mb-5 mr-5">
+            <div class="col" data-placement="top" title="المكان">{{ poster.place }}</div>
+            <div class="col" data-placement="top" title="عدد المتطوعين" >num volunteer</div>
+            <div class="col" data-placement="top" title="يوم التطوع">{{ poster.date_poster }}</div>
+            <div class="col" data-placement="top" title="تاريخ التطوع">{{ poster.time_poster }}</div>
+            {% comment %} <i  data-toggle="modal" data-target="#edit_poster" style="color:#00C7FE" class="fas fa-user-edit mr-4" data-placement="top" title="تعديل"></i> {% endcomment %}
+          </div>
+          <div class="row">
+            <div class="col-sm-2">
+              <img class="float-right mb-2 mr-4 pl-2"  style="width:210px;height:210px;border-radius:3px;" src="/media/{{ poster.poster_image }}" alt="Card image">
+            </div>
+            <div class="col">
+              <a class="nav-link" href="{% url 'comments' %}"><p style="color:#6F2DBD;"class="float-right mr-5 mt-4 font-weight-bolder" data-placement="top" title="اسم الؤسسة">{{ poster.name }}/{{poster.classification}}</a></p> 
+              <p class="mr-5 ml-5 mb-5 text-center float-right">{{ poster.posts }}</p>      
+            </div>
+          </div>
+        </div> 
+      </div>
+    </div>
+  </div>
+  <!-- <div style="">
+    <ul class="loading">
+      <li class=""></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+    </ul>                            
+  </div>  -->
+  {% endfor %}
+{% else %}
+  <div class="Boxshadow text-center mt-3 mb-5" style="margin-left:10px;background-color:#EFFEFE;border-radius:27px;margin-right:20px">
+    <div class="row">
+      <div class=" m-auto">
+        <div class=" mt-2 mb-2">
+          <p class="card-title font-weight-bold pb-4 pt-4" style="color:#2699FB;font-size:25px;margin-right:100px"> لا توجد معلومات</p>
+          <img class="mb-4" src="{% static 'iraq/images/informationR.png' %}" style="height:228px; width:313px; margin-right: 70px;margin-top:20px" alt="Cinque Terre"> 
+        </div>
+      </div>
+    </div>
+  </div>
+{% endif %}
+
+
+
+
+<!--=-==Start Add Poster-->
+{% include  'hod_template/add_poster.html' %} 
+ <!--End Add Poster -->
+
+
+
+{% comment %} <!--=-==Start Edit Poster-->
+{% include  'hod_template/edit_poster.html' %} 
+ <!--End Edit Poster --> {% endcomment %}
+
+
+
+
+                              
+
+{% endblock main_content %}

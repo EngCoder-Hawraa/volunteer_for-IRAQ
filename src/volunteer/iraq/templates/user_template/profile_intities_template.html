@@ -1,0 +1,89 @@
+{% extends 'user_template/base_template.html' %}
+{% load static %} 
+
+{% block main_content %}
+<div class="row background Boxshadow font-weight-bolder" style="margin-right:20px; margin-top:40px;margin-left:20px;border-radius:8px;">
+    <div class="col pr-5 pb-3" style="padding-top:23px;">معلومات المؤسسة</div>
+    <div class="col mb-3">
+        
+
+
+        <!--======End Edit Intity =========-->
+        <!--End The Modal for Edit Intity -->
+    </div>
+</div>
+{% if intitys %}
+
+<div class="Boxshadow mb-5 pb-5" style=" margin-left:20px;border-radius:5px;border-radius:5px;margin-right:20px">
+    <a href="{% url 'delete_intities'  user.intity.id  %}"><i style="color:#00C7FE;margin-right:85%" class="mt-4 ml-5 fas fa-trash-alt"></i></a>
+    <div class="row">
+        <label class="col-sm-2 Color2 font-weight-bolder pr-5" style="margin-top:60px">اسم المؤسسة</label>
+        <div class="col-sm-3 Boxshadow text-center font-weight-bolder pt-3" style="margin-right:18px;margin-top:30px;background-color:#00C7FE;height:60px;border-radius:8px;color:white;width:350px">
+            {{ user.intity.name }}
+        </div>
+        <label class="col-sm-2 Color2 font-weight-bolder pr-5" style="margin-top:60px">المحافظة</label>
+        <div class="col-sm-3 Boxshadow text-center font-weight-bolder pt-3" style="margin-right:18px;background-color:#6F2DBD;height:60px;border-radius:8px;margin-top:30px;color:white;width:350px">
+            {{ user.intity.region }}
+        </div>
+    </div>
+
+
+    <div class="row">
+        <label class="col-sm-2 Color2 font-weight-bolder pr-5" style="margin-top:35px;">تأريخ التأسيس</label>
+        <div class="col-sm-3 Boxshadow text-center font-weight-bolder pt-3" style="background-color:#FDC101;height:60px;border-radius:8px;margin-top:20px;margin-right:18px;color:white;width:350px">
+            {{ user.intity.created}}
+        </div>
+        <label class="col-sm-2 Color2 font-weight-bolder pr-5" style="margin-top:35px;">التصنيف</label>
+        <div class="col-sm-3 Boxshadow text-center font-weight-bolder pt-3" style="background-color:#C51DB5;height:60px;border-radius:8px;margin-top:20px;margin-right:18px;color:white;width:350px">
+            {{ user.intity.classification }}
+        </div>
+    </div>
+
+
+
+    <div class="row">
+        <label class="Color2 font-weight-bolder pr-5" style="margin-top:35px;margin-right:20px">ملخص</label>
+        <div class="col-sm-10 Boxshadow  pt-3 float-right text-center" style="border-radius:8px;margin-top:20px;margin-right:30px;width:85%">
+            <p class="float-right">{{ user.intity.abstract}}</p>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <label class="Color2 font-weight-bolder pr-5" style="margin-top:35px;margin-right:20px">اعمالها</label>
+        <div class="col-sm-10 Boxshadow pt-3 float-right text-center" style="border-radius:8px;margin-top:20px;margin-right:30px;width:85%">
+            <p class="float-right">{{ user.intity.works}}</p>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <label for="username" class="Color2 font-weight-bolder pr-5" style="margin-top:35px;margin-right:20px">الترخيص</label>
+        <div class="" style="margin-top:20px;margin-right:20px;">
+            <a class="Boxshadow" href="{% url 'view_imageP' %}"><img class="float-right" style="width:200px;height:200px;border-radius:8px;" src="/media/{{ user.intity.permission}}" alt="Card image">
+                <div style="color:#fff;border-radius:8px" class="bg-primary text-center font-weight-bolder nav-link">عرض الترخيص</div>
+            </a>
+        </div>
+    </div>
+</div>
+{% else %}
+<div class="Boxshadow text-center" style="height:440px;margin-top:20px;background-color: #EFFEFE;border-radius: 27px;margin-right:20px;margin-left:20px;margin-bottom:40px;">
+    <div class="row">
+        <div class=" m-auto">
+            <div class=" mt-2 mb-2">
+                <p class="card-title font-weight-bold pb-4 pt-4 text-center" style="color:#2699FB;font-size:25px;"> لا توجد معلومات</p>
+                <img class="mb-4" src="{% static 'iraq/images/informationR.png' %}" style="height:228px; width:350px; margin-right: 70px;margin-top:20px" alt="Cinque Terre">
+            </div>
+        </div>
+    </div>
+</div> 
+{% endif %}
+
+<!--=-==Start Edit Intities-->
+{% include 'hod_template/add_intities_template.html' %} {% include 'hod_template/edit_intities_template.html' %}
+<!--End Edit Intities -->
+
+
+
+
+{% endblock main_content %}

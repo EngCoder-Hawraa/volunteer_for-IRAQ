@@ -1,0 +1,97 @@
+{% load static %}
+<DOCTYPE html lang="ar" dir="rtl">
+    <html>
+
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"> {% if title %}
+        <title>تطوع / {{title}}</title>
+        {% else %}
+        <title>تطوع</title>
+        {% endif%}
+        <link rel="stylesheet" href="{% static 'iraq/css/bootstrap.min.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'iraq/css/main.css' %}">
+    </head>
+
+    <body>
+        <style>
+
+        </style>
+        <!-- ==========  Start Navbar  ========== -->
+        <navbar>
+            <nav class="Boxshadow nav navbar navbar-inverse navbar-expand-md bg-white navbar-light sticky-top">
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                        <button class=" mb-2 navbar-toggler border-0 " type="button" data-toggle="collapse" data-target="#menu">
+         <span class="menu-toggle navbar-toggler-icon"> </span>
+      </button>
+                    </div>
+                    <img class="img-responsive" src="{% static 'iraq/images/logo.png' %}" style="width:70px;height:50px" alt="Cinque Terre">
+                    <div class="collapse navbar-collapse" id="menu">
+                        <ul class="nav navbar-nav navbar-right ml-auto">
+                            <li class="nav-item">
+                                <a class="nav-link text-center" href="{% url 'home' %}">الرئيسية</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-center" href="{% url 'intities' %}">المؤسسات</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-center" href="{% url 'about' %}">من نحن</a>
+                            </li>
+                        </ul>
+                        <button style="height: 45px;border-radius:5px;color:#fff;" class="btn col-md-1 text-center border-0 mt-2 mb-2 background1" onclick=document.location="{% url 'doLogin' %}">دخول</button>
+                        <button style="height: 45px;border-radius:5px;color:#fff;" class="btn col-md-1 text-center btn-primary border-0 mt-2  mb-2 mr-lg-2" onclick=document.location="{% url 'register_type' %}">تسجيل</button>
+                    </div>
+                </div>
+            </nav>
+        </navbar>
+        <!-- ========  End Navbar  ======== -->
+
+        {% block content %} {% endblock content %}
+
+        <!-- ======== Start Footer Section ======== -->
+        <section>
+            <div class="copyright text-center">
+                جميع الحقوق محفوظة البرمجة من اجل العراق /2020
+            </div>
+        </section>
+        <!-- ======== End  Footer Section ======== -->
+
+        </div>
+        {% comment %}
+        <script src="{% static 'iraq/js/myStyle.js' %}"></script> {% endcomment %}
+        <script src="{% static 'iraq/js/jquery-3.5.1.slim.min.js' %}"></script>
+        <script src="{% static 'iraq/js/popper.min.js' %}"></script>
+        <script src="{% static 'iraq/js/bootstrap.min.js' %}"></script>
+        {% comment %}
+        <script src="https://kit.fontawesome.com/a076d05399.js"></script> {% endcomment %}
+        <script src="{% static 'iraq/js/fontawesome-all.min.js' %}"></script>
+
+        {% comment %}
+        <script>
+            $(document).ready(function() {
+                $("button").click(function() {
+                    $("a").addClass("active");
+                });
+            });
+        </script> {% endcomment %}
+        <script type="text/javascript">
+            $(document).ready(function() {
+                $('.menu-toggle').click(function() {
+                    $('nav').toggleClass('active')
+                })
+            })
+        </script>
+
+        <script>
+            $(document).ready(function() {
+                $('.navbar li a').click(function() {
+                    $(this).addClass('active').siblings().removeClass('active');
+                    $('.navbar a').removeClass('active');
+                });
+            });
+        </script>
+
+    </body>
+
+    </html>

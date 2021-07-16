@@ -1,0 +1,142 @@
+{% extends 'user_template/base_template.html' %} {% load static %} {% block custom_css %}
+
+<style>
+    .cardI:hover {
+        -ms-transform: scale(0.5);
+        /* IE 9 */
+        -webkit-transform: scale(.5);
+        /* Safari 3-8 */
+        transform: scale(1.1);
+    }
+    
+    .loading {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background: #4973ff;
+        border-radius: 50%;
+        box-shadow: inset 0 0 50px rgba(0, 0, 0, .5);
+    }
+    
+    .loading:before,
+    .loading:after {
+        content: '';
+        position: absolute;
+        width: 200%;
+        height: 200%;
+        top: 0;
+        left: 50%;
+        transform: translate(-50%, -75%);
+        background: #000;
+    }
+    
+    .loading:before {
+        border-radius: 45%;
+        background: rgba(255, 255, 255, 1);
+        animation: animate 5s linear infinite;
+    }
+    
+    .loading:after {
+        border-radius: 40%;
+        background: rgba(255, 255, 255, .5);
+        animation: animate 5s linear infinite;
+    }
+    
+    @keyframes animate {
+        0% {
+            transform: translate(-50%, -75%) rotate(0deg);
+        }
+        100% {
+            transform: translate(-50%, -75%) rotate(360deg);
+        }
+    }
+</style>
+{% endblock custom_css %} {% block main_content %}
+<div class="row mr-0 ml-0 pt-2" style="background-color:#F6FCFD">
+    <div class="col-sm-4 col-md-5 p-5">
+        <img class="img-responsive" style="width:100%" src="{% static 'iraq/images/volunteer.png' %}" alt="app">
+    </div>
+    <div class="col-sm-8 col-md-6">
+        <form class="pb-5" style="padding-top:100px;" action="{% url 'search_Intities_results1' %}" method="get">
+            <input class="form-control Boxshadow bg-white border-0" style="border-radius:27px;font-size:15px;height:45px;width:450px;border:none;" name="q" type="text" placeholder="ابحث المؤسسات حسب الاسم او المحافظة او التصنيف">
+            <button class="border-0 text-center background1 Boxshadow pt-2 Borders1" style="margin-top:-60px;color:white;height:45px;width:15%;margin-right:370px;font-size:13px" type="submit">بحث<i class="fas pr-1 fa-search"></i></button>
+        </form>
+    </div>
+</div>
+
+<div style="color:white;border:4px solid white;font-size:15px;" data-placement="top" title="عدد المؤسسات" class="mt-3 mr-4 badge rounded-circle pt-3 pb-3 pr-4 pl-4 Boxshadow bg-warning">
+    {{intitys.count}}
+</div>
+
+
+<!--====== Cards ======-->
+<div>
+    <!--Section: Cards-->
+    <section class="text-center">
+        <!--Grid row-->
+        <div class="row wow fadeIn mr-1 ml-1" style="visibility: visible; animation-name: fadeIn;">
+            {% if intitys %} {% for intity in intitys %}
+            <div class="col-sm-3 rounded-top">
+                <!--Card image-->
+                <img class="card-img-top mt-4" style="width:100%;height:150px;border-radius: 5px; " src="/media/{{ intity.intities_pic }} " alt="Card image ">
+                <!--Card content-->
+                <div class="card-body Boxshadow " style="width:100%; margin-right:3px;border-radius:8px ">
+                    <!--Title-->
+                    <div class="col text-center mb-3 " style="color:#6F2DBD;font-size:20px " data-placement="top " title="اسم المؤسسة ">{{ intity.name }}</div>
+                    <div class="row font-weight-normal " style="color:white ">
+                        <div class="col Boxshadow text-center pt-2 pb-2 " style="height:40px;border-radius:8px;background-color:#6F2DBD;font-size:15px ">
+                            <i class="fas fa-map-marked-alt ml-3 " data-placement="top " title="المحافظة "></i> {{ intity.region }}
+                        </div>
+                        <div class=" col Boxshadow text-center pt-2 pb-2 " style="height:40px;border-radius:8px;margin-right:5px;margin-bottom:5px;background-color:#6F2DBD ">
+                            <i class="fas fa-book-reader ml-3 " data-placement="top " title="التصنيف "></i> {{ intity.classification }}
+                        </div>
+                    </div>
+                    <div class="Boxshadow text-center pt-2 pb-2 " style="color:white;height:40px;border-radius:8px;background-color:#6F2DBD; ">
+                        <i class="fas fa-calendar-alt ml-3 " data-placement="top " title="تاريخ التأسيس "></i> {{ intity.created}}
+                    </div>
+                    <div>
+                        <a href="{% url 'more_read_intities' %}" class="btn mt-3 background1 font-weight-bolder Boxshadow" style="color:white;border-radius: 10px;width:100%;height:43px;font-size:14px;background-color:#6F2DBD">قراءة المزيد</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+    <!--Section: Cards-->
+</div>
+<!--====== EndCards ======-->
+
+
+
+{% else %}
+<div class="Boxshadow text-center" style="height:500px;width:100%;margin-top:20px;background-color: #EFFEFE;border-radius: 27px;margin-right:20px;margin-left:20px;margin-bottom:40px;">
+    <div class="row">
+        <div class=" m-auto">
+            <div class=" mt-2 mb-2">
+                <p class="card-title font-weight-bold pb-4 pt-4 text-center" style="color:#2699FB;font-size:25px;"> لا توجد معلومات</p>
+                <img class="mb-4" src="{% static 'iraq/images/informationR.png' %}" style="height:228px; width:350px; margin-right: 70px;margin-top:20px" alt="Cinque Terre">
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+{% endif %}
+
+
+<div class="container">
+    <div class="row">
+        <div class="container">
+            <div class="row pt-2 mb-4">
+                <a href="#" class="intro-banner-vdo-play-btn pinkBg" target="_blank">
+                    <i class="glyphicon glyphicon-play whiteText" aria-hidden="true"></i>
+                    <span class="ripple pinkBg"></span>
+                    <span class="ripple pinkBg"></span>
+                    <span class="ripple pinkBg"></span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock main_content %}

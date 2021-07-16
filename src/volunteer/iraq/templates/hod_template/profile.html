@@ -1,0 +1,85 @@
+{% extends 'hod_template/base_template.html' %} {% load static %} {% block main_content %}
+<div class="pb-5 pt-5" style="background-color:#F6FCFD">
+    {% if user %}
+    <form action="{% url 'profile_edit_staff' %}">
+        <div class="row mt-5">
+            <div class="col-sm-4">
+                <p class="font-weight-bold" style="margin-right:100px;color:#3BA2FB;"> الملف الشخصي</p>
+                <img style="width:200px;height:200px;border:10px solid white;" class="mt-3 mr-5 bg-success rounded-circle" src="{{user.staff.profile_pic.url}}" src="{{user.adminhod.profile_pic.url}}" alt="الصورة الشخصية">
+                <span class="border-0 row badge badge-warning rounded-circle " style="margin-right:150px;margin-top:-50px;width:30px;height:30px;color:#fff;" data-placement="top" title="عدد الاعلانات"><a href="#"></a>
+                <i data-toggle="modal" data-target="#mypicture" class="dd fas fa-camera fa-lg mt-1" data-placement="top" title="تعديل صورة الملف الشخصي"></i>
+            </span>
+                <h5 class="mt-" style="color:#3BA2FB;margin-right:120px">{{user}}</h5>
+            </div>
+            <div class="col-sm-7">
+                <div class="row">
+                    <div class="col">
+                        <label>الاسم</label>
+                        <input style="height:50px" type="text" class="form-control border-0" id="user" placeholder="الاسم" name="user" value="{{ user }}">
+                    </div>
+                    <div class="col">
+                        <label>البريد الالكتروني</label>
+                        <input style="height:50px" type="email" class="form-control border-0" id="email" placeholder="موقعك الالكتروني" name="user.email" value="{{ user.email }}">
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col">
+                        <label>رقم الهاتف</label>
+                        <input style="height:50px" type="text" class="form-control border-0" id="phone" placeholder="رقم الهاتف" name="phone" value="{{ user.phone }}">
+                    </div>
+                    <div class="col">
+                        <label for="">المحافظة</label>
+                        <select class="form-control border-0" name="region" style="height:50px">
+                            {% for region in region %}
+                              <option value="{{region.id}}" >{{ region }}</option>
+                            {% endfor %}
+                          </select>
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col">
+                        <label for="">تاريخ الميلاد</label>
+                        <input style="height:50px" type="date" class="form-control border-0" id="date" placeholder="تاريخ الميلاد" name="date" value={{user.birth}}>
+                    </div>
+                    <div class="col">
+                        <label for="">الجنس</label>
+                        <select class="form-control border-0" name="gender" value="الجنس" style="height:50px">
+                              <option value=""  >ذكر</option>
+                              <option value=""  >انثى</option>
+                          </select>
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col">
+                        <label for="">الوظيفة</label>
+                        <input style="height:50px" type="text" class=" pt-3 form-control border-0" placeholder="الوظيفة" name="employee" value="{{user.employee}}">
+                    </div>
+                    <div class="col">
+                        <label for="">كلمة المرور</label>
+                        <input style="height:50px" type="password" class="form-control border-0" placeholder="كلمة المرور" name="password1" value="password1">
+                    </div>
+                </div>
+                <button style="width:650px;height:50px;border-radius:5px" type="submit" class="mt-5 mb-5 btn btn-primary mt-3">اضافة</button>
+    </form>
+    </div>
+    </div>
+</div>
+
+
+
+
+
+{% else %}
+<div class="Boxshadow text-center mt-3 pb-5 " style="height:500px;margin-right:20px;margin-left:20px;background-color: #EFFEFE;border-radius: 8px; ">
+    <div class="row ">
+        <div class=" m-auto ">
+            <div class=" mt-2 mb-2 ">
+                <p class="card-title font-weight-bold pb-4 pt-4 " style="color:#2699FB;font-size:25px;margin-right:100px "> لا توجد معلومات</p>
+                <img class="mb-4 " src="{% static 'iraq/images/informationR.png' %} " style="height:228px; width:313px; margin-right: 70px;margin-top:20px " alt="Cinque Terre ">
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+</div>
+{% endblock main_content %}

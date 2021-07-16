@@ -1,0 +1,25 @@
+{% load static %}
+
+
+
+{% block custom_css %}
+<link rel="stylesheet" href ="{% static 'iraq/css/mystyle.css' %}">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">
+
+{% endblock custom_css %}
+{% block data %}
+
+
+<div class="row Boxshadow bg-primary m-2" style="border-radius:27px 250px 80px 80px">
+  <div class="col-sm-8" style="font-family:'tajawal'">
+    <p style="color:#fff;font-size:20px;margin-top:200px;text-align:center">تم الخروج عزيزي</p>
+    <p class="pb-5" style="font-weight:bold;font-size:30px;text-align:center"><a  href="{% url 'doLogin' %}"  style="color:#fff;margin-top:200px"> سجل الدخول من هنا</a></p>
+  </div>
+  <div class="col-sm-4">
+    <img   style="margin-top:150px;" src="{% static 'iraq/images/logout.png' %}"   alt="Cinque Terre">
+  </div>
+</div> 
+
+{% endblock %}
