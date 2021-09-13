@@ -1,24 +1,25 @@
 {% load static %}
+<!-- /* ======== Start Edit Intities Page ======== */ -->
 <!-- The Modal -->
 <div class="modal Boxshadow" id="edit">
     <div class="modal-dialog">
         <div class="modal-content border-0">
             <!-- Modal Header -->
-            <div class="modal-header bg-primary Boxshadow">
-                <button type="button" class="close" data-dismiss="modal" style="color:white">&times;</button>
-                <p class="modal-title text-center font-weight-bolder" style="font-size:15px;color:white">تعديل معلومات المؤسسة</p>
+            <div class="modal-header bg-primary">
+                <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
+                <p class="modal-title text-center text-white font-size3">تعديل معلومات المؤسسة</p>
             </div>
             <!-- Modal body -->
-            <!--==== Note:.... action="/update_intities/{{intity.id}}" if you need used id input form ==== -->
             <!-- form start -->
             <form role="form" action="{% url 'edit_intities'  %}" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="modal-body">
                     {% if intitys %}
-                    <div class="form-group mt-2 ">
-                        <label class="float-right">اسم المؤسسة</label>
-                        <input class="col-sm-12 Boxshadow" type="text" style="border: 1px solid #44A5E4;height:50px;border-radius:8px;" placeholder="اكتب اسم المؤسسة" name="name" value="{{user.intity.name}}">
-                        <!-- <div class="form-group  mt-2">
+                    <div class="form-group mt-3">
+                        <label class="control-label float-right">اسم المؤسسة</label>
+                        <input class="col-sm-12 Boxshadow Borders4 H2 Borders7" type="text" placeholder="اكتب اسم المؤسسة" name="name" value="{{user.intity.name}}">
+                    </div>
+                    <!-- <div class="form-group  mt-2">
                       <label class=" float-right" >المحافظة </label>
                       <select class="col-sm-12 Boxshadow" name="region" style="border: 1px solid #44A5E4;height:50px;border-radius:8px;"  >
                         {% for region in region %}
@@ -26,11 +27,11 @@
                         {% endfor %}
                       </select>
                     </div> -->
-                        <div class="form-group mt-2">
-                            <label class="float-right">تاريخ التأسيس</label>
-                            <input class="col-sm-12 Boxshadow" type="date" style="border: 1px solid #44A5E4;height:50px;border-radius:8px;" placeholder="اكتب هنا" name="created" value="{{intity.created}}">
-                        </div>
-                        <!-- <div class="form-group  mt-2">
+                    <div class="form-group">
+                        <label class="control-label float-right">تاريخ التأسيس</label>
+                        <input class="col-sm-12 Boxshadow Borders4 H2 Borders7" type="date" placeholder="اكتب هنا" name="created" value="{{intity.created}}">
+                    </div>
+                    <!-- <div class="form-group  mt-2">
                       <label class="float-right">التصنيف</label>
                         <select class="col-sm-12 Boxshadow" name="classification" style="border: 1px solid #44A5E4;height:50px;border-radius:8px;" >
                         {% for classification in classification %}
@@ -38,45 +39,43 @@
                         {% endfor %} 
                         </select>
                     </div> -->
-                        <div class="form-group mt-2">
-                            <label class="float-right">اعمالها</label>
-                            <textarea class="col-sm-12 Boxshadow" rows="3" name="works" placeholder="اكتب ..." style="border: 1px solid #44A5E4;border-radius:8px" value="{{intity.works}}"> </textarea>
-                        </div>
-                        <div class="form-group mt-2">
-                            <label class="float-right">ملخص</label>
-                            <textarea class="col-sm-12 Boxshadow" rows="3" name="abstract" placeholder="اكتب ..." style="border: 1px solid #44A5E4;border-radius:8px;" value="{{intity.abstract}}"></textarea>
-                        </div>
-                        <div class="form-group mt-2">
-                            <label class="float-right">الترخيص</label>
-                            <input type="file" class="col-sm-12  pt-3 Boxshadow" name="profile2" style="border: 1px solid #44A5E4;height:50px;border-radius:8px;">
-                        </div>
-                        <div class="form-group mt-2">
-                            <label class="float-right">صورةالمؤسسة</label>
-                            <input type="file" class="col-sm-12 pt-3 Boxshadow" name="profile1" style="border: 1px solid #44A5E4;height:50px;border-radius:8px">
-                        </div>
-                        <!-- Modal footer -->
-                        <div class="modal-footer center float-right">
-                            <button type="submit" name="submit" style="border-radius:34px;background-color:#00C7FE;border:none;width:204px;height:41px;color:white;font-size:14px" class=" text-center font-weight-bolder">
-                      <i class="fas fa-check"></i> حفظ
-                      </button> {% for intity in intitys %}
-                            <input type="hidden" value="{{ intity.id }}" name="id">
-                            <button class="btn btn-danger" data-dismiss="modal" style="border-radius:34px;border:none;width:204px;height:41px;color:white;font-size:14px" class=" text-center font-weight-bolder">
-                      <i class="fas fa-times"></i> اغلاق
-                      </button>
-                        </div>
-                        {% endfor %} {% endif %}
-
-                        <div class="form-group">
-                            {% if messages %} {% for message in messages %} {% if message.tags == 'error' %}
-                            <div class="alert alert-danger" style="margin-top:10px">{{ message }}</div>
-                            {% endif %} {% if message.tags == 'success' %}
-                            <div class="alert alert-success" style="margin-top:10px">{{ message }}</div>
-                            {% endif %} {% endfor %} {% endif %}
-                        </div>
+                    <div class="form-group">
+                        <label class="control-label float-right">اعمالها</label>
+                        <textarea class="col-sm-12 Boxshadow Borders4 H2 Borders7" rows="3" name="works" placeholder="اكتب ..." value="{{intity.works}}"> </textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label float-right">ملخص</label>
+                        <textarea class="col-sm-12 Boxshadow Borders4 H2 Borders7" rows="3" name="abstract" placeholder="اكتب ..." value="{{intity.abstract}}"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label float-right">الترخيص</label>
+                        <input type="file" class="col-sm-12  pt-3 Boxshadow Borders4 H2 Borders7" name="profile2">
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label float-right">صورةالمؤسسة</label>
+                        <input type="file" class="col-sm-12 pt-3 Boxshadow" name="profile1">
+                    </div>
+                    <!-- Modal footer -->
+                    <div class="modal-footer center">
+                        <button type="submit" name="submit" class="text-center Borders1 bg-primary border-0 text-white font-size3" style="width:204px;height:41px">
+                            <i class="fas fa-check"></i> حفظ
+                        </button> {% for intity in intitys %}
+                        <input type="hidden" value="{{ intity.id }}" name="id">
+                        <button data-dismiss="modal" class="text-center Borders1 bg-danger border-0 text-white font-size3" style="width:204px;height:41px"> 
+                            <i class="fas fa-times"></i> اغلاق
+                        </button>
                     </div>
                 </div>
+            </form>
+            <!-- form end -->
         </div>
-
     </div>
-</div>
-</form>
+    {% endfor %} {% endif %}
+    <div class="form-group">
+        {% if messages %} {% for message in messages %} {% if message.tags == 'error' %}
+        <div class="alert alert-danger" style="margin-top:10px">{{ message }}</div>
+        {% endif %} {% if message.tags == 'success' %}
+        <div class="alert alert-success" style="margin-top:10px">{{ message }}</div>
+        {% endif %} {% endfor %} {% endif %}
+    </div>
+    <!-- /* ======== End Edit Intities Page ======== */ -->

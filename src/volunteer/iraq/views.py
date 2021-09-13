@@ -62,7 +62,7 @@ class SearchIntitiesResultsView2(ListView):
     def get_queryset(self): # new
         query = self.request.GET.get('q')
         object_list = Intity.objects.filter(
-            Q(name__icontains=query) | Q(region__icontains=query) | Q(classification__icontains=query)
+            Q(name__icontains=query)  | Q(classification__icontains=query)
         )
         return object_list
 
@@ -94,6 +94,11 @@ def RegisterIntities(request):
         email=request.POST.get("email")
         password=request.POST.get("password1")
         address=request.POST.get("password2")
+        # phone=request.POST.get("phone")
+        # birth=request.POST.get("birth")
+        # gender=request.POST.get("gender")
+        # employee=request.POST.get("employee")
+        # region=request.POST.get("region")
         recaptcha_response = request.POST.get('g-recaptcha-response')
         data = {
             'secret' : settings.GOOGLE_RECAPTCHA_SECRET_KEY,
@@ -103,8 +108,14 @@ def RegisterIntities(request):
         result = r.json()
         if result['success']:
             try:
-                user=CustomUser.objects.create_user(username=username,password=password,email=email,user_type=2)
-                user.staff.address=address
+                # user=CustomUser.objects.create_user(username=username,email=email,password=password,address=address,phone=phone,birth=birth,gender=gender,emplouser_type=2)
+                user=CustomUser.objects.create_user(username=username,password=password,email=email,user_type=1)
+                user.adminhod.address=address
+                # user.adminhod.phone=phone
+                # user.staff.birth=birth
+                # user.adminhod.gender=gender
+                # user.adminhod.employee=employee
+                # user.adminhod.region=region
                 user.save()
                 messages.success(request , f'تهانينا  {user} تم التسجيل بنجاح . ')
                 return HttpResponseRedirect(reverse("doLogin"))
@@ -115,7 +126,8 @@ def RegisterIntities(request):
             messages.error(request ,  ' invalid Recaptcha please try again!') 
     context = {
         'form':form,
-        'title':'تسجيل المستخدم',}
+        'title':'تسجيل المؤسسة',
+        }
     return render(request, "iraq/register_intities.html", context)
 
 
@@ -160,9 +172,9 @@ def doLogin(request):
                     if user.user_type =="1":
                         return HttpResponseRedirect('/admin_home')
                     elif user.user_type =="2":
-                        return HttpResponseRedirect(reverse("admin_home"))
-                    else:
                         return HttpResponseRedirect(reverse("user_home"))
+                    # else:
+                    #     return HttpResponseRedirect(reverse("user_home"))
                 else:
                     messages.error(request ,  ' هناك خطأ في اسم المستخدم او كلمة المرور !')
             else:
@@ -170,7 +182,7 @@ def doLogin(request):
                 return HttpResponseRedirect("doLogin")
         context= {
             'title':'دخول',
-            'form':form
+            'form':form,
         }
         messages.error(request ,  ' هناك خطأ في اسم المستخدم او كلمة المرور !')
         return render(request, 'iraq/login_page.html',context)
@@ -208,7 +220,7 @@ def RegisterUser(request):
         result = r.json()
         if result['success']:
             try:
-                user=CustomUser.objects.create_user(username=username,password=password,email=email,user_type=3)
+                user=CustomUser.objects.create_user(username=username,password=password,email=email,user_type=2)
                 user.people.address=address
                 user.save()
                 messages.success(request , f'تهانينا  {user} تم التسجيل بنجاح . ')

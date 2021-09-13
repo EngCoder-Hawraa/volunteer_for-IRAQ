@@ -1,6 +1,6 @@
- {% load static %}
+<!-- {% load static %}
 <!-- The Modal -->
-<div class="modal" id="mypicture">
+<div class="modal" id="mypicture1">
     <div class="modal-dialog">
         <div class="modal-content border-0">
 
@@ -14,20 +14,21 @@
             <!-- form start -->
 
 
-            <form role="form" action="#" method="post" enctype="multipart/form-data">
+            <form role="form" action="" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="modal-body">
                     <div class="form-group">
                         <img class="mb-4" src="{{user.staff.profile_pic.url}}" style="width:200px;height:100px;margin-right:100px">
                         <label class="control-label float-right">صورة الملف الشخصي</label>{{user.staff.profile_pic}}
-                        <input type="file" value="{{user.staff.profile_pic}}" name="user.staff.profile_pic" class="col-sm-12 Boxshadow pt-3" style="border: 1px solid #44A5E4;height:50px;border-radius:8px;">
+                        <input type="file" name="profile" class="col-sm-12 Boxshadow pt-3" style="border: 1px solid #44A5E4;height:50px;border-radius:8px;">
                     </div>
                     <!-- Modal footer -->
                     <div class="modal-footer center">
+                        <!-- <input type="hidden" value="{{ user.staff.id }}" name="id"> -->
                         <button type="submit" name="submit" style="border-radius:34px;background-color:#00C7FE;border:none;width:204px;height:41px;color:white;font-size:14px" class=" text-center font-weight-bolder">
                 <i class="fas fa-check"></i> حفظ
               </button>
-                        <input type="hidden" value="{{ profile.id }}" name="id">
+                        <input type="hidden" value="{{ user.staff.id }}" name="id">
                         <button class="btn btn-danger" data-dismiss="modal" style="border-radius:34px;border:none;width:204px;height:41px;color:white;font-size:14px" class=" text-center font-weight-bolder">
                 <i class="fas fa-times"></i> اغلاق
               </button>

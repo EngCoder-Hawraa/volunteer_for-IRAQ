@@ -1,0 +1,114 @@
+{% extends 'user_template/base_template.html' %} {% load static %} {% block main_content %}
+<div class="pb-5 pt-5" style="background-color:#F6FCFD">
+    <form role="form" action="{% url 'profile_edit_user' %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="row mt-5">
+            <div class="col-sm-4">
+                <p class="font-weight-bold" style="margin-right:100px;color:#3BA2FB;"> الملف الشخصي</p>
+                <img style="width:200px;height:200px;border:10px solid white;" class="mt-3 mr-5 bg-success rounded-circle" src="/media/{{user.people.profile_pic}}" alt="الصورة الشخصية">
+                <span class="border-0 row badge badge-warning rounded-circle " style="margin-right:150px;margin-top:-50px;width:30px;height:30px;color:#fff;" data-placement="top" title="عدد الاعلانات">
+                <i data-toggle="modal" data-target="#mypicture1" class="dd fas fa-camera fa-lg mt-1" data-placement="top" title="تعديل صورة الملف الشخصي"></i>
+            </span>
+
+                <!-- The Modal -->
+                <div class="modal" id="mypicture1">
+                    <div class="modal-dialog">
+                        <div class="modal-content border-0">
+
+                            <!-- Modal Header -->
+                            <div class="modal-header bg-primary Boxshadow">
+                                <button type="button" class="close" data-dismiss="modal" style="color:white">&times;</button>
+                                <p class="modal-title text-center font-weight-bolder" style="font-size:15px;color:white">تعديل الملف الشخصي</p>
+                            </div>
+
+                            <!-- Modal body -->
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <img class="mb-4" src="{{user.people.profile_pic.url}}" style="width:200px;height:100px;margin-right:100px">
+                                    <label class="control-label float-right">صورة الملف الشخصي</label>{{user.staff.profile_pic}}
+                                    <input type="file" name="profile" class="col-sm-12 Boxshadow pt-3" style="border: 1px solid #44A5E4;height:50px;border-radius:8px;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+
+
+
+                <h5 class="mt-" style="color:#3BA2FB;margin-right:120px">{{username}}</h5>
+            </div>
+            <div class="col-sm-7">
+                <div class="row">
+                    <div class="col">
+                        <label>الاسم</label>
+                        <input style="height:50px" type="text" class="form-control border-0" placeholder="الاسم" name="username" value="{{ user.people.admin }}">
+                    </div>
+                    <div class="col">
+                        <label>البريد الالكتروني</label>
+                        <input style="height:50px" type="email" class="form-control border-0" id="email" placeholder="موقعك الالكتروني" name="email" value="{{ user.email }}">
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col">
+                        <label>رقم الهاتف</label>
+                        <input style="height:50px" type="tel" class="form-control border-0" id="phone" name="phone" value="{{ user.people.phone }}">
+                    </div>
+                    <div class="col">
+                        <label for="">المحافظة</label>
+                        <select class="form-control border-0" style="height:50px" name="region" value="{{ user.people.region }}">
+                            {% for region in region %}
+                              <option value="{{region.id}}" >{{ region }}</option>
+                            {% endfor %}
+                          </select>
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col">
+                        <label for="">تاريخ الميلاد</label>
+                        <input style="height:50px" type="date" class="form-control border-0" placeholder="تاريخ الميلاد" name="birth" value="{{ people.birth }}">
+                    </div>
+                    <div class="col">
+                        <label for="">الجنس</label>
+                        <select class="form-control border-0" style="height:50px" name="gender" value="{{ user.people.gender }}">
+                          {% for gender in gender %}
+                            <option value="{{gender.id}}" >{{ gender }}</option>
+                          {% endfor %}
+                          </select>
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col">
+                        <label for="">الوظيفة</label>
+                        <input style="height:50px" type="text" class=" pt-3 form-control border-0" placeholder="الوظيفة" name="employee" value="{{user.people.employee}}">
+                    </div>
+                    <div class="col">
+                        <label for="">كلمة المرور</label>
+                        <input style="height:50px" type="password" class="form-control border-0" placeholder="كلمة المرور" name="password" value="{{user.people.password1}}">
+                    </div>
+                </div>
+                <input type="hidden" value="{{ user.people.id }}" name="id">
+                <button style="width:650px;height:50px;border-radius:5px" type="submit" class="mt-5 mb-5 btn btn-primary mt-3">اضافة</button>
+
+                <div class="form-group">
+                    {% if messages %} {% for message in messages %} {% if message.tags == 'error' %}
+                    <div class="alert alert-danger" style="margin-top:10px">{{ message }}</div>
+                    {% endif %} {% if message.tags == 'success' %}
+                    <div class="alert alert-success" style="margin-top:10px">{{ message }}</div>
+                    {% endif %}{% endfor %} {% endif %}
+                </div>
+    </form>
+    </div>
+    </div>
+</div>
+
+
+
+
+
+
+</div>
+{% endblock main_content %}

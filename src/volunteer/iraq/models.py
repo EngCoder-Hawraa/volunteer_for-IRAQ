@@ -10,26 +10,20 @@ from django.template.defaultfilters import slugify
 
 
 class CustomUser(AbstractUser):
-    user_type_data=((1,"HOD"),(2,"Intities"),(3,"Peoples"))
+    user_type_data=((1,"HOD"),(2,"people"))
     user_type=models.CharField(default=1,choices=user_type_data,max_length=10)
 
-class AdminHOD(models.Model):
+
+class Gender(models.Model):
     id=models.AutoField(primary_key=True)
-    admin=models.OneToOneField(CustomUser,on_delete=models.CASCADE)
-    profile_pic=models.ImageField(default='default.jpg', upload_to='profile_pics')
-    # name=models.CharField(max_length=255,null=True)
-    # region=models.CharField(max_length=255,null=False)
-    # intities_pic=models.FileField(upload_to='images',null=False)
-    # created=models.DateField(null=False)
-    # classification=models.CharField(max_length=255,null=False)
-    # # classification=models.ForeignKey(Classification,on_delete=models.DO_NOTHING)
-    # works=models.TextField(default="",null=False)
-    # abstract=models.TextField(default="",null=False)
-    # permission=models.FileField(upload_to='images',null=False)
+    gender=models.CharField(max_length=255)
     created_at=models.DateTimeField(auto_now_add=True)
     updated_at=models.DateTimeField(auto_now_add=True)
     objects=models.Manager()
-
+    class Meta:
+      verbose_name_plural = "genders"
+    def __str__(self):
+        return self.gender
 
 
 class Region(models.Model):
@@ -49,17 +43,19 @@ class Classification(models.Model):
     created_at=models.DateTimeField(auto_now_add=True)
     updated_at=models.DateTimeField(auto_now_add=True)
     objects=models.Manager()
+    class Meta:
+      verbose_name_plural = "classifications"
     def __str__(self):
         return self.classification
 
-class Staff(models.Model):
+class AdminHOD(models.Model):
     id=models.AutoField(primary_key=True)
     admin=models.OneToOneField(CustomUser,on_delete=models.CASCADE)
     address=models.TextField()
-    name=models.CharField(max_length=255)
-    # phone=models.CharField(max_length=255)
-    # birth=models.DateField(max_length=255)
-    # gender=models.CharField(max_length=255)
+    # name=models.CharField(max_length=255)
+    phone=models.CharField(max_length=255)
+    birth=models.DateField(max_length=255)
+    gender=models.CharField(max_length=255)
     employee=models.CharField(max_length=255)
     region=models.CharField(max_length=255,null=False)
     profile_pic=models.ImageField(default='default.jpg', upload_to='profile_pics')
@@ -69,20 +65,58 @@ class Staff(models.Model):
     objects=models.Manager()
 
 
+class People(models.Model):
+    id=models.AutoField(primary_key=True)
+    admin=models.OneToOneField(CustomUser,on_delete=models.CASCADE)
+    address=models.TextField()
+    # name=models.CharField(max_length=255)
+    phone=models.CharField(max_length=255)
+    birth=models.DateField(max_length=255)
+    gender=models.CharField(max_length=255)
+    employee=models.CharField(max_length=255)
+    region=models.CharField(max_length=255,null=False)
+    profile_pic=models.ImageField(default='default.jpg', upload_to='profile_pics')
+    created_at=models.DateTimeField(auto_now_add=True)
+    updated_at=models.DateTimeField(auto_now_add=True)
+    fcm_token=models.TextField(default="")
+    objects=models.Manager()
+
+
+
+
+
+
+# class Staff(models.Model):
+#     id=models.AutoField(primary_key=True)
+#     admin=models.OneToOneField(CustomUser,on_delete=models.CASCADE)
+#     address=models.TextField()
+#     # name=models.CharField(max_length=255)
+#     phone=models.CharField(max_length=255)
+#     birth=models.DateField(max_length=255)
+#     gender=models.CharField(max_length=255)
+#     employee=models.CharField(max_length=255)
+#     region=models.CharField(max_length=255,null=False)
+#     profile_pic=models.ImageField(default='default.jpg', upload_to='profile_pics')
+#     created_at=models.DateTimeField(auto_now_add=True)
+#     updated_at=models.DateTimeField(auto_now_add=True)
+#     fcm_token=models.TextField(default="")
+    # objects=models.Manager()
+
+
 class Intity(models.Model):
     id=models.AutoField(primary_key=True)
     admin=models.OneToOneField(CustomUser,on_delete=models.CASCADE)
     name=models.CharField(max_length=255,null=True)
     region=models.CharField(max_length=255,null=False)
-    profile_pic=models.ImageField(default='default.jpg', upload_to='profile_pics')
-    region=models.ForeignKey(Region,on_delete=models.DO_NOTHING)
-    profile_pic=models.FileField(upload_to='images',null=True)
-    intities_pic=models.FileField(upload_to='images',null=False)
     created=models.DateField(null=False)
     classification=models.CharField(max_length=255,null=False)
-    # classification=models.ForeignKey(Classification,on_delete=models.DO_NOTHING)
     works=models.TextField(default="",null=False)
     abstract=models.TextField(default="",null=False)
+    # profile_pic=models.ImageField(default='default.jpg', upload_to='profile_pics')
+    # region=models.ForeignKey(Region,on_delete=models.DO_NOTHING)
+    # profile_pic=models.FileField(upload_to='images',null=True)
+    intities_pic=models.FileField(upload_to='images',null=False)
+    # classification=models.ForeignKey(Classification,on_delete=models.DO_NOTHING) 
     permission=models.FileField(upload_to='images',null=False)
     # address=models.TextField()
     created_at=models.DateTimeField(auto_now_add=True)
@@ -98,15 +132,7 @@ class Intity(models.Model):
 
 
 
-class People(models.Model):
-    id=models.AutoField(primary_key=True)
-    admin=models.OneToOneField(CustomUser,on_delete=models.CASCADE)
-    address=models.TextField()
-    profile_pic=models.ImageField(default='default.jpg', upload_to='profile_pics')
-    created_at=models.DateTimeField(auto_now_add=True)
-    updated_at=models.DateTimeField(auto_now_add=True)
-    fcm_token=models.TextField(default="")
-    objects=models.Manager()
+
 
 
     # id=models.AutoField(primary_key=True)
@@ -163,7 +189,8 @@ class Poster(models.Model):
 
 class NumVolunteer(models.Model):
     name=models.CharField(max_length=255)
-    age=models.IntegerField()
+    age = models.PositiveIntegerField(null=True, blank=True)
+    # age=models.IntegerField()
     gender=models.CharField(max_length=255)
     region=models.ForeignKey(Region,on_delete=models.CASCADE)
     employee=models.CharField(max_length=255)
@@ -218,13 +245,14 @@ class Reply(models.Model):
 def create_user_profile(sender,instance,created,**kwargs):
     if created:
         if instance.user_type==1:
-            AdminHOD.objects.create(admin=instance,)
+            AdminHOD.objects.create(admin=instance,address="",gender="",employee="",region="",birth="1994-10-07")
         if instance.user_type==2:
-            Staff.objects.create(admin=instance,address="",)
+            People.objects.create(admin=instance,address="",gender="",employee="",region="",birth="1994-10-07")
+            # birth="",gender="",employee="",region="",
             # Intity.objects.create(admin=instance)
             # Intity.objects.create(admin=instance,name="",region="",profile_pic="",intities_pic="",created="",classification="",works="",abstract="",permission="")
-        if instance.user_type==3:
-            People.objects.create(admin=instance,address="")
+        # if instance.user_type==3:
+        #     People.objects.create(admin=instance,address="")
             # People.objects.create(admin=instance,region=Region.objects.get(id=1),profile_pic="",gender="")
             
     def save(self,*args, **kwargs):
@@ -243,11 +271,11 @@ def save_user_profile(sender,instance,**kwargs):
     if instance.user_type ==1:
         instance.adminhod.save()
     if instance.user_type ==2:
-        instance.staff.save()
+        instance.people.save()
     # if instance.user_type==2:
     #     instance.intity.save()
-    if instance.user_type ==3:
-        instance.people.save()
+    # if instance.user_type ==3:
+    #     instance.people.save()
 
 
 
@@ -263,11 +291,11 @@ def save_user_profile(sender,instance,**kwargs):
 
 # class Profile(models.Model):
 #     # name=models.CharField(max_length=255,null=True)
-#     id=models.AutoField(primary_key=True)
-#     user=models.OneToOneField(CustomUser,null=True,on_delete=models.CASCADE)
-#     bio=models.TextField()
+#     # id=models.AutoField(primary_key=True)
+#     # user=models.OneToOneField(CustomUser,null=True,on_delete=models.CASCADE)
+#     # bio=models.TextField()
 #     profile_img=models.ImageField(default='default.jpg', upload_to='profile_pics')
-#     email=models.EmailField()
+#     # email=models.EmailField()
 #     def __str__(self):
 #         return '{} profile.'.format(self.user)
 

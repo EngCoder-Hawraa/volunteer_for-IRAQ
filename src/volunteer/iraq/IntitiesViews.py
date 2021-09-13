@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 
 from django.contrib import messages
 # from django.contrib.auth.models import User,Group
-from .models import Intity, Member,Region,Classification,Comment,NumVolunteer,Poster,CustomUser,Reply
+from .models import Intity,AdminHOD,Member,Region,Classification,Comment,NumVolunteer,Poster,CustomUser,Reply,Gender
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.files.storage import FileSystemStorage
 from django.db.models import Q # new
@@ -30,284 +30,13 @@ from django.urls import reverse
 
 
 
- #profile user
-def Profile(request):
-#     pass
-#     if request.method == 'POST':
-#         user_form = UserUpdateForm(request.POST, instance=request.user)
-#         profile_form = ProfileUpdateForm(request.POST, request.FILES)
-#         if user_form.is_valid and profile_form.is_valid:
-#             user_form.save()
-#             profile_form.save()
-#         messages.success(request , ' تم تحديث الملف الشخصي . ')
-#         # return redirect('/')
-#     else:
-#         user_form = UserUpdateForm(request.POST, instance=request.user)
-#         profile_form = ProfileUpdateForm(instance=request.profile)
-    context = {
-        'region': Region.objects.all(),
-        'title':'الملف الشخصي',
-#         'user_form': user_form ,
-        # 'profile_form': profile_form ,
-    }
-    return render(request,'hod_template/profile.html', context)
-
-
-
-
-
-
-
-
-# # def Profile_update(request):
-# #     user_form = UserUpdateForm()
-# #     profile_form = ProfileUpdateForm()
-# #     context = {
-# #     'title':'تعديل الملف الشخصي',
-# #     'user_form':user_form,
-# #     'profile_form':profile_form
-# #     }
-# #     return render(request, 'hod_template/profile_update.html', context')
-
-
-
-
-
-
-
-# # ========Views for User=================#
-@login_required(login_url='doLogin')
-def user_home(request):
-    return render(request,"user_template/home_content.html")
-
-
-# #profile user
-# def profile_update1(request):
-#     pass
-#     if request.method == 'POST':
-#         user_form = UserUpdateForm(request.POST, instance=request.user)
-#         profile_form = ProfileUpdateForm(request.POST, request.FILES)
-#         if user_form.is_valid and profile_form.is_valid:
-#             user_form.save()
-#             profile_form.save()
-#         messages.success(request , ' تم تحديث الملف الشخصي . ')
-#         # return redirect('/')
-#     else:
-#         user_form = UserUpdateForm(request.POST, instance=request.user)
-#         profile_form = ProfileUpdateForm(instance=request.profile)
-#     context = {
-#         'title':'تعديل الملف الشخصي',
-#         'user_form': user_form ,
-#         'profile_form': profile_form ,
-#     }
-#     return render(request,'user_template/home_content.html', context)
-
-
-@login_required(login_url='doLogin')
-def Intities2(request):
-    context = {
-    'intitys' : Intity.objects.all(),
-    'classifications': Classification.objects.all(),
-    'regions': Region.objects.all(),
-    # 'num_com': Comment.objects.filter().count(),
-    'title':'المؤسسات'
-    }
-    return render(request, 'user_template/intities.html', context)
-
-class SearchIntitiesResultsView1(ListView):
-    model = Intity
-    model = Region
-    model = Classification
-    template_name = 'user_template/search_intities_results.html'
-
-    def get_queryset(self): # new
-        query = self.request.GET.get('q')
-        object_list = Intity.objects.filter(
-            Q(name__icontains=query) | Q(region__icontains=query) | Q(classification__icontains=query)
-        )
-        return object_list
-
-
-
-@login_required(login_url='doLogin')  
-def Details2(request):
-    context = {
-    'title':'قراءة المزيد',
-    }
-    return render(request, 'user_template/details.html', context)
-
-
-@login_required(login_url='doLogin')
-def Profile_Intities1(request):
-    context = {
-        'title':'معلومات المؤسسة'
-    }
-    return render(request,'user_template/profile_intities_template.html', context) 
-
-
-@login_required(login_url='doLogin')
-def Declaration1(request):
-    context = {
-        'posters': Poster.objects.all(),
-        'regions': Region.objects.all(),
-        'num_poster': Poster.objects.filter().count(),
-        'classifications': Classification.objects.all(),
-        'title':'الاعلانات',
-    }
-    return render(request, 'user_template/poster.html', context)
-
-# # class SearchPosterEduResultsView(ListView):
-# #     model = Poster
-# #     template_name = 'hod_template/search_posterEdu_results.html'
-# #     queryset = Poster.objects.filter(classification__icontains='تعليم') # new
-
-# # class SearchPosterEnvResultsView(ListView):
-# #     model = Poster
-# #     template_name = 'hod_template/search_posterEnv_results.html'
-# #     queryset = Poster.objects.filter(classification__icontains='بيئي') # new
-
-# # class SearchPosterHeaResultsView(ListView):
-# #     model = Poster
-# #     template_name = 'hod_template/search_posterHea_results.html'
-# #     queryset = Poster.objects.filter(classification__icontains='صحي') # new
-
-# # class SearchPosterArtResultsView(ListView):
-# #     model = Poster
-# #     template_name = 'hod_template/search_posterArt_results.html'
-# #     queryset = Poster.objects.filter(classification__icontains='فنون') # new
-
-# # class SearchPosterOthResultsView(ListView):
-# #     model = Poster
-# #     template_name = 'hod_template/search_posterOth_results.html'
-# #     queryset = Poster.objects.filter(classification__icontains='أخرى') # new
-
-
-class SearchPosterEduResultsView1(ListView):
-    model = Poster
-    template_name = 'user_template/search_posterEdu_results1.html'
-    queryset = Poster.objects.filter(classification__icontains='تعليم') # new
-
-
-class SearchPosterEnvResultsView1(ListView):
-    model = Poster
-    template_name = 'user_template/search_posterEnv_results1.html'
-    queryset = Poster.objects.filter(classification__icontains='بيئة') # new
-
-
-class SearchPosterHeaResultsView1(ListView):
-    model = Poster
-    template_name = 'user_template/search_posterHea_results1.html'
-    queryset = Poster.objects.filter(classification__icontains='صحي') # new
-
-
-class SearchPosterArtResultsView1(ListView):
-    model = Poster
-    template_name = 'user_template/search_posterArt_results1.html'
-    queryset = Poster.objects.filter(classification__icontains='فنون') # new
-
-
-class SearchPosterOthResultsView1(ListView):
-    model = Poster
-    template_name = 'user_template/search_posterOth_results1.html'
-    queryset = Poster.objects.filter(classification__icontains='أخرى') # new
-
-
-
-@login_required(login_url='doLogin')
-def Add_Notification(request):
-    context = {
-    'numvolunteers': NumVolunteer.objects.all(),
-    'regions': Region.objects.all(),
-    'title':'ارسال اشعار للمؤسسة للتطوع'
-    }
-    return render(request, 'user_template/add_notification.html', context)
-
-
-
-# @login_required(login_url='login_user')
-# def Send_Notification(request):
-#     if request.method!="POST":
-#         return HttpResponse("<h2>Method Now Allowed</h2>")
-#     else:
-#         file=request.FILES['profile']
-#         fs=FileSystemStorage()
-#         volunteer_img=fs.save(file.name,file)
-#         try:
-#             region=Region.objects.get(id=request.POST.get('region',''))
-#             numvolunteer=NumVolunteer(name=request.POST.get('name',''),age=request.POST.get('age',''),gender=request.POST.get('gender',''),employee=request.POST.get('employee',''),volunteer_image=volunteer_img,region=region)
-#             numvolunteer.save()
-#             messages.success(request,"Added Successfully")
-#         except Exception as e:
-#             print(e)
-#             messages.error(request,"فشل في ارسال الاشعار")
-#         return HttpResponseRedirect("/add_notification")
-
-
-
-
-
-@login_required(login_url='doLogin')
-def comments1(request):
-    comments = Comment.objects.all()
-    paginator = Paginator(comments, 4)
-    page = request.GET.get('page')
-    try:
-        comments = paginator.page(page)
-    except PageNotAnInteger:
-        comments = paginator.page(1)
-    except EmptyPage:
-        comments = paginator.page(paginator.num_page) 
-    context = {
-        'comments' : comments,
-        'num_com': Comment.objects.filter().count(),
-        # 'total_likes': total_likes,
-        'page': page,
-        'title':'التعليقات',
-    }
-    return render(request, 'user_template/comments.html', context)
-
-@login_required(login_url='doLogin')
-def LikeView1(request,pk):
-    comment = get_object_or_404(Comment, id=request.POST.get('comment_id'))
-    comment.likes.add(request.user)
-    return HttpResponseRedirect(reverse('comments1'))
-
-   
-
-
-
-
-
-
-
-@login_required(login_url='doLogin')
-# @allowedUsers(allowedGroups=['intityAdmin'])
-def Add_Comment_Save_User(request):
-    if request.method!="POST":
-        return HttpResponse("<h2>Method Now Allowed</h2>")
-    else:
-        com = Comment(comm_name=request.POST.get('comm_name',''),author=request.user,body=request.POST.get('body',''))
-        com.save()
-        return redirect("/comments1")
-
-@login_required(login_url='doLogin')
-def About2(request):
-    context = {
-    'title':'من نحن',
-    }
-    return render(request, 'user_template/about.html', context)
-
-
-
-
-
-
 
 
 
 
 
 # # ========Views for Admin=================#
+
 def dashboard(request):
     context = {
     'title':'معلومات المؤسسة',
@@ -323,137 +52,67 @@ def admin_home(request):
     return render(request,"hod_template/home_content.html",context)
 
 
+@login_required(login_url='doLogin')
+def Profile(request):
+    context = {
+        'region': Region.objects.all(),
+        'gender':Gender.objects.all(),
+        'admin': AdminHOD.objects.all(),
+        'title':'الملف الشخصي',
+    }
+    return render(request,'hod_template/profile.html', context)
 
 
-@login_required(login_url='login_intities')
-def ProfileUpdate(request,profile_id):
-    # return HttpResponse("Intity Id: "+str(intity_id))
-    staff=Staff.objects.get(id=profile_id)
-    if profile==None:
+@login_required(login_url='do_login')
+def ProfileUpdate(request,user_id):
+    # return HttpResponse("Intity Id: "+str(user_id))
+    user=AdminHOD.objects.get(id=user_id)
+    if user==None:
         return HttpResponse("Intity Not Found")
     else:
         # return render(request, "hod_template/edit_intities_template.html",{'intity': intity})
         return HttpResponseRedirect("/profile")
 
-
           
 
 
-@login_required(login_url='login_intities')
+
+
+
+
+
+@login_required(login_url='doLogin')
 # @allowedUsers(allowedGroups=['intityAdmin'])
 def ProfileEdit(request):
     if request.method!="POST":
         return HttpResponse("<h2>Method Now Allowed</h2>")
     else:
-        intity=Intity.objects.get(id=request.POST.get('id',''))
-        if intity==None:
-            return HttpResponse("<h2>Intity Not Found</h2>")
+        # user=CustomUser.objects.update()
+        user=AdminHOD.objects.get(id=request.POST.get('id',''))
+        if user==None:
+            return HttpResponse("<h2>Staff Not Found</h2>")
         else:       
-            if request.FILES.get('profile1') and request.FILES.get('profile2'):
-                file = request.FILES['profile1']
+            if request.FILES.get('profile'):
+                file = request.FILES['profile']
                 fs = FileSystemStorage()
-                intities_pic = fs.save(file.name, file)
-                file1 = request.FILES['profile2']
-                fs = FileSystemStorage()
-                permission = fs.save(file1.name, file1)
+                profile_pic = fs.save(file.name, file)
             else:
-                intities_pic=None
-                permission=None
-            if (intities_pic!=None and permission!=None):   
-                intity.intities_picture = intities_pic
-                intity.permission=permission
-            User =request.POST.get('user','')
-            intity.name=request.POST.get('name','')
-            intity.created=request.POST.get('created','')
-            intity.works=request.POST.get('works','')
-            intity.abstract=request.POST.get('abstract','')
-            intity.save()
+                    profile_pic=None
+            if profile_pic!=None:  
+                user.profile_pic= profile_pic
+            user.username =request.POST.get('username','')
+            user.email=request.POST.get('email','')
+            user.phone=request.POST.get('phone','')
+            user.region=request.POST.get('region','')
+            user.birth=request.POST.get('birth','')
+            user.gender=request.POST.get('gender','')
+            user.employee=request.POST.get('employee','')
+            user.password=request.POST.get('password','')
+            user.save()
             messages.success(request,"Updated Successfully")
-            return HttpResponseRedirect("update_intities/"+str(intity.id)+"")
+            return HttpResponseRedirect("profile_update/"+str(user.id)+"")
 
 
-
-
-
-
-
-# @login_required(login_url='doLogin')
-# # profile intity
-# def profile_update(request,profile_id):
-#     profile=Profile.objects.get(id=profile_id)
-#     if profile==None:
-#         return HttpResponse("Profile Not Found")
-#     else:
-#         return HttpResponseRedirect("/admin_home")
-
-
-
-# @login_required(login_url='login_intities')
-# # @allowedUsers(allowedGroups=['intityAdmin'])
-# def profile_edit(request):
-#     if request.method!="POST":
-#         return HttpResponse("<h2>Method Now Allowed</h2>")
-#     else:
-#         profile=Profile.objects.get(id=request.POST.get('id',''))
-#         if profile==None:
-#             return HttpResponse("<h2>Profile Not Found</h2>")
-#         else:
-#             if request.FILES.get('profile_img')!=None:
-#                 file = request.FILES['profile_img']
-#                 fs = FileSystemStorage()
-#                 profile_img = fs.save(file.name, file)
-#             else:
-#                 profile_img=None
-#             if profile_img!=None:
-#                 profile.profile_img=profile_img
-#             profile.save()
-#             messages.success(request,"Updated Successfully")
-#             return HttpResponseRedirect("profile_update/"+str(profile.id)+"")
-
-
-
-
-           
-
-
-
-
-#     # if request.method == 'POST':
-#         # user_form = UserUpdateForm(request.POST, instance=request.user)
-#         # profile_form = ProfileUpdateForm(request.POST, request.FILES)
-#     #     if user_form.is_valid and profile_form.is_valid:
-#     #         user_form.save()
-#     #         profile_form.save()
-#     #     messages.success(request , ' تم تحديث الملف الشخصي . ')
-#     #     # return redirect('/')
-#     # else:
-#     #     user_form = UserUpdateForm(request.POST, instance=request.user)
-#     #     profile_form = ProfileUpdateForm(instance=request.profile_img)
-#     # context = {
-#     #     'title':'تعديل الملف الشخصي',
-#     #     'user_form': user_form ,
-#     #     'profile_form': profile_form ,
-#     # }
-#     # return render(request,'hod_template/home_content.html', context)
-
-
-
-# # @login_required(login_url='doLogin')
-# # def AddProfile(request):
-# #     if request.method!="POST":
-# #         return HttpResponse("<h2>Method Now Allowed</h2>")
-# #     else:
-# #         file=request.FILES['profile']
-# #         fs=FileSystemStorage()
-# #         profile_picture=fs.save(file.name,file)
-# #         try:
-# #             PicProfile=Profile(intities_pic=profile_picture)
-# #             PicProfile.save()
-# #             messages.success(request,"Added Successfully")
-# #         except Exception as e:
-# #             print(e)
-# #             messages.error(request,"Failed to Add Intities")
-# #         return HttpResponseRedirect("/admin_home")
 
 
 
@@ -703,13 +362,18 @@ def ComReply(request):
     if request.method!="POST":
         return HttpResponse("<h2>Method Now Allowed</h2>")
     else:
-        comment=Comment.objects.get(id=request.POST.get('comment',''))
+        # comment_name=Comment.objects.get(id=request.POST.get('comm_name',''))
+        comment_name=Comment(comm_name=request.POST.get('comm_name',''))
+        rep = Reply(comment_name=comment_name,author=request.user,reply_body=request.POST.get('body',''))
+        rep.save()
+        return redirect("/comments")
+        # comment=Comment.objects.get(id=request.POST.get('comment',''))
         # comm_name=Comment(request.POST.get('comm_name','')),
         # comm_name = Comment(request.POST.get('comment',''))
         # comment_name=Comment.objects.get(id=request.POST.get('comment',''))
-        rep = Reply(comment=comment,reply_body=request.POST.get('reply_body',''),author=request.user)
-        rep.save()
-        return redirect("/comments")
+        # rep = Reply(comment=comment,reply_body=request.POST.get('reply_body',''),author=request.user)
+        # rep.save()
+        # return redirect("/comments")
 
 
 
@@ -746,6 +410,7 @@ def Manage_Members(request):
     context = {
         'members': members ,
         'region': Region.objects.all(),
+        'gender': Gender.objects.all(),
         'page': page,
         'title':'الاعضاء'
         # 'form':form
@@ -766,7 +431,8 @@ def Add_Member_Save(request):
         member_img=fs.save(file.name,file)
         try:
             region=Region.objects.get(id=request.POST.get('region',''))
-            member=Member(name=request.POST.get('name',''),gender=request.POST.get('gender',''),employee=request.POST.get('employee',''),phone=request.POST.get('phone',''),email=request.POST.get('email',''),member_image=member_img,region=region)
+            gender=Gender.objects.get(id=request.POST.get('gender',''))
+            member=Member(name=request.POST.get('name',''),employee=request.POST.get('employee',''),phone=request.POST.get('phone',''),email=request.POST.get('email',''),member_image=member_img,region=region,gender=gender)
             member.save()
             messages.success(request,"Added Successfully")
         except Exception as e:
@@ -956,7 +622,8 @@ def Notification(request):
         numvolunteers = paginator.page(paginator.num_page)
     context = {
         'num_volunteer':NumVolunteer.objects.filter().count(),
-        'regions': Region.objects.all(),
+        'region': Region.objects.all(),
+        'gender':Gender.objects.all(),
         'numvolunteers': numvolunteers,
         'page': page,
         'title':'الاشعارات'
@@ -978,7 +645,8 @@ def AddVolunteer(request):
         volunteer_img=fs.save(file.name,file)
         try:
             region=Region.objects.get(id=request.POST.get('region',''))
-            numvolunteer=NumVolunteer(name=request.POST.get('name',''),age=request.POST.get('age',''),gender=request.POST.get('gender',''),employee=request.POST.get('employee',''),volunteer_image=volunteer_img,region=region)
+            gender=Gender.objects.get(id=request.POST.get('gender',''))
+            numvolunteer=NumVolunteer(name=request.POST.get('name',''),age=request.POST.get('age',''),employee=request.POST.get('employee',''),volunteer_image=volunteer_img,region=region,gender=gender)
             numvolunteer.save()
             messages.success(request,"Added Successfully")
         except Exception as e:

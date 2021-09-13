@@ -1,134 +1,98 @@
-{% extends 'hod_template/base_template.html' %} {% load static %} {% block main_content %}
-<div class="" style="background-color:#F6F7F9;padding-top:40px;padding-bottom:122px">
-    <div class="row font-weight-bolder  Boxshadow" style="margin-right:30px;margin-left:20px;border-radius:10px 10px 0px 0px;background-color:#fff">
-        <div class="col mb-2 text-center font-weight-bold" style="padding-top:38px;margin-left:480px;color:#2699FB;">الاعضاء</div>
-        <div class="col">
-            <button type="button" style="border-radius:34px;background-color:#00C7FE;border:none;width:204px;height:41px;margin-top:10px;margin-right:100px;color:white;font-size:14px" class="mb-2 Boxshadow text-center font-weight-bolder" data-toggle="modal" data-target="#addmem">
+{% extends 'hod_template/base_template.html' %} {% load static %}
+
+<!-- /* ======== Start Manage Member Page ======== */ -->
+{% block main_content %}
+<div class="background2 pt-5 pb-5">
+    <div class="row background Boxshadow mr-4 ml-4" style="border-radius:10px 10px 0px 0px">
+        <div class="col-sm-12 col-lg-2 mr-lg-1 text-center" style="padding-top:23px">الاعضاء</div>
+        <!--======Start Add Member =========-->
+        <div class="col-sm-12 col-lg-9">
+            <button type="button" style="width:204px;height:41px;margin-top:10px" class="float-left Borders1 border-0 bg-primary font-size4 text-white mb-2 Boxshadow text-center" data-toggle="modal" data-target="#addmem">
         اضافة جديد
-        </button>
-            <!--======Start Add Member =========-->
-            <!--Start The Modal for Add Member -->
-            <div class="modal Boxshadow font-weight-normal" id="addmem">
-                <div class="modal-dialog ">
-                    <div class="modal-content border-0 ">
-
-                        <!-- Modal Header -->
-                        <div class="modal-header bg-primary Boxshadow ">
-                            <button type="button " class="close " data-dismiss="modal ">&times;</button>
-                            <p class="modal-title font-weight-bolder " style="font-size:15px; margin-left:50px;color:#fff ">اضافة الاعضاء</p>
-                        </div>
-
-                        <!-- End The Modal for Add Member -->
-
-                        {% include 'hod_template/add_member.html' %}
-
-                        <!--======End Add Member =========-->
-                    </div>
-                </div>
-
-                <!--======Start Data Member =========-->
-                <div class="row mt-1 Boxshadow table-hover" style="background-color:#fff;margin-right:30px;margin-left:20px;border-radius:5px;">
-                    <div class=" float-right table-responsive">
-                        <table class="table">
-                            {% if members %}
-                            <thead>
-                                <tr style="color:#4b4242;;font-weight:100px;font-size:15px">
-                                    <th>#</th>
-                                    <th>الصورة</th>
-                                    <th>الاسم</th>
-                                    <th>الجنس</th>
-                                    <th>المحافظة</th>
-                                    <th>الوظيفة</th>
-                                    <th>رقم الهاتف</th>
-                                    <th>البريد الالكتروني</th>
-                                    <th>الاجراء</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr class="font-weight-normal" style="color:rgb(75, 66, 66)">
-                                    {% for member in members %}
-                                    <td>
-                                        <p class="mt-4 font-weight-bolder">{{ member.id}}</p>
-                                    </td>
-                                    <td><img class="Boxshadow mt-2" style="width:60px;height:60px;border-radius: 50%;border:3px #FAFAFA solid;" ; src="/media/{{ member.member_image }}"></td>
-                                    <td>
-                                        <p class="mt-4">{{member.name}}</p>
-                                    </td>
-                                    <td>
-                                        <p class="mt-4">{{ member.gender }}</p>
-                                    </td>
-                                    <td>
-                                        <p class="mt-4">{{ member.region }}</p>
-                                    </td>
-                                    <td>
-                                        <p class="mt-4">{{ member.employee }}</p>
-                                    </td>
-                                    <td>
-                                        <p class="mt-4">{{ member.phone }}</p>
-                                    </td>
-                                    <td>
-                                        <p class="mt-4">{{ member.email }}</p>
-                                    </td>
-                                    <td>
-                                        <!--======End Data Member =========-->
-
-
-
-
-
-                                        <!--======Start Edit Member =========-->
-                                        <!-- Trigger the modal with a button -->
-                                        <!--Start The Modal for Edit Member -->
-                                        <i data-toggle="modal" data-target="#editmember" style="margin-top:30px;color:#00C7FE;margin-right:40" class="fas fa-user-edit"></i>
-
-                                        <!-- Modal -->
-                                        <div class="modal Boxshadow" id="editmember" role="dialog ">
-                                            <div class="modal-dialog ">
-                                                <!-- Modal Header -->
-                                                {% include 'hod_template/edit_member.html' %}
-                                    </td>
-                                    <td>
-                                        <!--======End Edit Member =========-->
-                                        <!--End The Modal for Edit Member -->
-
-                                        <!--======Start Delete Member =========-->
-                                        <a href="{% url 'delete_member' member.id %} "><i style="margin-top:30px;margin-right:20px;color:#00C7FE " class="fas fa-trash-alt ml-2 "></i></a>
-                                        <!--======End Delete Member =========-->
-                                    </td>
-                                </tr>
-                                {% endfor %} {% else %}
-                                <div class="Boxshadow text-center mt-3 pb-5 " style="width:100%;background-color: #EFFEFE;border-radius: 8px; ">
-                                    <div class="row ">
-                                        <div class=" m-auto ">
-                                            <div class=" mt-2 mb-2 ">
-                                                <p class="card-title font-weight-bold pb-4 pt-4 " style="color:#2699FB;font-size:25px;margin-right:100px "> لا توجد معلومات</p>
-                                                <img class="mb-4 " src="{% static 'iraq/images/informationR.png' %} " style="height:228px; width:313px; margin-right: 70px;margin-top:20px " alt="Cinque Terre ">
-                                            </div>
-                                        </div>
-                                    </div>
+            </button>
+        </div>
+    </div>
+    <!--======Start Data Member =========-->
+    <div class="row mt-1 bg-white Boxshadow table-hover Borders mr-4 ml-4">
+        <div class="float-right table-responsive">
+            <table class="table">
+                {% if members %}
+                <thead class="font-size3 text-primary">
+                    <tr>
+                        <th>#</th>
+                        <th>الصورة</th>
+                        <th>الاسم</th>
+                        <th>الجنس</th>
+                        <th>المحافظة</th>
+                        <th>الوظيفة</th>
+                        <th>رقم الهاتف</th>
+                        <th>البريد الالكتروني</th>
+                        <th>الاجراء</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        {% for member in members %}
+                        <td>
+                            <p class="mt-4">{{ member.id}}</p>
+                        </td>
+                        <td><img class="Boxshadow mt-2" style="width:60px;height:60px;border-radius: 50%;border:3px #FAFAFA solid" src="/media/{{ member.member_image }}"></td>
+                        <td>
+                            <p class="mt-4">{{member.name}}</p>
+                        </td>
+                        <td>
+                            <p class="mt-4">{{ member.gender }}</p>
+                        </td>
+                        <td>
+                            <p class="mt-4">{{ member.region }}</p>
+                        </td>
+                        <td>
+                            <p class="mt-4">{{ member.employee }}</p>
+                        </td>
+                        <td>
+                            <p class="mt-4">{{ member.phone }}</p>
+                        </td>
+                        <td>
+                            <p class="mt-4">{{ member.email }}</p>
+                        </td>
+                        <td>
+                            <i data-toggle="modal" data-target="#editmember" class="mt-4 mr-2 fas fa-user-edit text-primary"></i>
+                            <!--======Start Edit Member =========-->
+                            {% include 'hod_template/edit_member.html' %}
+                            <!--======End Edit Member =========-->
+                        </td>
+                        <td>
+                            <!--======End Edit Member =========-->
+                            <!--======Start Delete Member =========-->
+                            <a href="{% url 'delete_member' member.id %} "><i class="mt-4 text-primary fas fa-trash-alt ml-2"></i></a>
+                            <!--======End Delete Member =========-->
+                        </td>
+                    </tr>
+                    {% endfor %} {% else %}
+                    <div class="Boxshadow text-center background mt-1 ml-3" style="height:440px;width:100%">
+                        <div class="row">
+                            <div class="m-auto">
+                                <div class="mt-2 mb-2">
+                                    <p class="card-title font-weight-bold pb-4 pt-4 text-center Color" style="font-size:25px"> لا توجد معلومات</p>
+                                    <img class="mb-4 " src="{% static 'iraq/images/informationR.png' %} " style="height:228px; width:350px; margin-right: 70px;margin-top:20px" alt="Not Found">
                                 </div>
-                                {% endif %}
-
-                            </tbody>
-                        </table>
+                            </div>
                         </div>
-                        </div>
-                        <div class="row Boxshadow " style="background:#fff;margin-right:30px; margin-top:3px;margin-left:20px;border-radius:0px 0px 10px 10px;height:60px ">
-                        </div>
-
-
-
-
-                        <!--======Start Pagination Member =========-->
-
-                        {% include 'hod_template/pagination_member.html' with page=members %}
                     </div>
-                    <!--======End Pagination Member =========-->
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row Boxshadow bg-white mr-4 ml-4 mt-1" style="border-radius:0px 0px 10px 10px;height:60px">
+    </div>
 
-
-
-
-
-
-
-                    {% endblock main_content %}
+    <!--======Start Pagination Member =========-->
+    {% include 'hod_template/pagination_member.html' with page=members %}
+</div>
+<!--======End Pagination Member =========-->
+<!--======Start Add Member =========-->
+{% include 'hod_template/add_member.html' %}
+<!--======End Add Member =========-->
+{% endblock main_content %}
+<!-- /* ======== Start Manage Member Page ======== */ -->

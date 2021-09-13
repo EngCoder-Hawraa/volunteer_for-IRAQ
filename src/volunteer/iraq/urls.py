@@ -1,10 +1,10 @@
 from django.urls import path
-from . import views, IntitiesViews 
+from . import views, IntitiesViews ,UserViews
 from volunteer import settings
 from django.conf.urls.static import static
 from django.contrib.auth import views as authviews
 from .IntitiesViews import Intities,SearchIntitiesResultsView,SearchPosterEduResultsView,SearchPosterEnvResultsView,SearchPosterHeaResultsView,SearchPosterArtResultsView,SearchPosterOthResultsView,LikeView
-from .IntitiesViews import SearchIntitiesResultsView1,SearchPosterEduResultsView1,SearchPosterEnvResultsView1,SearchPosterHeaResultsView1,SearchPosterArtResultsView1,SearchPosterOthResultsView1,More_Read_Intities,LikeView1
+from .UserViews import SearchIntitiesResultsView1,SearchPosterEduResultsView1,SearchPosterEnvResultsView1,SearchPosterHeaResultsView1,SearchPosterArtResultsView1,SearchPosterOthResultsView1,More_Read_Intities,LikeView1
 from django.contrib.auth.views import LogoutView
 
 # # from .IntitiesViews import IntitiesCreateView,IntitiesUpdateView
@@ -16,9 +16,9 @@ urlpatterns = [
 
     path('admin_home',IntitiesViews.admin_home,name="admin_home"),
     path('profile',IntitiesViews.Profile,name="profile"),
-    path('profile_update/<str:profile_id>', IntitiesViews.ProfileUpdate, name='profile_update'),
-    path('profile_edit_staff', IntitiesViews.ProfileEdit, name='profile_edit_staff'),
-#     # path('add_picture_profile',IntitiesViews.AddProfile,name="add_picture_profile"),
+    path('profile_update/<str:user_id>', IntitiesViews.ProfileUpdate, name='profile_update'),
+    path('profile_edit_admin', IntitiesViews.ProfileEdit, name='profile_edit_admin'),
+    # path('add_picture_profile',IntitiesViews.AddProfile,name="add_picture_profile"),
     path('details1/', IntitiesViews.Details, name='details1'),
     path('intities1/', IntitiesViews.Intities, name='intities1'),
     path('view_imageP/', IntitiesViews.ViewImageP, name='view_imageP'),
@@ -72,27 +72,31 @@ urlpatterns = [
 
 
 # # url Path For user
-    path('user_home',IntitiesViews.user_home,name="user_home"),
+    path('user_home',UserViews.user_home,name="user_home"),
+    path('profile1',UserViews.Profile1,name="profile1"),
+    path('profile_update1/<str:user_id>', UserViews.ProfileUpdate, name='profile_update1'),
+    path('profile_edit_user', UserViews.ProfileEdit, name='profile_edit_user'),
 #     path('profile_update1', IntitiesViews.profile_update1, name='profile_update1'),
-    path('details2/', IntitiesViews.Details2, name='details2'),
-    path('intities2/', IntitiesViews .Intities2, name='intities2'),
+    path('details2/', UserViews.Details2, name='details2'),
+    path('intities2/', UserViews.Intities2, name='intities2'),
+    path('more_read_intities1/', UserViews.More_Read_Intities, name='more_read_intities1'),
     path('search_Intities1/', SearchIntitiesResultsView1.as_view(), name='search_Intities_results1'),
-    path('profile_intities1/', IntitiesViews.Profile_Intities1,name="profile_intities1"),
+    path('profile_intities1/', UserViews.Profile_Intities1,name="profile_intities1"),
 #     # path('add_intities_save',IntitiesViews.Add_Intities_Save,name="add_intities_save"),
 #     # path('edit_information',IntitiesViews.Edit_Information,name="edit_information"),
-    path('poster1/', IntitiesViews.Declaration1, name='poster1'),
+    path('poster1/', UserViews.Declaration1, name='poster1'),
     path('search_PosterEdu_results1/', SearchPosterEduResultsView1.as_view(), name='search_PosterEdu_results1'),
     path('search_PosterEnv_results1/', SearchPosterEnvResultsView1.as_view(), name='search_PosterEnv_results1'),
     path('search_PosterHea_results1/', SearchPosterHeaResultsView1.as_view(), name='search_PosterHea_results1'),
     path('search_PosterArt_results1/', SearchPosterArtResultsView1.as_view(), name='search_PosterArt_results1'),
     path('search_PosterOth_results1/', SearchPosterOthResultsView1.as_view(), name='search_PosterOth_results1'),
 
-    path('add_notification/', IntitiesViews.Add_Notification, name='add_notification'),
-#     path('send_notification', IntitiesViews.Send_Notification, name='send_notification'),
-    path('about2/', IntitiesViews.About2, name='about2'),
-    path('comments1/',IntitiesViews.comments1, name='comments1'),
+    path('add_notification/', UserViews.Add_Notification, name='add_notification'),
+    path('send_notification', UserViews.Send_Notification, name='send_notification'),
+    path('about2/', UserViews.About2, name='about2'),
+    path('comments1/',UserViews.comments1, name='comments1'),
     path('like1/<int:pk>',LikeView1,name='like_comment1'),
-    path('add_comment_save1', IntitiesViews.Add_Comment_Save_User , name='add_comment_save1'),
+    path('add_comment_save1', UserViews.Add_Comment_Save_User , name='add_comment_save1'),
 #     # path('dashboard/', UserViews .dashboard, name='dashboard'),
 #     # path('add_intities_save',UserViews .Add_Intities_Save,name="add_intities_save"),
 #     # path('edit_information',UserViews .Edit_Information,name="edit_information"),
