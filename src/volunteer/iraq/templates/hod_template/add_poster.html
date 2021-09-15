@@ -1,4 +1,4 @@
-<!-- =======Start Add poster> -=-=======>
+<!--=======Start Add poster Page========-->
 <!-- The Modal -->
 <div class="modal Boxshadow" id="myModal3">
     <div class="modal-dialog">
@@ -9,16 +9,17 @@
                 <p class="modal-title text-center text-white font-size3">اضافة اعلان</p>
             </div>
             <!-- Modal body -->
+            <!-- form start -->
             <form role="form" action="/save_poster" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="modal-body">
-                    <div class="form-group">
-                        <label class="control-label float-right" required="true">اسم المؤسسة</label>
-                        <input type="text" class="col-sm-12 Boxshadow" style="border: 1px solid #44A5E4;height:50px;border-radius:8px;" name="name">
+                    <div class="form-group mt-3">
+                        <label class="control-label float-right">اسم المؤسسة</label>
+                        <input type="text" class="col-sm-12 Boxshadow Borders4 H2 Borders7" name="name">
                     </div>
                     <div class="form-group">
                         <label class="control-label float-right">المحافظة </label>
-                        <select class="col-sm-12 Boxshadow" style="border: 1px solid #44A5E4;height:50px;border-radius:8px;" name="region">
+                        <select class="col-sm-12 Boxshadow Borders4 H2 Borders7" name="region">
                       {% for region in regions %}
                         <option value="{{ region.id }}">{{ region.region }}</option>
                       {% endfor %}
@@ -26,57 +27,51 @@
                     </div>
                     <div class="form-group">
                         <label class="control-label float-right">المكان بالضبط</label>
-                        <input type="text" class="col-sm-12 Boxshadow" style="border: 1px solid #44A5E4;height:50px;border-radius:8px;" name="place">
+                        <input type="text" class="col-sm-12 Boxshadow Borders4 H2 Borders7" name="place">
                     </div>
                     <div class="form-group">
                         <label class="control-label float-right">التصنيف</label>
-                        <select class="col-sm-12 Boxshadow" style="border: 1px solid #44A5E4;height:50px;border-radius:8px;" name="classification">
-                      {% for classification in classifications %}
-                        <option value="{{ classification.id }}">{{ classification.classification }}</option>
-                      {% endfor %}
-                    </select>
+                        <select class="col-sm-12 Boxshadow Borders4 H2 Borders7" name="classification">
+                            {% for classification in classifications %}
+                            <option value="{{ classification.id }}">{{ classification.classification }}</option>
+                            {% endfor %}
+                         </select>
                     </div>
                     <div class="form-group">
                         <label class="control-label float-right">صورةالاعلان</label>
-                        <input type="file" name="profile" class="col-sm-12 Boxshadow pt-3" style="border: 1px solid #44A5E4;height:50px;border-radius:8px;">
+                        <input type="file" name="profile" class="col-sm-12 Boxshadow Borders4 H2 Borders7 pt-3">
                     </div>
                     <div class="form-group">
                         <label class="control-label float-right">الاعلان</label>
-                        <textarea class="col-sm-12 Boxshadow" style="border: 1px solid #44A5E4;border-radius:8px;" rows="3" name="posts" placeholder="اكتب ..."></textarea>
+                        <textarea class="col-sm-12 Boxshadow Borders4 H2 Borders7" rows="3" name="posts" placeholder="اكتب ..."></textarea>
                     </div>
                     <div class="form-group">
                         <label class="control-label float-right">التاريخ</label>
-                        <input type="date" class="col-sm-12 Boxshadow" style="border: 1px solid #44A5E4;height:50px;border-radius:8px;" name="date_poster">
+                        <input type="date" class="col-sm-12 Boxshadow Borders4 H2 Borders7" name="date_poster">
                     </div>
                     <!-- <div class="form-group">
                     <label class="control-label float-right">الوقت</label>
                     <input type="time" class="col-sm-12 Boxshadow" style="border: 1px solid #44A5E4;height:50px;border-radius:8px;" name="time_poster">
                   </div>  -->
                     <!-- Modal footer -->
-                    <div class="modal-footer center float-right">
-                        <button type="submit" name="submit" style="border-radius:34px;background-color:#00C7FE;border:none;width:204px;height:41px;color:white;font-size:14px" class=" text-center font-weight-bolder">
-                      <i class="fas fa-check"></i> حفظ
+                    <div class="modal-footer center">
+                        <button type="submit" name="submit" class="text-center Borders1 bg-primary border-0 text-white font-size3" style="width:204px;height:41px">
+                        <i class="fas fa-check"></i> حفظ
                     </button>
-                        <button class="btn btn-danger" data-dismiss="modal" style="border-radius:34px;border:none;width:204px;height:41px;color:white;font-size:14px" class=" text-center font-weight-bolder">
+                        <button data-dismiss="modal" class="text-center Borders1 bg-danger border-0 text-white font-size3" style="width:204px;height:41px"> 
                       <i class="fas fa-times"></i> اغلاق
-                    </button>
+                  </button>
                     </div>
                 </div>
             </form>
+            <!-- form end -->
         </div>
     </div>
-</div>
-
-
-<div class="row">
-    <div class="col-lg-5" style="margin-right:400px">
-        <div class="form-group">
-            {% if messages %} {% for message in messages %} {% if message.tags == 'success' %}
-            <div class="alert alert-success">{{ message }}</div>
-            {% elif message.tags == 'error' %}
-            <div class="alert alert-danger">{{ message }}</div>
-            {% endif %} {% endfor %} {% endif %}
-        </div>
+    <div class="form-group">
+        {% if messages %} {% for message in messages %} {% if message.tags == 'error' %}
+        <div class="alert alert-danger" style="margin-top:10px">{{ message }}</div>
+        {% endif %} {% if message.tags == 'success' %}
+        <div class="alert alert-success" style="margin-top:10px">{{ message }}</div>
+        {% endif %} {% endfor %} {% endif %}
     </div>
-</div>
-</div>
+    <!--=======End Add poster ========-->

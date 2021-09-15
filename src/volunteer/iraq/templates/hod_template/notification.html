@@ -1,11 +1,15 @@
-{% extends 'hod_template/base_template.html' %} {% load static %} {% block main_content %}
-<div style="background-color:#F6F7F9;padding-top:100px;padding-bottom:40px">
-    <div class="bg-white Boxshadow Borders1" style="margin-right:30px; margin-left:25px;padding-bottom:80px">
+{% extends 'hod_template/base_template.html' %} {% load static %}
+<!-- /* ======== Start Notification Page======== */ -->
+{% block main_content %}
+<div class="background2 pb-5" style="padding-top:80px">
+    <div class="row bg-white Boxshadow Borders1 mr-4 ml-4 pb-5">
         {% if numvolunteers %} {% for numvolunteer in numvolunteers %}
-        <i style="color:#00C7FE;margin-right:30%" data-placement="top" title="اضافة متطوعين" class="fas fa-user-plus mt-5" data-toggle="modal" data-target="#addVolunteer"></i>
-        <img style="width:160px;height:160px;border:8px solid #fff;margin-right:10%;margin-top:-60px" class="w3-circle" src="/media/{{ numvolunteer.volunteer_image }}" alt="Cinque Terre">
-        <a href="{% url 'delete_volunteer' numvolunteer.id %}"><i style="color:#00C7FE;margin-right:110px" data-placement="top" title="حذف" class="fas fa-trash-alt Boxshadow"></i></a>
-        <p class="font-weight-bolder mt-4 text-center" style="color:#2699FB;font-size:18px;">إشعارات المتطوعين</p>
+        <div class="col-sm-12" style="margin-right:30%">
+            <i class="fas fa-user-plus mt-5 text-primary" data-placement="top" title="اضافة متطوعين" data-toggle="modal" data-target="#addVolunteer"></i>
+            <img style="width:160px;height:160px;border:8px solid #fff;margin-right:10%;margin-top:-60px" class="w3-circle" src="/media/{{ numvolunteer.volunteer_image }}" alt="Volunteer">
+            <a href="{% url 'delete_volunteer' numvolunteer.id %}"><i class="text-primary fas fa-trash-alt Boxshadow" style="margin-right:7%" data-placement="top" title="حذف"></i></a>
+            <p class="font-weight-bolder mt-4 text-center" style="color:#2699FB;font-size:18px;">إشعارات المتطوعين</p>
+        </div>
         <div class="row">
             <div class="col-sm-1" style="margin-right:30%">
                 <small class="bg-danger badge p-3" style="font-size:15px;color:white">{{num_volunteer}}</small>
@@ -19,7 +23,7 @@
                 <label class="font-weight-bolder pt-3"> الاسم</label>
             </div>
             <div class="col-sm-5">
-                <div class="Borders text-center pt-3 font-weight-bolder mr-2" style="width:96%;height:60px;background-color:#2699FB;color:white">{{numvolunteer.name}}</div>
+                <div class="Borders text-center pt-3 font-weight-bolder mr-2 bg-white Boxshadow" style="width:96%;height:60px">{{numvolunteer.name}}</div>
             </div>
         </div>
         <div class="row mt-2">
@@ -55,22 +59,22 @@
             </div>
         </div>
         {% endfor %} {% else %}
-        <div class="Boxshadow text-center" style="margin-top:60px;background-color: #EFFEFE;border-radius: 8px;">
-            <i style="color:#2699FB;" data-placement="top" title="اضافة متطوعين" class="mt-5 fas fa-user-plus" data-toggle="modal" data-target="#addVolunteer"></i>
+        <div class="Boxshadow text-center background Borders1 mb-3" style="height:440px;width:100%">
             <div class="row">
-                <div class=" m-auto">
-                    <div class=" mt-2 mb-2">
-                        <p class="card-title font-weight-bold pb-4 pt-4 text-center" style="color:#2699FB;font-size:25px;"> لا توجد معلومات</p>
-                        <img class="mb-4" src="{% static 'iraq/images/informationR.png' %}" style="height:228px; width:313px; margin-right: 70px;margin-top:20px" alt="Cinque Terre">
+                <div class="m-auto">
+                    <div class="mt-2 mb-2">
+                        <p class="card-title font-weight-bold pb-4 pt-4 text-center Color" style="font-size:25px"> لا توجد معلومات</p>
+                        <img class="mb-4 " src="{% static 'iraq/images/informationR.png' %} " style="height:228px; width:350px; margin-right: 70px;margin-top:20px" alt="Not Found">
                     </div>
                 </div>
             </div>
         </div>
-        {% endif %}
     </div>
-    <!--======Start Pagination Member =========-->
-    {% include 'hod_template/add_volunteer.html' %} {% include 'hod_template/pagination_notification.html' with page=numvolunteers %}
 </div>
+{% endif %}
+<!--======Start Pagination Member =========-->
+{% include 'hod_template/add_volunteer.html' %} {% include 'hod_template/pagination_notification.html' with page=numvolunteers %}
 <!--======End Pagination Member =========-->
 </div>
 {% endblock main_content %}
+<!-- /* ======== End Notification Page======== */ -->

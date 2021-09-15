@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'iraq.apps.IraqConfig',
     'crispy_forms',
     'django_filters',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
