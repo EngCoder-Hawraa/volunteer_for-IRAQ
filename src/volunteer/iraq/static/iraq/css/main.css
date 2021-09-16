@@ -1,5 +1,41 @@
 /* ======== Start Myframework ======== */
 
+
+/* @media (max-width: 700px) { */
+
+
+/* label #sidebar_btn {
+z-index: 1;
+color: #00A4ED;
+cursor: pointer;
+font-size: 20px;
+transition: 0.5s;
+transition-property: color;
+margin-left: 60px
+} */
+
+
+/* label #sidebar_btn:hover {
+color: #000000;
+}
+.content {
+display: none;
+} */
+
+
+/* #check:checked~.navigation {
+right: -190px;
+position: fixed;
+} */
+
+
+/* .content {
+display: block;
+} */
+
+
+/* } */
+
 * {
     direction: rtl;
     text-align: right;
@@ -150,6 +186,10 @@
     box-shadow: 0px 3px 6px #F1ECEC;
 }
 
+.Boxshadows {
+    border: 8px solid #fff;
+}
+
 #container {
     margin: 50px 20px 20px 20px;
 }
@@ -219,6 +259,142 @@ nav ul li a:hover,
 
 
 /* ======== End login & register ======== */
+
+label #sidebar_btn {
+    z-index: 1;
+    color: #00A4ED;
+    cursor: pointer;
+    font-size: 20px;
+    transition: 0.5s;
+    transition-property: color;
+    margin-left: 60px
+}
+
+label #sidebar_btn:hover {
+    color: #000000;
+}
+
+#check:checked~.navigation {
+    right: -190px;
+    position: fixed;
+}
+
+#check:checked~.navigation a .title {
+    display: none;
+}
+
+#check:checked~.navigation .dd {
+    display: none;
+}
+
+#check:checked~.navigation a {
+    text-align: center;
+    font-size: 16px;
+    width: 60px;
+    margin-right: 170px;
+}
+
+#check {
+    display: none
+}
+
+.logout_btn {
+    background: #00A4ED;
+    color: white;
+    border-radius: 5px;
+    font-size: 13px;
+    font-weight: 600;
+    margin-top: 2px;
+    height: 40px;
+    transition: 0.5s;
+    transition-property: 'background';
+}
+
+.logout_btn:hover {
+    background: #00A4ED;
+    color: #fff
+}
+
+.content {
+    margin-right: 240px;
+    background-position: center;
+}
+
+#check:checked~.content {
+    margin-right: 40px;
+}
+
+.pinkBg {
+    background-color: #ed184f!important;
+    background-image: linear-gradient(90deg, #fd5581, #fd8b55);
+}
+
+.intro-banner-vdo-play-btn {
+    height: 60px;
+    width: 60px;
+    position: absolute;
+    top: 153%;
+    left: 75%;
+    text-align: center;
+    margin: -30px 0 40 -30px;
+    border-radius: 100px;
+    z-index: 1
+}
+
+.intro-banner-vdo-play-btn i {
+    line-height: 56px;
+    font-size: 30px
+}
+
+.intro-banner-vdo-play-btn .ripple {
+    position: absolute;
+    width: 160px;
+    height: 160px;
+    z-index: -1;
+    left: 50%;
+    top: 50%;
+    opacity: 0;
+    margin: -80px 0 0 -80px;
+    border-radius: 100px;
+    -webkit-animation: ripple 1.8s infinite;
+    animation: ripple 1.8s infinite
+}
+
+@-webkit-keyframes ripple {
+    0% {
+        opacity: 1;
+        -webkit-transform: scale(0);
+        transform: scale(0)
+    }
+    100% {
+        opacity: 0;
+        -webkit-transform: scale(1);
+        transform: scale(1)
+    }
+}
+
+@keyframes ripple {
+    0% {
+        opacity: 1;
+        -webkit-transform: scale(0);
+        transform: scale(0)
+    }
+    100% {
+        opacity: 0;
+        -webkit-transform: scale(1);
+        transform: scale(1)
+    }
+}
+
+.intro-banner-vdo-play-btn .ripple:nth-child(2) {
+    animation-delay: .3s;
+    -webkit-animation-delay: .3s
+}
+
+.intro-banner-vdo-play-btn .ripple:nth-child(3) {
+    animation-delay: .6s;
+    -webkit-animation-delay: .6s
+}
 
 
 /* ======== // Small devices (landscape phones, 576px and up) ======== */

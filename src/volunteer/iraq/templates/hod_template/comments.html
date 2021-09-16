@@ -15,42 +15,39 @@
             <button type="submit" name="submit" class="btn btn-primary btn-block Boxshadow font-weight-bolder H2 Borders6" value="Comment" style="margin-top:28px">نشر التعليق</button>
         </div>
     </form>
-
-
-
-
-
     <div style="margin-top:70px">
-        <label style="margin-top:-40px" class=" font-weight-bolder float-right mr-5">كل التعليقات </label>
-        <span style="border:4px solid white;margin-right:200px;margin-top:-62px" data-placement="top" title="عدد التعليقات" class="font-size3 text-white float-right badge rounded-circle pt-3 pb-3 pr-4 pl-4 Boxshadow bg-primary">{{num_com}}</span>
+        <label style="margin-top:-40px" class="font-weight-bolder float-right mr-5">كل التعليقات </label>
+        <span class="font-size3 text-white float-right badge rounded-circle pt-3 pb-3 pr-4 pl-4 Boxshadow bg-primary" style="border:4px solid white;margin-right:200px;margin-top:-55px" data-placement="top" title="عدد التعليقات">{{num_com}}</span>
     </div>
     {% if comments %} {% for comment in comments %}
     <div class="Borders border-0 bg-white Boxshadow pt-4 pb-2 mr-4 ml-4 Borders4 mt-4 mb-2">
-        <img style="width:75px;" class="rounded-circle mr-4" src="{{profile_pic}}" alt="Comment">
+        <img style="width:75px" class="rounded-circle mr-4" src="{{profile_pic}}" alt="Comment">
         <h4 class="text-primary mr-5">{{comment.author}}</h4>
-        <h5 class="m-4">{{comment.comm_name}}<small class="mr-5"><i class="text-danger">نشر  في ...</i>{{ comment.created_at}}</small></h5>
-        <!-- <p class="font-weight-bolder float-left mt-4" style="color:#00C7FE;margin-left:900px">{{comment.user}}</p> -->
-        <p class="" style="margin-right:100px">{{ comment.date_comment }}</p>
-        <a class="float-left ml-5" href="{% url 'delete_comment' comment.id %}"><i style="color:#00C7FE;margin-top:-80px" class="fas fa-trash-alt"></i></a>
-        <div class="p-2 mr-3 ml-3" style="">
+        <div class="row">
+            <div class="col">
+                <h5 class="mr-4">{{comment.comm_name}}</h5>
+            </div>
+            <div class="col">
+                <p class="font-size3"><small><i class="text-danger mr-5">نشر  في ...</i></small>{{ comment.date_comment }}{{ comment.created_at}}</p>
+            </div>
+            <div class="col">
+                <a class="float-left ml-5" href="{% url 'delete_comment' comment.id %}"><i class="text-primary fas fa-trash-alt"></i></a>
+            </div>
+        </div>
+        <div class="p-2 mr-3 ml-3 mt-3 text-center">
             {{ comment.body }}
         </div>
-
-        <div class=" mt-5 row pb-2" style="">
-
+        <div class="mt-5 row pb-2">
             <form action="{% url 'like_comment' comment.pk %}" method="POST">
                 {% csrf_token %}
                 <button type="submit" , name="comment_id" , value="{{ comment.id }}" class="bg-white border-0 mr-3" style="width:100px">
-                    <i style="color:red" class="far fa-heart mt-2 mr-4"></i>
+                    <i class="text-danger far fa-heart mt-2 mr-4"></i>
                     <p class="font-weight-bold float-left" style="font-size:13px">اعجبني</p>
-                    <br/><br/><small class="mr-4" style="color:#2699FB">{{ comment.likes.count }}</small><small class="mr-2"> إعجاب</small>
+                    <br/><br/><small class="mr-4 text-primary">{{ comment.likes.count }}</small><small class="mr-2"> إعجاب</small>
                 </button>
             </form>
-
-
-
-            <i style="color:red" class="far fa-comment mr-5 ml-2 mt-2" data-toggle="modal" data-target="#Reply"></i>
-            <p class="font-weight-bolder" style="">رد</p>
+            <i class="text-danger far fa-comment mr-5 ml-2 mt-2" data-toggle="modal" data-target="#Reply"></i>
+            <p class="font-weight-bolder">رد</p>
         </div>
     </div>
     {% endfor %}
@@ -58,19 +55,17 @@
     {% include 'iraq/pagination_comment.html' with page=comments %}
     <!--======End Pagination Member =========-->
     {% else %}
-    <div class="Boxshadow text-center" style="margin-top:65px;margin-right:30px;margin-left:20px;background-color: #EFFEFE;border-radius: 27px;">
+    <div class="Boxshadow text-center mt-5 mr-4 ml-4 background Borders1">
         <div class="row">
-            <div class=" " style="margin-right:380px">
-                <div class=" mt-2 mb-2">
-                    <p class="card-title font-weight-bold pb-4 pt-4" style="color:#2699FB;font-size:25px;margin-right:100px"> لا توجد معلومات</p>
-                    <img class="mb-4" src="{% static 'iraq/images/informationR.png' %}" style="height:228px; width:313px; margin-right: 70px;margin-top:20px" alt="Cinque Terre">
+            <div style="margin-right:380px">
+                <div class="mt-2 mb-2">
+                    <p class="card-title font-weight-bold pb-4 pt-4 text-primary text-center" style="font-size:25px"> لا توجد معلومات</p>
+                    <img class="mb-4" src="{% static 'iraq/images/informationR.png' %}" style="height:228px; width:313px; margin-right: 70px;margin-top:20px" alt="Not Found">
                 </div>
             </div>
         </div>
     </div>
     {% endif %} {% include 'iraq/reply.html' %}
-
-
 </div>
 {% endblock %}
 <!-- /* ======== End Comment Page======== */ -->

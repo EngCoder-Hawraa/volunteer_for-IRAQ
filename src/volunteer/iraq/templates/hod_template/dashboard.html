@@ -1,4 +1,6 @@
-{% extends 'hod_template/base_template.html' %} {% load static %} {% block content %}
+{% extends 'hod_template/base_template.html' %} {% load static %}
+<!-- /* ======== Start Dashboard Page======== */ -->
+{% block content %}
 <!-- ==========  Start Sidebar  ========== -->
 <div class="navigation Boxshadow mt-1">
     <div class="Boxshadow Borders badge-primary mb-5 pt-3 pb-2" style="height:140px">
@@ -7,13 +9,13 @@
     <!-- <button type="button" style="border-radius:34px;background-color:#00C7FE;border:none;color:white;font-size:14px" class="text-center font-weight-bolder" data-toggle="modal" data-target="#mypicture">
       حفظ
       </button> -->
-    <span class="border-0 row badge badge-warning rounded-circle " style="width:30px;height:30px;color:#fff;margin-top:-80px;margin-right:80px" data-placement="top" title="عدد الاعلانات"><a href="#"></a>
+    <!-- <span class="border-0 row badge badge-warning rounded-circle " style="width:30px;height:30px;color:#fff;margin-top:-80px;margin-right:80px" data-placement="top" title="عدد الاعلانات"><a href="#"></a>
       <i data-toggle="modal" data-target="#mypicture1" class="dd fas fa-camera fa-lg mt-1" data-placement="top" title="تعديل صورة الملف الشخصي"></i>
-    </span>
+    </span> -->
     <!--======End Edit Member =========-->
     <!--Start The Modal for Edit Picture -->
     <div class="pb-3">
-        <p class="text-center font-weight-bold" style="color:blueviolet;">{{user.username}}</p>
+        <p class="text-center font-weight-bold text-primary">{{user.username}}</p>
         <!-- <p class="text-center font-weight-normal" style=""> {{user.email}}</p> -->
     </div>
     <ul>
@@ -65,19 +67,18 @@
                 <span class="title nav-link mt-1">التعليقات</span>
             </a>
         </li>
-        <li class="mb-5">
+        <li>
             <a href="{% url 'about1' %}">
                 <span class="icon"><i class="fas fa-book-reader mt-3"></i></span>
                 <span class="title nav-link mt-1">من نحن</span>
             </a>
         </li>
-        {% comment %}
-        <li class="mb-5 ">
-            <a href="{% url 'logoutstate' %}">
+        <li class="mb-3">
+            <a href="{% url 'logout' %}">
                 <span class="icon"><i class="fas fa-sign-out-alt mt-3"></i></span>
                 <span class="title nav-link mt-1">تسجيل خروج</span>
             </a>
-        </li> {% endcomment %}
+        </li>
     </ul>
 </div>
 <div class="toggle">
@@ -85,3 +86,4 @@
 {% include 'hod_template/profile_edit.html' %}
 <!-- ========  End Sidebar  ======== -->
 {% endblock %}
+<!-- /* ======== End Dashboard Page======== */ -->
