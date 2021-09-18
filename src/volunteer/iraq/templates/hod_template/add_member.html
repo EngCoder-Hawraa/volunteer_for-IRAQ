@@ -21,7 +21,7 @@
                     </div>
                     <div class="form-group">
                         <label class="control-label float-right">الجنس</label>
-                        <select type="text" value="{{ gender.id }}" name="gender" class="col-sm-12 Boxshadow Borders4 H2 Borders7">
+                        <select type="text" name="gender" class="col-sm-12 Boxshadow Borders4 H2 Borders7">
                             {% for gender in gender %}
                                 <option value="{{ gender.id }}">{{ gender }}</option>
                             {% endfor %}    

@@ -89,11 +89,13 @@ def RegisterIntities(request):
     # if request.user.is_authenticated: //this code save the user. So, enter directly without anything(information)
     # #     return redirect('/admin_home')
     form=CreateNewUser()
-    if request.method=="POST":
+    # if request.method=="POST":
+    if form.is_valid():
+        form = CreateNewUser(request.POST)
         username=request.POST.get("username")
         email=request.POST.get("email")
         password=request.POST.get("password1")
-        address=request.POST.get("password2")
+        fcm_token=request.POST.get("password2")
         # phone=request.POST.get("phone")
         # birth=request.POST.get("birth")
         # gender=request.POST.get("gender")
@@ -110,12 +112,12 @@ def RegisterIntities(request):
             try:
                 # user=CustomUser.objects.create_user(username=username,email=email,password=password,address=address,phone=phone,birth=birth,gender=gender,emplouser_type=2)
                 user=CustomUser.objects.create_user(username=username,password=password,email=email,user_type=1)
-                user.adminhod.address=address
+                user.adminhod.fcm_token=fcm_token
                 # user.adminhod.phone=phone
                 # user.staff.birth=birth
                 # user.adminhod.gender=gender
                 # user.adminhod.employee=employee
-                # user.adminhod.region=region
+                # user.adminhod.region=
                 user.save()
                 messages.success(request , f'تهانينا  {user} تم التسجيل بنجاح . ')
                 return HttpResponseRedirect(reverse("doLogin"))
@@ -184,7 +186,6 @@ def doLogin(request):
             'title':'دخول',
             'form':form,
         }
-        messages.error(request ,  ' هناك خطأ في اسم المستخدم او كلمة المرور !')
         return render(request, 'iraq/login_page.html',context)
         
 
@@ -210,7 +211,7 @@ def RegisterUser(request):
         username=request.POST.get("username")
         email=request.POST.get("email")
         password=request.POST.get("password1")
-        address=request.POST.get("password2")
+        fcm_token=request.POST.get("password2")
         recaptcha_response = request.POST.get('g-recaptcha-response')
         data = {
             'secret' : settings.GOOGLE_RECAPTCHA_SECRET_KEY,
@@ -221,7 +222,7 @@ def RegisterUser(request):
         if result['success']:
             try:
                 user=CustomUser.objects.create_user(username=username,password=password,email=email,user_type=2)
-                user.people.address=address
+                user.people.fcm_token=fcm_token
                 user.save()
                 messages.success(request , f'تهانينا  {user} تم التسجيل بنجاح . ')
                 return HttpResponseRedirect(reverse("doLogin"))

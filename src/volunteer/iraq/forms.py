@@ -16,36 +16,52 @@ class CreateNewUser(forms.Form):
     username = forms.CharField(label='اسم المستخدم', max_length=255,help_text='اسم المستخدم يجب الا يحتوي على مسافات' ,
                         widget= forms.TextInput(attrs={'class': 'form-control  mb-3'}))
     email = forms.EmailField(label='البريد الإلكتروني',
-                            widget= forms.TextInput(attrs={'class': 'form-control mb-3'}))
-    password1 = forms.CharField(
-        label='كلمة المرور',help_text='يجب الايقل عن ثمانية', widget=forms.PasswordInput(attrs={'class': 'form-control mb-3'}), min_length=8,required=True)
-    password2 = forms.CharField(
-        label='تأكيد كلمة المرور', widget=forms.PasswordInput(attrs={'class': 'form-control mb-3'}), min_length=8,required=True)
+                        widget= forms.TextInput(attrs={'class': 'form-control mb-3'}))
+    password1 = forms.CharField(label='كلمة المرور',help_text='يجب الايقل عن ثمانية',
+                        widget=forms.PasswordInput(attrs={'class': 'form-control mb-3'}), min_length=8,required=True)
+    password2 = forms.CharField(label='تأكيد كلمة المرور', 
+                        widget=forms.PasswordInput(attrs={'class': 'form-control mb-3'}), min_length=8,required=True)
     
-    # name=forms.CharField(label='اسم المؤسسة', max_length=255,widget= forms.TextInput(attrs={'class': 'form-control  mb-3'}),required=False)
-    
-    # region=models.ForeignKey(Region,on_delete=models.CASCADE)
-    # intities_pic=models.FileField(upload_to='images',null=True)
-    # created=models.DateField(null=True)
-    # classification=models.CharField(max_length=255,null=True)
-    # works=models.TextField(default="",null=True)
-    # abstract=models.TextField(default="",null=True)
-    # permission=models.FileField(upload_to='images',null=True)
-    
-    def clean_password2(self):
-        cd = self.cleaned_data
-        if cd['password1'] != cd['password2']:
-            raise forms.ValidationError('كلمة المرور غير متطابقة')
-        return cd['password2']
-
     def clean_username(self):
-        cd = self.cleaned_data
-        if CustomUser.objects.filter(username=cd['username']).exists():
+        username = self.cleaned_data['username'].lower()
+        r = CustomUser.objects.filter(username=username)
+        if r.count():
             raise forms.ValidationError('يوجد مستخدم مسجل بهذا الاسم.')
-        return cd['username']
+        return username
+
+    def clean_email(self):
+        email = self.cleaned_data['email'].lower()
+        r = CustomUser.objects.filter(email=email)
+        if r.count():
+            raise forms.ValidationError('هذا الايميل مسجل مسبقا')
+        return email
+
+    def clean_password2(self):
+        password1 = self.cleaned_data.get('password1')
+        password2 = self.cleaned_data.get('password2')
+
+        if password1 and password2 and password1 != password2:
+            raise forms.ValidationError('كلمة المرور غير متطابقة')
+
     class Meta:
-        model = CustomUser
-        fields = ('username', 'email', 'password1', 'password2')
+            model = CustomUser
+            fields = ('username', 'email', 'password1', 'password2')
+
+    
+    # def clean_password2(self):
+    #     cd = self.cleaned_data
+    #     if cd['password1'] != cd['password2']:
+    #         raise forms.ValidationError('كلمة المرور غير متطابقة')
+    #     return cd['password2']
+
+    # def clean_username(self):
+    #     cd = self.cleaned_data
+    #     if CustomUser.objects.filter(username=cd['username']).exists():
+    #         raise forms.ValidationError('يوجد مستخدم مسجل بهذا الاسم.')
+    #     return cd['username']
+    # class Meta:
+    #     model = CustomUser
+    #     fields = ('username', 'email', 'password1', 'password2')
     
 
 

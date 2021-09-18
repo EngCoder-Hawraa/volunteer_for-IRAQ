@@ -7,6 +7,8 @@ from .models import *
 from iraq.models import CustomUser
 
 
+
+# admin.site.register(CustomUser)
 class UserModel(UserAdmin):
     pass
 
