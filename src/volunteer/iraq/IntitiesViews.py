@@ -1,9 +1,9 @@
 from django.shortcuts import render, redirect,  get_object_or_404
 from django.contrib.auth.decorators import login_required
-
+from .forms import UserUpdateForm,ProfileUpdateForm
 from django.contrib import messages
 # from django.contrib.auth.models import User,Group
-from .models import Intity,AdminHOD,Member,Region,Classification,Comment,NumVolunteer,Poster,CustomUser,Reply,Gender
+from .models import Intity,AdminHOD,Member, People,Region,Classification,Comment,NumVolunteer,Poster,CustomUser,Reply,Gender,Post,Stream
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.files.storage import FileSystemStorage
 from django.db.models import Q # new
@@ -14,6 +14,7 @@ from django.urls import reverse
 
 
 
+# from .decorators import notLoggedUsers
 # import json
 # import requests
 # # from .forms import AddMemberForm,IntitiesForm
@@ -22,7 +23,6 @@ from django.urls import reverse
 # from .decorators import notLoggedUsers,allowedUsers,IntityAdmins
 # # from .forms import IntityForm
 # # from .forms import UserUpdateForm, ProfileUpdateForm
-# # from .forms import UserUpdateForm,ProfileUpdateForm
 
 # # Create by using class based view replace function based view that provide Django
 # # from django.views.generic import CreateView,UpdateView
@@ -37,6 +37,8 @@ from django.urls import reverse
 
 # # ========Views for Admin=================#
 
+
+@login_required(login_url='doLogin')
 def dashboard(request):
     context = {
     'title':'معلومات المؤسسة',
@@ -55,6 +57,7 @@ def admin_home(request):
 @login_required(login_url='doLogin')
 def Profile(request):
     context = {
+        # 'adminhod': AdminHOD.objects.all(),
         'region': Region.objects.all(),
         'gender':Gender.objects.all(),
         'admin': AdminHOD.objects.all(),
@@ -65,20 +68,13 @@ def Profile(request):
 
 @login_required(login_url='do_login')
 def ProfileUpdate(request,user_id):
-    # return HttpResponse("Intity Id: "+str(user_id))
     user=AdminHOD.objects.get(id=user_id)
     if user==None:
         return HttpResponse("Intity Not Found")
     else:
-        # return render(request, "hod_template/edit_intities_template.html",{'intity': intity})
         return HttpResponseRedirect("/profile")
 
           
-
-
-
-
-
 
 
 @login_required(login_url='doLogin')
@@ -87,10 +83,9 @@ def ProfileEdit(request):
     if request.method!="POST":
         return HttpResponse("<h2>Method Now Allowed</h2>")
     else:
-        # user=CustomUser.objects.update()
         user=AdminHOD.objects.get(id=request.POST.get('id',''))
         if user==None:
-            return HttpResponse("<h2>Staff Not Found</h2>")
+            return HttpResponse("<h2>لا يوجد الملف الشخصي</h2>")
         else:       
             if request.FILES.get('profile'):
                 file = request.FILES['profile']
@@ -100,16 +95,21 @@ def ProfileEdit(request):
                     profile_pic=None
             if profile_pic!=None:  
                 user.profile_pic= profile_pic
-            user.username =request.POST.get('username','')
+            # admin=CustomUser.objects.update()
+            # if admin == True:
+            #     admin.username =request.POST.get('user','')
+            #     admin.email=request.POST.get('email','')
+            #     admin.save()
+            user.username =request.POST.get('user','')
             user.email=request.POST.get('email','')
             user.phone=request.POST.get('phone','')
             user.region=request.POST.get('region','')
             user.birth=request.POST.get('birth','')
             user.gender=request.POST.get('gender','')
             user.employee=request.POST.get('employee','')
-            user.password=request.POST.get('password','')
+            user.facebook=request.POST.get('facebook','')
             user.save()
-            messages.success(request,"Updated Successfully")
+            messages.success(request,",تم التعديل بنجاح")
             return HttpResponseRedirect("profile_update/"+str(user.id)+"")
 
 
@@ -122,8 +122,6 @@ def Intities(request):
         'intitys' : Intity.objects.all(),
         'region': Region.objects.all(),
         'classification': Classification.objects.all(),
-
-        # 'myFilter': searchFilter,
         'title':'المؤسسات'
     }
     return render(request, 'hod_template/intities.html', context)
@@ -165,17 +163,8 @@ def Profile_Intities(request):
 
 
 
-# # # Create by using class based view replace function based view that provide Django
-# # @login_required(login_url='login_intities')
-# # # # @allowedUsers(allowedGroups=['intityAdmin'])
-# # class IntitiesCreateView(CreateView):
-# #     model=Intity
-# #     fields = ['user','name','region','intities_pic','created','classification','works','abstract','permission']
-# #     template_name = 'hod_template/add_intities_template.html'
 
-
-@login_required(login_url='login_intities')
-# @allowedUsers(allowedGroups=['intityAdmin'])
+@login_required(login_url='doLogin')
 def Add_Intities_Save(request):
     if request.method!="POST":
         return HttpResponse("<h2>Method Now Allowed</h2>")
@@ -191,42 +180,32 @@ def Add_Intities_Save(request):
             classification=Classification.objects.get(id=request.POST.get('classification',''))
             intity=Intity(admin=request.user,name=request.POST.get('name',''),created=request.POST.get('created',''),works=request.POST.get('works',''),abstract=request.POST.get('abstract',''),intities_pic=intities_picture,region=region,classification=classification,permission=permission)
             intity.save()
-            messages.success(request,"Added Successfully")
+            messages.success(request,"تم الاضافة بنجاح")
         except Exception as e:
             print(e)
-            messages.error(request,"Failed to Add Intities")
+            messages.error(request,"لم يتم الاضافة لا يحق لك معلومات واحدة")
         return HttpResponseRedirect("/profile_intities")
 
 
 
-# # # Create by using class based view replace function based view that provide Django
-# # @login_required(login_url='login_intities')
-# # # # # @allowedUsers(allowedGroups=['intityAdmin'])
-# # class IntitiesUpdateView(LoginRequiredMixin,UpdateView):
-# #     model=Intity
-# #     fields = ['user','name','region','intities_pic','created','classification','works','abstract','permission']
-
-
-# # @login_required(login_url='login_intities')
 # # @allowedUsers(allowedGroups=['intityAdmin'])
+@login_required(login_url='doLogin')
 def delete_intities(request, intity_id):
     intity=Intity.objects.get(id=intity_id)
     intity.delete()
-    messages.error(request, "Deleted Successfully")
+    messages.error(request, "تم الحذف بنجاح")
     return HttpResponseRedirect("/profile_intities") 
 
 
 
  
 
-@login_required(login_url='login_intities')
+@login_required(login_url='doLogin')
 def Update_Intities(request,intity_id):
-    # return HttpResponse("Intity Id: "+str(intity_id))
     intity=Intity.objects.get(id=intity_id)
     if intity==None:
-        return HttpResponse("Intity Not Found")
+        return HttpResponse("المؤسسة غير موجودة")
     else:
-        # return render(request, "hod_template/edit_intities_template.html",{'intity': intity})
         return HttpResponseRedirect("/profile_intities")
 
 
@@ -239,7 +218,7 @@ def Update_Intities(request,intity_id):
           
 
 
-@login_required(login_url='login_intities')
+@login_required(login_url='doLogin')
 # @allowedUsers(allowedGroups=['intityAdmin'])
 def Edit_Intities_Save(request):
     if request.method!="POST":
@@ -247,7 +226,7 @@ def Edit_Intities_Save(request):
     else:
         intity=Intity.objects.get(id=request.POST.get('id',''))
         if intity==None:
-            return HttpResponse("<h2>Intity Not Found</h2>")
+            return HttpResponse("<h2>المؤسسة غير موجودة</h2>")
         else:       
             if request.FILES.get('profile1') and request.FILES.get('profile2'):
                 file = request.FILES['profile1']
@@ -264,11 +243,13 @@ def Edit_Intities_Save(request):
                 intity.permission=permission
             User =request.POST.get('user','')
             intity.name=request.POST.get('name','')
+            intity.region=request.POST.get('region','')
+            intity.classification=request.POST.get('classification','')
             intity.created=request.POST.get('created','')
             intity.works=request.POST.get('works','')
             intity.abstract=request.POST.get('abstract','')
             intity.save()
-            messages.success(request,"Updated Successfully")
+            messages.success(request,"تم التحديث بنجاح")
             return HttpResponseRedirect("update_intities/"+str(intity.id)+"")
  
       
@@ -307,8 +288,11 @@ def Details(request):
 @login_required(login_url='doLogin')
 def comments(request):
     comments = Comment.objects.all()
+    customuser = CustomUser.objects.all()
     # stuff = get_object_or_404(Comment, id=['pk'])
     # total_likes = stuff.total_likes()
+    # adminhod = AdminHOD.objects.all()
+    # people  = People.objects.all()
     reply = Reply.objects.all()
     paginator = Paginator(comments, 4)
     page = request.GET.get('page')
@@ -320,6 +304,10 @@ def comments(request):
         comments = paginator.page(paginator.num_page)
     context = {
         # 'Profile': Profile.objects.all(),
+        # 'adminhod': adminhod,
+        # 'people': people,
+        'reply': reply,
+        'customuser':customuser,
         'comments' : comments,
         'intitys': Intity.objects.all(),
         'num_com': Comment.objects.filter().count(),
@@ -342,9 +330,18 @@ def Add_Comment_Save(request):
     if request.method!="POST":
         return HttpResponse("<h2>Method Now Allowed</h2>")
     else:
-        com = Comment(comm_name=request.POST.get('comm_name',''),author=request.user,body=request.POST.get('body',''))
-        com.save()
-        return redirect("/comments")
+        # file=request.FILES['profile']
+        # fs=FileSystemStorage()
+        # commet_pic=fs.save(file.name,file)
+        try:
+            com = Comment(comm_name=request.POST.get('comm_name',''),author=request.user,body=request.POST.get('body',''))
+            com.save()
+            messages.success(request,"تم الاضافة بنجاح")
+            return redirect("/comments")
+        except Exception as e:
+            print(e)
+            messages.error(request,"لم يتم الاضافة ")
+            return redirect("/comments")
 
 
 
@@ -356,6 +353,9 @@ def LikeView(request,pk):
 
 
 
+
+
+
 @login_required(login_url='doLogin')
 # @allowedUsers(allowedGroups=['intityAdmin'])
 def ComReply(request):
@@ -364,9 +364,9 @@ def ComReply(request):
     else:
         # comment_name=Comment.objects.get(id=request.POST.get('comm_name',''))
         comment_name=Comment(comm_name=request.POST.get('comm_name',''))
-        rep = Reply(comment_name=comment_name,author=request.user,reply_body=request.POST.get('body',''))
+        rep = Reply(comment_name=comment_name,author=request.user,reply_body=request.POST.get('body',''),comment_pic=request.user)
         rep.save()
-        return redirect("/comments")
+    return redirect("/comments")
         # comment=Comment.objects.get(id=request.POST.get('comment',''))
         # comm_name=Comment(request.POST.get('comm_name','')),
         # comm_name = Comment(request.POST.get('comment',''))
@@ -504,7 +504,7 @@ def Declaration(request):
     return render(request, 'hod_template/poster.html', context)
 
 
-@login_required(login_url='doLogin')   
+# @login_required(login_url='doLogin')   
 # @allowedUsers(allowedGroups=['intityAdmin'])
 def Save_Poster(request):
     if request.method!="POST":

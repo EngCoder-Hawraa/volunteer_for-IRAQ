@@ -11,50 +11,51 @@
     اضافة معلومات المؤسسة
             </button>
             <!--======End Add Intity =========-->
-            <!--======Start Edit Intity =========-->
-            <button type="button" style="width:204px;height:41px;margin-top:15px" class="border-0 Borders1 font-size text-white col Boxshadow text-center bg-primary" data-toggle="modal" data-target="#edit">
-    تعديل معلومات المؤسسة
-            </button>
-            <!--======End Edit Intity =========-->
         </div>
     </div>
     {% if intitys %} {% for intity in intitys %}
     <div class="bg-white Boxshadow pb-5 Borders mr-4 ml-4">
-        <a href="{% url 'delete_intities' intity.id  %}"><i style="margin-right:85%" class="mt-4 ml-5 fas fa-trash-alt text-primary"></i></a> {% endfor %}
+        <!--======Start Edit Intity =========-->
+        <div class="Boxshadow pt-3 pb-3 Borders1">
+            <button type="button" style="margin-right:40%" class="border-0 Borders1 text-center fas fa-user-edit text-primary" data-toggle="modal" data-target="#edit">
+            </button>
+            <!--======End Edit Intity =========-->
+            <a href="{% url 'delete_intities' intity.id  %}"><i class="ml-5 mr-5 fas fa-trash-alt text-primary"></i></a> {% endfor %}
+        </div>
         <div class="row">
-            <label class="col-sm-2 text-primary font-weight-bolder pr-5" style="margin-top:60px">اسم المؤسسة</label>
+            <label class="col-sm-2 text-dark font-weight-bolder pr-5" style="margin-top:60px">اسم المؤسسة</label>
             <div class="col-sm-3 Boxshadow text-center pt-3 Borders4" style="margin-right:18px;margin-top:30px;height:60px;width:350px">
                 {{ user.intity.name }}
             </div>
-            <label class="col-sm-2 text-primary font-weight-bolder pr-5" style="margin-top:60px">المحافظة</label>
+            <label class="col-sm-2 text-dark font-weight-bolder pr-5" style="margin-top:60px">المحافظة</label>
             <div class="col-sm-3 Boxshadow text-center pt-3 Borders4" style="margin-right:18px;height:60px;margin-top:30px;width:350px">
                 {{ user.intity.region }}
             </div>
         </div>
         <div class="row">
-            <label class="col-sm-2 text-primary font-weight-bolder pr-5" style="margin-top:35px;">تأريخ التأسيس</label>
+            <label class="col-sm-2 text-dark font-weight-bolder pr-5" style="margin-top:35px;">تأريخ التأسيس</label>
             <div class="col-sm-3 Boxshadow text-center pt-3 Borders4" style="height:60px;margin-top:20px;margin-right:18px;width:350px">
                 {{ user.intity.created}}
             </div>
-            <label class="col-sm-2 text-primary font-weight-bolder pr-5" style="margin-top:35px;">التصنيف</label>
+            <label class="col-sm-2 text-dark font-weight-bolder pr-5" style="margin-top:35px;">التصنيف</label>
             <div class="col-sm-3 Boxshadow text-center pt-3 Borders4" style="height:60px;margin-top:20px;margin-right:18px;width:350px">
                 {{ user.intity.classification }}
             </div>
         </div>
         <div class="row">
-            <label class="text-primary font-weight-bolder pr-5" style="margin-top:35px;margin-right:20px">ملخص</label>
+            <label class="text-dark font-weight-bolder pr-5" style="margin-top:35px;margin-right:20px">ملخص</label>
             <div class="col-sm-10 Boxshadow  pt-3 float-right text-center Borders4" style="margin-top:20px;margin-right:30px;width:85%">
                 <p class="float-right">{{ user.intity.abstract}}</p>
             </div>
         </div>
         <div class="row">
-            <label class="text-primary font-weight-bolder pr-5" style="margin-top:35px;margin-right:20px">اعمالها</label>
+            <label class="text-dark font-weight-bolder pr-5" style="margin-top:35px;margin-right:20px">اعمالها</label>
             <div class="col-sm-10 Boxshadow pt-3 float-right text-center Borders4" style="margin-top:20px;margin-right:30px;width:85%">
                 <p class="float-right">{{ user.intity.works}}</p>
             </div>
         </div>
         <div class="row">
-            <label for="username" class="text-primary font-weight-bolder pr-5" style="margin-top:35px;margin-right:20px">الترخيص</label>
+            <label for="username" class="text-dark font-weight-bolder pr-5" style="margin-top:35px;margin-right:20px">الترخيص</label>
             <div class="" style="margin-top:20px;margin-right:20px;">
                 <a class="Boxshadow" href="{% url 'view_imageP' %}"><img class="float-right Borders4" style="width:200px;height:200px" src="/media/{{ user.intity.permission}}" alt="Card image">
                     <div class="bg-primary text-center font-weight-bolder nav-link text-white Borders4">عرض الترخيص</div>
@@ -75,6 +76,13 @@
     </div>
     {% endif %}
     <div class="row Boxshadow bg-white mr-4 ml-4 mt-1" style="border-radius:0px 0px 10px 10px;height:60px">
+    </div>
+    <div class="background4 m-3">
+        {% if messages %} {% for message in messages %} {% if message.tags == 'success' %}
+        <div class="alert alert-success text-center Boxshadow border-0 Borders4 text-primary font-weight-bold">{{ message }}</div>
+        {% elif message.tags == 'error' %}
+        <div class="alert alert-danger text-center Boxshadow border-0 Borders4 text-primary font-weight-bold">{{ message }}</div>
+        {% endif %} {% endfor %} {% endif %}
     </div>
     <!--Start Add Intities-->
     {% include 'hod_template/add_intities_template.html' %}

@@ -37,19 +37,14 @@ urlpatterns = [
     path('intities/', views.Intities, name='intities'),
     path('search_Intities2/', SearchIntitiesResultsView2.as_view(), name='search_Intities_results2'),
     path('about/', views.about, name='about'),
-    # # path('logout_intities/', LogoutView.as_view(template_name= "hod_template/logout_intities.html"), name='logout'),
     path('register_type/', views.register_type, name='register_type'),
     path('register_intities',views.RegisterIntities, name='register_intities'),
-    # # path('save_intities/', views.SaveIntities, name='save_intities'),
     path('doLogin', views.doLogin, name='doLogin'),
-    path('get_user_details', views.GetUserDetails,name='get_user_details'),
     path('register_user', views.RegisterUser, name='register_user'),
-    # # path('profile/', views.profile, name='profile'),
     path('logout', LogoutView.as_view(template_name= "iraq/logout.html"), name='logout'),
 
 
     # path('oauth/', include('social_django.urls', namespace='social')),
-    
     
     # # for Reset Password
     path('reset_password/' , authviews.PasswordResetView.as_view(template_name= "iraq/password_reset.html"), name="reset_password"),

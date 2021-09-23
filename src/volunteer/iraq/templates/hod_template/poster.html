@@ -60,7 +60,7 @@
 <div class="background2 pt-4">
     <div class="Boxshadow bg-white row mr-4 ml-3 Borders4">
         <p class="col-sm-12 font-weight-bolder pt-5 text-center text-primary mr-2">تصفح الفرص التطوعية</p>
-        <img style="width:100px;height:200px;margin-right:35%" class="mb-5" src="{% static 'iraq/images/Poster.png' %}" alt="Poster">
+        <!-- <img style="width:100px;height:200px;margin-right:35%" class="mb-5" src="{% static 'iraq/images/Poster.png' %}" alt="Poster"> -->
         <div class="row">
             <div class="col text-center">
                 <a class="text-decoration-none" href="{% url 'poster' %}" method="get" name="q">
@@ -130,7 +130,7 @@
     </div>
     {% if posters %} {% for poster in posters %}
     <div class="Boxshadow text-center pb-4 bg-white" style="margin-left:10px;border-radius: 8px;margin-right:20px">
-        <div class="row container mt-5 mb-5">
+        <div class="row container mt-3 mb-5">
             <div class="col-sm-12 col-md text-center pt-4" data-placement="top" title="المكان">
                 {{ poster.place }}
             </div>
@@ -163,7 +163,7 @@
                         <small class="font-size3"><i class="text-danger font-size">نشر  في ...</i>{{ poster.created_at}}</small>
                     </div>
                 </div>
-                <p class="p-3 mb-5 text-center font-size3">{{ poster.posts }}</p>
+                <p class="p-3 mb-5 float-right font-size3">{{ poster.posts }}</p>
             </div>
         </div>
     </div>

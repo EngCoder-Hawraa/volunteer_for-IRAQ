@@ -23,31 +23,31 @@
     }
 </style>
 {% endblock custom_css %} {% block main_content %}
-<div style="background-color:#F6F7F9;padding-top:40px;padding-bottom:40px">
-    <div class="bg-white Boxshadow Borders1" style="margin-right:20px; margin-left:20px;padding-bottom:60px">
-        <p class="font-weight-bolder col-12 text-center" style="padding-top:60px;padding-bottom:40px;color:#2699FB;font-size:20px;">إرسال إشعار للمؤسسة</p>
-        <img style="width:86.97px;height:73px;margin-right:45%;" class="" src="{% static 'iraq/images/vol1.png' %}" alt="Cinque Terre">
+<div class="background2 pt-4 pb-4">
+    <div class="bg-white Boxshadow Borders1 mr-4 ml-4 pb-5">
+        <p class="font-weight-bolder col-12 text-center text-primary font-size1" style="padding-top:60px;padding-bottom:40px">إرسال إشعار للمؤسسة</p>
+        <img style="width:90px;height:90px;margin-right:45%;border:4px solid white;" class="Boxshadow bg-success rounded-circle" src="{{user.people.profile_pic.url}}" alt="الصورة الشخصية">
         <form role="form" action="/send_notification" method="post" enctype="multipart/form-data">
             {% csrf_token %}
-            <div class="form-group border-0 ">
+            <div class="form-group border-0 pb-5 pt-3">
                 <span class="row custom-file">
-					<span class="badge w3-circle pt-1 pb-2 Boxshadow" style="width:35px; height:35px;margin-right:45%"><i style="color:#00C7FE;" class="fas fa-camera fa-2x" data-placement="top" title="اختر صورتك"></i>
+					<span class="badge w3-circle pt-1 pb-2 Boxshadow" style="width:35px; height:35px;margin-right:45%"><i class="text-primary fas fa-camera fa-2x" data-placement="top" title="اختر صورتك"></i>
 					<input style="margin-right:-50px;margin-top:0px;opacity:0" type="file" name="profile" />
 					</span>
-                <label class="font-weight-bold pt-1" style="color:#6F2DBD;">اختر صورتك</label>
+                <label class="font-weight-bold pt-1 text-primary">اختر صورتك</label>
                 </span>
             </div>
             <div class="form-group row">
-                <label class="col-form-label font-weight-bolder mt-5 col-sm-12 col-md-1" style="font-size:14px;margin-right:20%">الاسم</label>
-                <input class="mt-5 col-sm-12 col-md-5" type="text" style="border: 1px solid #44A5E4;width:95%;height:50px;border-radius:8px; box-shadow: 0px 3px 6px #F1ECEC;margin-right:5%;margin-left:5%" name="name">
+                <label class="col-form-label font-weight-bolder col-sm-12 col-md-1 font-size4" style="margin-right:20%">الاسم</label>
+                <input class="col-sm-11 col-md-6 col-lg-5 Boxshadow Borders7 Borders4 mr-4 ml-4" type="text" style="height:50px" name="name">
             </div>
             <div class="form-group row">
                 <label class="col-form-label font-weight-bolder col-sm-12 col-md-1" style="font-size:14px;margin-right:20%">العمر</label>
-                <input class="col-sm-12 col-md-5" type="number" style="border: 1px solid #44A5E4;width:95%;height:50px;border-radius:8px; box-shadow: 0px 3px 6px #F1ECEC;margin-right:5%;margin-left:5%" name="age">
+                <input class="col-sm-11 col-md-6 col-lg-5 Boxshadow Borders7 Borders4 mr-4 ml-4" type="number" style="width:95%;height:50px" name="age">
             </div>
             <div class="form-group row">
                 <label class="col-form-label font-weight-bolder col-sm-12 col-md-1" style="font-size:14px;margin-right:20%">الجنس</label>
-                <select type="text" name="gender" class="col-sm-12 col-md-5" style="border: 1px solid #44A5E4;width:95%;height:50px;border-radius:8px; box-shadow: 0px 3px 6px #F1ECEC;margin-right:5%;margin-left:5%">
+                <select type="text" name="gender" class="col-sm-11 col-md-6 col-lg-5 Boxshadow Borders7 Borders4 mr-4 ml-4" style="width:95%;height:50px">
 					{% for gender in gender %}
 					  <option value="{{ gender.id }}">{{ gender }}</option>
 					{% endfor %}    
@@ -55,7 +55,7 @@
             </div>
             <div class="form-group row">
                 <label class="col-form-label font-weight-bolder col-sm-12 col-md-1" style="font-size:14px;margin-right:20%">المحافظة</label>
-                <select class="col-sm-12 col-md-5" style="border: 1px solid #44A5E4;width:95%;height:50px;border-radius:8px; box-shadow: 0px 3px 6px #F1ECEC;margin-right:5%;margin-left:5%" name="region">
+                <select class="col-sm-11 col-md-6 col-lg-5 Boxshadow Borders7 Borders4 mr-4 ml-4" style="width:95%;height:50px" name="region">
 				{% for region in region %}
 					<option value="{{ region.id }}">{{ region }}</option>
 				{% endfor %}
@@ -63,25 +63,21 @@
             </div>
             <div class="form-group row">
                 <label class="col-form-label font-weight-bolder col-sm-12 col-md-1" style="font-size:14px;margin-right:20%">الوظيفة</label>
-                <input class="col-sm-12 col-md-5" type="text" style="border: 1px solid #44A5E4;width:95%;height:50px;border-radius:8px; box-shadow: 0px 3px 6px #F1ECEC;margin-right:5%;margin-left:5%" name="employee">
+                <input class="col-sm-11 col-md-6 col-lg-5 Boxshadow Borders7 Borders4 mr-4 ml-4" type="text" style="width:95%;height:50px" name="employee">
             </div>
-            <button type="submit" name="submit" class="btn btn-primary btn-lg  mt-5 pt-3 pb-2 Boxshadow" style="margin-right:20%;margin-left:20%;width:57%">ارسال</button>
+            <button type="submit" name="submit" class="col-sm-10 bg-primary btn-lg  mt-5 pt-3 pb-2 Boxshadow Borders1 text-white text-center border-0 font-size3 mb-5" style="margin-right:20%;margin-left:20%;width:57%">ارسال</button>
     </div>
     </form>
 
 </div>
-
-
-<div class="row">
-    <div class="col-lg-5" style="margin-right:400px">
-        <div class="form-group">
-            {% if messages %} {% for message in messages %} {% if message.tags == 'success' %}
-            <div class="alert alert-success">{{ message }}</div>
-            {% elif message.tags == 'error' %}
-            <div class="alert alert-danger">{{ message }}</div>
-            {% endif %} {% endfor %} {% endif %}
-        </div>
-    </div>
+<div class="background4 m-5">
+    {% if messages %} {% for message in messages %} {% if message.tags == 'success' %}
+    <div class="alert alert-success text-center Boxshadow border-0 Borders4 text-primary font-weight-bold">{{ message }}</div>
+    {% elif message.tags == 'error' %}
+    <div class="alert alert-danger text-center Boxshadow border-0 Borders4 text-primary font-weight-bold">{{ message }}</div>
+    {% endif %} {% endfor %} {% endif %}
+</div>
+</div>
 </div>
 </div>
 

@@ -68,10 +68,9 @@ def ProfileEdit(request):
     if request.method!="POST":
         return HttpResponse("<h2>Method Now Allowed</h2>")
     else:
-        # user=CustomUser.objects.update()
         user=People.objects.get(id=request.POST.get('id',''))
         if user==None:
-            return HttpResponse("<h2>People Not Found</h2>")
+            return HttpResponse("<h2>لا يوجد الملف الشخصي</h2>")
         else:       
             if request.FILES.get('profile'):
                 file = request.FILES['profile']
@@ -81,16 +80,21 @@ def ProfileEdit(request):
                     profile_pic=None
             if profile_pic!=None:  
                 user.profile_pic= profile_pic
-            user.username =request.POST.get('username','')
+            # admin=CustomUser.objects.update()
+            # if admin == True:
+            #     admin.username =request.POST.get('user','')
+            #     admin.email=request.POST.get('email','')
+            #     admin.save()
+            user.username =request.POST.get('user','')
             user.email=request.POST.get('email','')
             user.phone=request.POST.get('phone','')
             user.region=request.POST.get('region','')
             user.birth=request.POST.get('birth','')
             user.gender=request.POST.get('gender','')
             user.employee=request.POST.get('employee','')
-            user.password=request.POST.get('password','')
+            user.facebook=request.POST.get('facebook','')
             user.save()
-            messages.success(request,"Updated Successfully")
+            messages.success(request,",تم التعديل بنجاح")
             return HttpResponseRedirect("profile_update1/"+str(user.id)+"")
 
 

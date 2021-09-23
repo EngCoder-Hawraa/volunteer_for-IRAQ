@@ -12,12 +12,10 @@ import requests
 from django.conf import settings
 from django.contrib.auth.models import Group
 from .forms import CreateNewUser
-import json
-from django.core.files.storage import FileSystemStorage
+from .decorators import notLoggedUsers
 
-
-
-# from .decorators import notLoggedUsers
+# import json
+# from django.core.files.storage import FileSystemStorage
 # from django.contrib.auth.forms import UserCreationForm
 # from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
@@ -66,6 +64,7 @@ class SearchIntitiesResultsView2(ListView):
         )
         return object_list
 
+
 def about(request):
     context = {
     'title':'من نحن',
@@ -84,48 +83,49 @@ def register_type(request):
 
 
 
-# @notLoggedUsers
+@notLoggedUsers
 def RegisterIntities(request):
-    # if request.user.is_authenticated: //this code save the user. So, enter directly without anything(information)
-    # #     return redirect('/admin_home')
+    # if request.user.is_authenticated:
+        # //this code save the user. So, enter directly without anything(information)
+        # return redirect('/admin_home')
     form=CreateNewUser()
-    # if request.method=="POST":
-    if form.is_valid():
+    if request.method=="POST":
         form = CreateNewUser(request.POST)
         username=request.POST.get("username")
         email=request.POST.get("email")
         password=request.POST.get("password1")
         fcm_token=request.POST.get("password2")
-        # phone=request.POST.get("phone")
-        # birth=request.POST.get("birth")
-        # gender=request.POST.get("gender")
-        # employee=request.POST.get("employee")
-        # region=request.POST.get("region")
-        recaptcha_response = request.POST.get('g-recaptcha-response')
-        data = {
-            'secret' : settings.GOOGLE_RECAPTCHA_SECRET_KEY,
-            'response' : recaptcha_response
-            }
-        r = requests.post('https://www.google.com/recaptcha/api/siteverify',data=data)
-        result = r.json()
-        if result['success']:
-            try:
-                # user=CustomUser.objects.create_user(username=username,email=email,password=password,address=address,phone=phone,birth=birth,gender=gender,emplouser_type=2)
-                user=CustomUser.objects.create_user(username=username,password=password,email=email,user_type=1)
-                user.adminhod.fcm_token=fcm_token
-                # user.adminhod.phone=phone
-                # user.staff.birth=birth
-                # user.adminhod.gender=gender
-                # user.adminhod.employee=employee
-                # user.adminhod.region=
-                user.save()
-                messages.success(request , f'تهانينا  {user} تم التسجيل بنجاح . ')
-                return HttpResponseRedirect(reverse("doLogin"))
-            except:
-                messages.error(request ,  ' هناك خطأ في اسم المستخدم او كلمة المرور!')
-                return HttpResponseRedirect(reverse("register_intities"))
+        r = CustomUser.objects.filter(username=username)
+        if r.count():
+            messages.error(request , 'يوجد مستخدم مسجل بهذا الاسم.')
+            return HttpResponseRedirect(reverse("register_intities"))
+        r = CustomUser.objects.filter(email=email)
+        if r.count():
+            messages.error(request ,'هذا الايميل مسجل مسبقا')
+            return HttpResponseRedirect(reverse("register_intities"))
+        if password and  fcm_token and password != fcm_token:
+            messages.error(request , 'كلمة المرور غير متطابقة')
+            return HttpResponseRedirect(reverse("register_intities"))
         else:
-            messages.error(request ,  ' invalid Recaptcha please try again!') 
+            recaptcha_response = request.POST.get('g-recaptcha-response')
+            data = {
+                'secret' : settings.GOOGLE_RECAPTCHA_SECRET_KEY,
+                'response' : recaptcha_response
+                }
+            r = requests.post('https://www.google.com/recaptcha/api/siteverify',data=data)
+            result = r.json()
+            if result['success']:
+                try:
+                    user=CustomUser.objects.create_user(username=username,password=password,email=email,user_type=1)
+                    user.adminhod.fcm_token=fcm_token
+                    user.save()
+                    messages.success(request , f'تهانينا  {user} تم التسجيل بنجاح . ')
+                    return HttpResponseRedirect(reverse("doLogin"))
+                except:
+                    messages.error(request ,  ' هناك خطأ في اسم المستخدم او كلمة المرور!')
+                    return HttpResponseRedirect(reverse("register_intities"))
+            else:
+                messages.error(request ,  ' invalid Recaptcha please try again!') 
     context = {
         'form':form,
         'title':'تسجيل المؤسسة',
@@ -134,27 +134,11 @@ def RegisterIntities(request):
 
 
 
-
-
-
-
-
- 
- 
-
-      
-      
-
   
 
 
-
-
-# @notLoggedUsers
+@notLoggedUsers
 def doLogin(request):
-    # if request.method!="POST":
-    #     return HttpResponse("<h2>Method Not Allowed</h2>")
-    # else:
         form = CreateNewUser()
         if request.method == 'POST':
             recaptcha_response = request.POST.get('g-recaptcha-response')
@@ -168,7 +152,7 @@ def doLogin(request):
                 username = request.POST.get('email')
                 password = request.POST.get('password1')
                 user=EmailBackEnd.authenticate(request,username=username,password=password)
-                # messages.success(request , f'تهانينا  {username} تم التسجيل بنجاح . ')
+                messages.success(request , f'تهانينا  {username} تم التسجيل بنجاح . ')
                 if user != None: 
                     login(request, user)
                     if user.user_type =="1":
@@ -189,20 +173,12 @@ def doLogin(request):
         return render(request, 'iraq/login_page.html',context)
         
 
-                
-        
-
-def GetUserDetails(request):
-    if request.user!=None:
-        return HttpResponse("User : "+request.user.email+" usertype : "+str(request.user.user_type))
-    else:
-        return HttpResponse("Please Login First")
 
 
     
 
 
-# @notLoggedUsers
+@notLoggedUsers
 def RegisterUser(request):
     # if request.user.is_authenticated: //this code save the user. So, enter directly without anything(information)
     # #     return redirect('/admin_home')
@@ -212,28 +188,40 @@ def RegisterUser(request):
         email=request.POST.get("email")
         password=request.POST.get("password1")
         fcm_token=request.POST.get("password2")
-        recaptcha_response = request.POST.get('g-recaptcha-response')
-        data = {
-            'secret' : settings.GOOGLE_RECAPTCHA_SECRET_KEY,
-            'response' : recaptcha_response
-            }
-        r = requests.post('https://www.google.com/recaptcha/api/siteverify',data=data)
-        result = r.json()
-        if result['success']:
-            try:
-                user=CustomUser.objects.create_user(username=username,password=password,email=email,user_type=2)
-                user.people.fcm_token=fcm_token
-                user.save()
-                messages.success(request , f'تهانينا  {user} تم التسجيل بنجاح . ')
-                return HttpResponseRedirect(reverse("doLogin"))
-            except:
-                messages.error(request ,  ' هناك خطأ في اسم المستخدم او كلمة المرور!')
-                return HttpResponseRedirect(reverse("register_user"))
+        r = CustomUser.objects.filter(username=username)
+        if r.count():
+            messages.error(request , 'يوجد مستخدم مسجل بهذا الاسم.')
+            return HttpResponseRedirect(reverse("register_user"))
+        r = CustomUser.objects.filter(email=email)
+        if r.count():
+            messages.error(request ,'هذا الايميل مسجل مسبقا')
+            return HttpResponseRedirect(reverse("register_user"))
+        if password and  fcm_token and password != fcm_token:
+            messages.error(request , 'كلمة المرور غير متطابقة')
+            return HttpResponseRedirect(reverse("register_user"))
         else:
-            messages.error(request ,  ' invalid Recaptcha please try again!') 
+            recaptcha_response = request.POST.get('g-recaptcha-response')
+            data = {
+                'secret' : settings.GOOGLE_RECAPTCHA_SECRET_KEY,
+                'response' : recaptcha_response
+                }
+            r = requests.post('https://www.google.com/recaptcha/api/siteverify',data=data)
+            result = r.json()
+            if result['success']:
+                try:
+                    user=CustomUser.objects.create_user(username=username,password=password,email=email,user_type=2)
+                    user.people.fcm_token=fcm_token
+                    user.save()
+                    messages.success(request , f'تهانينا  {user} تم التسجيل بنجاح . ')
+                    return HttpResponseRedirect(reverse("doLogin"))
+                except:
+                    messages.error(request ,  ' هناك خطأ في اسم المستخدم او كلمة المرور!')
+                    return HttpResponseRedirect(reverse("register_user"))
+            else:
+                messages.error(request ,  ' invalid Recaptcha please try again!') 
     context = {
-        'form':form,
-        'title':'تسجيل المستخدم',
+    'form':form,
+    'title':'تسجيل المستخدم',
     }
     return render(request, "iraq/register_user.html", context)
 

@@ -1,4 +1,57 @@
-{% extends 'hod_template/base_template.html' %} {% load static %}
+{% extends 'hod_template/base_template.html' %} {% load static %} {% block custom_css %}
+
+<style>
+    .cardI:hover {
+        -ms-transform: scale(0.5);
+        /* IE 9 */
+        -webkit-transform: scale(.5);
+        /* Safari 3-8 */
+        transform: scale(1.1);
+    }
+    
+    .loading {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background: #4973ff;
+        border-radius: 50%;
+        box-shadow: inset 0 0 50px rgba(0, 0, 0, .5);
+    }
+    
+    .loading:before,
+    .loading:after {
+        content: '';
+        position: absolute;
+        width: 200%;
+        height: 200%;
+        top: 0;
+        left: 50%;
+        transform: translate(-50%, -75%);
+        background: #000;
+    }
+    
+    .loading:before {
+        border-radius: 45%;
+        background: rgba(255, 255, 255, 1);
+        animation: animate 5s linear infinite;
+    }
+    
+    .loading:after {
+        border-radius: 40%;
+        background: rgba(255, 255, 255, .5);
+        animation: animate 5s linear infinite;
+    }
+    
+    @keyframes animate {
+        0% {
+            transform: translate(-50%, -75%) rotate(0deg);
+        }
+        100% {
+            transform: translate(-50%, -75%) rotate(360deg);
+        }
+    }
+</style>
+{% endblock custom_css %}
 
 <!-- /* ======== Start Intities Page ======== */ -->
 {% block main_content %}
@@ -73,7 +126,20 @@
 </div>
 {% endif %}
 <!--====== End Not found ======-->
-
+<div class="container">
+    <div class="row">
+        <div class="container">
+            <div class="row pt-2 mb-4">
+                <a href="#" class="intro-banner-vdo-play-btn pinkBg" target="_blank">
+                    <i class="glyphicon glyphicon-play whiteText" aria-hidden="true"></i>
+                    <span class="ripple pinkBg"></span>
+                    <span class="ripple pinkBg"></span>
+                    <span class="ripple pinkBg"></span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
 
 <div class="cup ">
 </div>

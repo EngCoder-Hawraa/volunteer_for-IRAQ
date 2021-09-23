@@ -1,7 +1,6 @@
 from django import forms
-from .models import CustomUser
 # from django.contrib.auth.forms import UserCreationForm
-from .models import Intity, Member,Region, Classification
+from .models import CustomUser,AdminHOD,Intity, Member,Region, Classification
 from django.forms import ModelForm
 
 # class IntityForm(ModelForm):
@@ -48,35 +47,25 @@ class CreateNewUser(forms.Form):
             fields = ('username', 'email', 'password1', 'password2')
 
     
-    # def clean_password2(self):
-    #     cd = self.cleaned_data
-    #     if cd['password1'] != cd['password2']:
-    #         raise forms.ValidationError('كلمة المرور غير متطابقة')
-    #     return cd['password2']
-
-    # def clean_username(self):
-    #     cd = self.cleaned_data
-    #     if CustomUser.objects.filter(username=cd['username']).exists():
-    #         raise forms.ValidationError('يوجد مستخدم مسجل بهذا الاسم.')
-    #     return cd['username']
-    # class Meta:
-    #     model = CustomUser
-    #     fields = ('username', 'email', 'password1', 'password2')
-    
 
 
+class UserUpdateForm(forms.ModelForm):
+    username = forms.CharField(label='اسم المستخدم', max_length=255,help_text='اسم المستخدم يجب الا يحتوي على مسافات' ,
+                        widget= forms.TextInput(attrs={'class': 'form-control  mb-3'}))
+    email = forms.EmailField(label='البريد الإلكتروني',
+                        widget= forms.TextInput(attrs={'class': 'form-control mb-3'}))
+    # password1 = forms.CharField(label='كلمة المرور',help_text='يجب الايقل عن ثمانية',
+    #                     widget=forms.PasswordInput(attrs={'class': 'form-control mb-3'}), min_length=8,required=True)
+    # password2 = forms.CharField(label='تأكيد كلمة المرور', 
+    #                     widget=forms.PasswordInput(attrs={'class': 'form-control mb-3'}), min_length=8,required=True) 
+    class Meta:
+        model = CustomUser
+        fields = ('username','email')
 
-
-# class UserUpdateForm(forms.ModelForm):
-#     # username = forms.CharField(label='اسم المستخدم', max_length=255,help_text='اسم المستخدم يجب الا يحتوي على مسافات' ,
-#     #                 widget= forms.TextInput(attrs={'class': 'form-control  mb-3'}))
-#     # email = forms.EmailField(label='البريد الإلكتروني',
-#     #                         widget= forms.TextInput(attrs={'class': 'form-control mb-3'}))      
-#     class Meta:
-#         model = User
-#         fields = ('username','email')
-
-# class ProfileUpdateForm(forms.ModelForm):
+class ProfileUpdateForm(forms.ModelForm):
+     class Meta:
+        model = AdminHOD
+        fields = ('phone','birth','facebook','gender','employee','region','profile_pic')
 #     class Meta:
 #         model = Profile
 #         fields = ('profile_img',)

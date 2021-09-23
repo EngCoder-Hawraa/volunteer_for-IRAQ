@@ -1,21 +1,88 @@
-# Create your models here.
 
-from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.contrib.auth.models import AbstractUser
+from django.db.models.fields import SlugField
 from django.db.models.signals import post_save
+from django.utils.text import slugify
+import uuid
 from django.dispatch import receiver
+from django.urls import reverse
 #import image from pillow desktop
 from PIL import Image
-from django.template.defaultfilters import slugify
+from django.template.defaultfilters import date, slugify, title
 
-
-
-
+# Create your models here.
 
 
 class CustomUser(AbstractUser):
     user_type_data=((1,"HOD"),(2,"people"))
     user_type=models.CharField(default=1,choices=user_type_data,max_length=10)
+
+
+
+
+
+
+def user_directory_path(instance, filename):
+    # this file will be uploaded to MEDIA_ROOT /user(id)/filename
+    return 'user_{0}/{1}'.format(instance.user.id, filename)
+
+class Tag(models.Model):
+    title = models.CharField(max_length=75, verbose_name='Tag')
+    slug = models.SlugField(null=False, unique=True)
+    class meta:
+        verbose_name = 'Tag'
+        verbose_name_plural ='Tags'
+
+    def get_absolute_url(self):
+        return reverse("tags", org=[self.slug])
+
+    def __str__(self):
+        return self.title
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.title)
+        return super().save(*args, **kwargs)
+
+class Post(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    picture = models.ImageField(upload_to=user_directory_path, verbose_name='Picture', null=False)
+    caption = models.TextField(max_length=1500, verbose_name='Caption', )
+    posted = models.DateTimeField(auto_now_add=True)
+    tags = models.ManyToManyField(Tag, related_name='tags')
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    likes = models.IntegerField()
+
+    def get_absolute_url(self):
+        return reverse("post_details", args=[str(self.id)])
+
+
+class Follow(models.Model):
+    follower = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='follower')
+    following = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='following')
+
+class Stream(models.Model):
+    following = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='stream_following')
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    date = models.DateTimeField()
+
+    def add_post(sender, instance, *args, **kwargs):
+        post = instance
+        user = post.user
+        followers = Follow.objects.all().filter(following=user)
+        for follower in followers:
+            stream = Stream(post=post, user=follower.follower,date=post.posted, following=user)
+            stream.save()
+
+post_save.connect(Stream.add_post, sender=Post) 
+
+
+
+    
+
+
 
 
 class Gender(models.Model):
@@ -80,35 +147,78 @@ class Region(models.Model):
 class AdminHOD(models.Model):
     admin=models.OneToOneField(CustomUser,on_delete=models.CASCADE)
     phone=models.CharField(max_length=255,null=True)
-    birth=models.DateField(max_length=255)
-    gender=models.CharField(max_length=255)
-    employee=models.CharField(max_length=255)
-    region=models.CharField(max_length=255,null=False)
+    birth=models.DateField(max_length=255, null=True, default="1994-10-07",blank=True)
+    facebook=models.URLField(max_length=255,default='https://www.facebook.com/')
+    gender=models.CharField(max_length=255, null=True)
+    employee=models.CharField(max_length=255, null=True)
+    region=models.CharField(max_length=255,null=True)
     profile_pic=models.ImageField(default='default.jpg', upload_to='profile_pics')
     created_at=models.DateTimeField(auto_now_add=True)
     updated_at=models.DateTimeField(auto_now_add=True)
     fcm_token=models.TextField(default="")
     objects=models.Manager()
+    def save(self,*args, **kwargs):
+        super().save(*args, **kwargs)
+        profile_pic =Image.open(self.profile_pic.path)
+        if profile_pic.width > 300 or profile_pic.height > 300:
+            output_size =(300, 300)
+            profile_pic.thumbnail(output_size)
+            profile_pic.save(self.profile_pic.path)
+
+
     
 
 
 class People(models.Model):
     admin=models.OneToOneField(CustomUser,on_delete=models.CASCADE)
-    phone=models.CharField(max_length=255)
-    birth=models.DateField(max_length=255)
-    gender=models.CharField(max_length=255)
-    employee=models.CharField(max_length=255)
-    region=models.CharField(max_length=255,null=False)
+    phone=models.CharField(max_length=255,null=True)
+    birth=models.DateField(max_length=255, null=True, default="1994-10-07")
+    facebook=models.URLField(max_length=255,default='https://www.facebook.com/')
+    gender=models.CharField(max_length=255, null=True)
+    employee=models.CharField(max_length=255, null=True)
+    region=models.CharField(max_length=255,null=True)
     profile_pic=models.ImageField(default='default.jpg', upload_to='profile_pics')
     created_at=models.DateTimeField(auto_now_add=True)
     updated_at=models.DateTimeField(auto_now_add=True)
     fcm_token=models.TextField(default="")
     objects=models.Manager()
+    def save(self,*args, **kwargs):
+        super().save(*args, **kwargs)
+        profile_pic =Image.open(self.profile_pic.path)
+        if profile_pic.width > 300 or profile_pic.height > 300:
+            output_size =(300, 300)
+            profile_pic.thumbnail(output_size)
+            profile_pic.save(self.profile_pic.path)
+
+
+
+
+
+@receiver(post_save,sender=CustomUser)
+def create_user_profile(sender,instance,created,**kwargs):
+    if created:
+        if instance.user_type==1:
+            AdminHOD.objects.create(admin=instance,phone="",birth="1994-10-07",gender="",employee="",region="",fcm_token="")
+        if instance.user_type==2:
+            People.objects.create(admin=instance,fcm_token="",gender="",employee="",region="",birth="1994-10-07")
+
+
+@receiver(post_save,sender=CustomUser)
+def save_user_profile(sender,instance,**kwargs):
+    if instance.user_type ==1:
+        instance.adminhod.save()
+    if instance.user_type ==2:
+        instance.people.save()
+    # if instance.user_type==2:
+    #     instance.intity.save()
+    # if instance.user_type ==3:
+    #     instance.people.save()
+
+
 
 
 
 class Intity(models.Model):
-    id=models.AutoField(primary_key=True)
     admin=models.OneToOneField(CustomUser,on_delete=models.CASCADE)
     name=models.CharField(max_length=255,null=True)
     region=models.CharField(max_length=255,null=False)
@@ -116,13 +226,8 @@ class Intity(models.Model):
     classification=models.CharField(max_length=255,null=False)
     works=models.TextField(default="",null=False)
     abstract=models.TextField(default="",null=False)
-    # profile_pic=models.ImageField(default='default.jpg', upload_to='profile_pics')
-    # region=models.ForeignKey(Region,on_delete=models.DO_NOTHING)
-    # profile_pic=models.FileField(upload_to='images',null=True)
-    intities_pic=models.FileField(upload_to='images',null=False)
-    # classification=models.ForeignKey(Classification,on_delete=models.DO_NOTHING) 
+    intities_pic=models.FileField(upload_to='images',null=False) 
     permission=models.FileField(upload_to='images',null=False)
-    # address=models.TextField()
     created_at=models.DateTimeField(auto_now_add=True)
     updated_at=models.DateTimeField(auto_now_add=True)
     objects=models.Manager()
@@ -147,8 +252,8 @@ class Member(models.Model):
     objects = models.Manager()
     def __str__(self):
         return self.name
-    # class Meta:
-    #     ordering = ["-name","-gender","-region_name","-employee","-phone","-email","-member_image"]
+   
+   
 class Poster(models.Model):
     # admin = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     name=models.CharField(max_length=255)
@@ -187,6 +292,7 @@ class NumVolunteer(models.Model):
 class Comment(models.Model):
     # intity_name = models.ForeignKey(Intity,null=True, on_delete=models.CASCADE,related_name='comments')
     comm_name = models.CharField(max_length=100, blank=True)
+    # comment_pic=models.ForeignKey(AdminHOD,on_delete=models.CASCADE)
     # reply = models.ForeignKey("Comment", null=True, blank=True, on_delete=models.CASCADE,related_name='replies')
     author = models.ForeignKey(CustomUser,on_delete=models.CASCADE)
     body = models.TextField(max_length=500)
@@ -223,39 +329,6 @@ class Reply(models.Model):
 
 
 
-@receiver(post_save,sender=CustomUser)
-def create_user_profile(sender,instance,created,**kwargs):
-    if created:
-        if instance.user_type==1:
-            AdminHOD.objects.create(admin=instance,phone="",birth="1994-10-07",gender="",employee="",region="",fcm_token="")
-        if instance.user_type==2:
-            People.objects.create(admin=instance,fcm_token="",gender="",employee="",region="",birth="1994-10-07")
-            # birth="",gender="",employee="",region="",
-            # Intity.objects.create(admin=instance)
-            # Intity.objects.create(admin=instance,name="",region="",profile_pic="",intities_pic="",created="",classification="",works="",abstract="",permission="")
-        # if instance.user_type==3:
-        #     People.objects.create(admin=instance,address="")
-            # People.objects.create(admin=instance,region=Region.objects.get(id=1),profile_pic="",gender="")
-            
-    def save(self,*args, **kwargs):
-        super().save(*args, **kwargs)
-        profile_pic = profile_pic.open(self.profile_pic.path)
-        if profile_pic.width > 300 or profile_pic.height > 300:
-            output_size =(300, 300)
-            profile_pic.thumbnail(output_size)
-            profile_pic.save(self.profile_pic.path)
-
-
-@receiver(post_save,sender=CustomUser)
-def save_user_profile(sender,instance,**kwargs):
-    if instance.user_type ==1:
-        instance.adminhod.save()
-    if instance.user_type ==2:
-        instance.people.save()
-    # if instance.user_type==2:
-    #     instance.intity.save()
-    # if instance.user_type ==3:
-    #     instance.people.save()
 
 
 
@@ -268,21 +341,8 @@ def save_user_profile(sender,instance,**kwargs):
 
 
 
-# class Staff(models.Model):
-#     id=models.AutoField(primary_key=True)
-#     admin=models.OneToOneField(CustomUser,on_delete=models.CASCADE)
-#     address=models.TextField()
-#     # name=models.CharField(max_length=255)
-#     phone=models.CharField(max_length=255)
-#     birth=models.DateField(max_length=255)
-#     gender=models.CharField(max_length=255)
-#     employee=models.CharField(max_length=255)
-#     region=models.CharField(max_length=255,null=False)
-#     profile_pic=models.ImageField(default='default.jpg', upload_to='profile_pics')
-#     created_at=models.DateTimeField(auto_now_add=True)
-#     updated_at=models.DateTimeField(auto_now_add=True)
-#     fcm_token=models.TextField(default="")
-    # objects=models.Manager()
+
+
 
 # class Profile(models.Model):
 #     # name=models.CharField(max_length=255,null=True)

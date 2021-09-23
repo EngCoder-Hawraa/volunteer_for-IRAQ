@@ -17,28 +17,34 @@
                     {% if intitys %}
                     <div class="form-group mt-3">
                         <label class="control-label float-right">اسم المؤسسة</label>
-                        <input class="col-sm-12 Boxshadow Borders4 H2 Borders7" type="text" placeholder="اكتب اسم المؤسسة" name="name" value="{{user.intity.name}}">
+                        <input class="col-sm-12 Boxshadow H2 Borders7 Borders4" type="text" placeholder="اكتب اسم المؤسسة" name="name" value="{{user.intity.name}}">
                     </div>
-                    <!-- <div class="form-group  mt-2">
-                      <label class=" float-right" >المحافظة </label>
-                      <select class="col-sm-12 Boxshadow" name="region" style="border: 1px solid #44A5E4;height:50px;border-radius:8px;"  >
-                        {% for region in region %}
-                          <option value="{{ region.id }}" >{{ region.region }}</option>
-                        {% endfor %}
-                      </select>
-                    </div> -->
-                    <div class="form-group">
+                    <div class="form-group mt-2">
+                        <label class="float-right">المحافظة </label>
+                        <div class="col-sm-12 float-right Boxshadow H2 pt-3 Borders7 Borders4">
+                            <span>{{ user.intity.region }}</span>
+                            <select class="bg-white border-0 float-left" name="region">
+                                {% for region in region %}
+                                <option value="{{ region }}" >{{ region }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group mt-2">
                         <label class="control-label float-right">تاريخ التأسيس</label>
-                        <input class="col-sm-12 Boxshadow Borders4 H2 Borders7" type="date" placeholder="اكتب هنا" name="created" value="{{intity.created}}">
+                        <div class="col-sm-12 float-right Boxshadow H2 pt-3 Borders7 Borders4">
+                            <span>{{ user.intity.created}}</span>
+                            <input class="bg-white border-0 float-left" type="date" placeholder="اكتب هنا" name="created" value="{{intity.created}}">
+                        </div>
                     </div>
-                    <!-- <div class="form-group  mt-2">
-                      <label class="float-right">التصنيف</label>
-                        <select class="col-sm-12 Boxshadow" name="classification" style="border: 1px solid #44A5E4;height:50px;border-radius:8px;" >
+                    <div class="form-group  mt-2">
+                        <label class="float-right">التصنيف</label> {{ user.intity.classification }}
+                        <select class="col-sm-12 Boxshadow" name="classification" style="border: 1px solid #44A5E4;height:50px;border-radius:8px;">
                         {% for classification in classification %}
-                          <option value="{{ classification.id }}">{{ classification.classification }}</option>
+                          <option value="{{ classification }}">{{ classification }}</option>
                         {% endfor %} 
                         </select>
-                    </div> -->
+                    </div>
                     <div class="form-group">
                         <label class="control-label float-right">اعمالها</label>
                         <textarea class="col-sm-12 Boxshadow Borders4 H2 Borders7" rows="3" name="works" placeholder="اكتب ..." value="{{intity.works}}"> </textarea>
@@ -63,14 +69,13 @@
                         <input type="hidden" value="{{ intity.id }}" name="id">
                         <button data-dismiss="modal" class="text-center Borders1 bg-danger border-0 text-white font-size3" style="width:204px;height:41px"> 
                             <i class="fas fa-times"></i> اغلاق
-                        </button>
+                        </button> {% endfor %}{% endif %}
                     </div>
                 </div>
             </form>
             <!-- form end -->
         </div>
     </div>
-    {% endfor %} {% endif %}
     <div class="form-group">
         {% if messages %} {% for message in messages %} {% if message.tags == 'error' %}
         <div class="alert alert-danger" style="margin-top:10px">{{ message }}</div>
