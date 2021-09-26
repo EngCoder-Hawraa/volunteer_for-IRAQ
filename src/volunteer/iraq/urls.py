@@ -3,9 +3,9 @@ from . import views, IntitiesViews ,UserViews
 from volunteer import settings
 from django.conf.urls.static import static
 from django.contrib.auth import views as authviews
-from .IntitiesViews import Intities,SearchIntitiesResultsView,SearchPosterEduResultsView,SearchPosterEnvResultsView,SearchPosterHeaResultsView,SearchPosterArtResultsView,SearchPosterOthResultsView,LikeView
-from .UserViews import SearchIntitiesResultsView1,SearchPosterEduResultsView1,SearchPosterEnvResultsView1,SearchPosterHeaResultsView1,SearchPosterArtResultsView1,SearchPosterOthResultsView1,More_Read_Intities,LikeView1
-from django.contrib.auth.views import LogoutView
+from .IntitiesViews import Intities, LikeViewUser,SearchIntitiesResultsView,SearchPosterEduResultsView,SearchPosterEnvResultsView,SearchPosterHeaResultsView,SearchPosterArtResultsView,SearchPosterOthResultsView,LikeView
+from .UserViews import SearchIntitiesResultsView1,SearchPosterEduResultsView1,SearchPosterEnvResultsView1,SearchPosterHeaResultsView1,SearchPosterArtResultsView1,SearchPosterOthResultsView1,More_Read_Intities,LikeView1,LikeViewUser1
+# from django.contrib.auth.views import LogoutView
 
 # # from .IntitiesViews import IntitiesCreateView,IntitiesUpdateView
 
@@ -14,7 +14,7 @@ urlpatterns = [
 # url Path For Intities
     # path('dashboard/', IntitiesViews.dashboard, name='dashboard'),
     path('admin_home',IntitiesViews.admin_home,name="admin_home"),
-    path('profile',IntitiesViews.Profile,name="profile"),
+    path('profile/',IntitiesViews.Profile,name="profile"),
     path('profile_update/<str:user_id>', IntitiesViews.ProfileUpdate, name='profile_update'),
     path('profile_edit_admin', IntitiesViews.ProfileEdit, name='profile_edit_admin'),
     # path('add_picture_profile',IntitiesViews.AddProfile,name="add_picture_profile"),
@@ -30,6 +30,11 @@ urlpatterns = [
     path('search_Intities/', SearchIntitiesResultsView.as_view(), name='search_Intities_results'),
 
     path('poster/', IntitiesViews.Declaration, name='poster'),
+    # path('new_post', IntitiesViews.NewPost, name='new_post'),
+    # path('<uuid:post_id>', IntitiesViews.PostDetails, name='post_details'),
+    # path('<uuid:post_id>/like', IntitiesViews.like, name='postlike'),
+   	# path('<uuid:post_id>/favorite', IntitiesViews.favorite, name='postfavorite'),
+    # path('tags/<slug:tag_slug>', IntitiesViews.tags, name='tags'),
     path('search_PosterEdu_results/', SearchPosterEduResultsView.as_view(), name='search_PosterEdu_results'),
     path('search_PosterEnv_results/', SearchPosterEnvResultsView.as_view(), name='search_PosterEnv_results'),
     path('search_PosterHea_results/', SearchPosterHeaResultsView.as_view(), name='search_PosterHea_results'),
@@ -46,11 +51,11 @@ urlpatterns = [
     path('about1/', IntitiesViews.About, name='about1'),
     path('comments/',IntitiesViews.comments, name='comments'),
     path('like/<int:pk>',LikeView,name='like_comment'),
+    path('like_user/<int:pk>',LikeViewUser,name='like_comment_user'),
     path('add_comment_save', IntitiesViews.Add_Comment_Save , name='add_comment_save'),
-    path('reply',IntitiesViews.ComReply, name='reply'),
-    # path('add_comment_save',IntitiesViews.Add_Comment_Save, name='add_comment_save'),
     path('delete_comment/<str:comment_id>' ,IntitiesViews.delete_comment, name='delete_comment'),
-    # path('comment/<int:comment_id>/action/' ,IntitiesViews.likecommentview.as_view(), name='like_comment'),
+    path('delete_comment_user/<str:comment_user_id>' ,IntitiesViews.delete_comment_user, name='delete_comment_user'),
+    # path('reply',IntitiesViews.ComReply, name='reply'),
     path('manage_members',IntitiesViews.Manage_Members,name="manage_members"),
     path('add_member_save',IntitiesViews.Add_Member_Save,name="add_member_save"),
     path('update_member/<str:member_id>' , IntitiesViews.update_member, name='update_member'),
@@ -88,7 +93,10 @@ urlpatterns = [
     path('about2/', UserViews.About2, name='about2'),
     path('comments1/',UserViews.comments1, name='comments1'),
     path('like1/<int:pk>',LikeView1,name='like_comment1'),
+    path('like_user1/<int:pk>',LikeViewUser1,name='like_comment_user1'),
     path('add_comment_save1', UserViews.Add_Comment_Save_User , name='add_comment_save1'),
+    # path('delete_comment/<str:comment_id>' ,IntitiesViews.delete_comment, name='delete_comment'),
+    path('delete_comment_user1/<str:comment_user_id>' ,UserViews.delete_comment_user1, name='delete_comment_user1'),
 #     # path('dashboard/', UserViews .dashboard, name='dashboard'),
 #     # path('add_intities_save',UserViews .Add_Intities_Save,name="add_intities_save"),
 #     # path('edit_information',UserViews .Edit_Information,name="edit_information"),
@@ -102,8 +110,8 @@ urlpatterns = [
 ]
 
 
-# # if settings.DEBUG:
-# #     urlpatterns += static(settings.STATIC_URL, document_root = settings.STATIC_ROOT)
-# #     urlpatterns += static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root = settings.STATIC_ROOT)
+    urlpatterns += static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
 
 

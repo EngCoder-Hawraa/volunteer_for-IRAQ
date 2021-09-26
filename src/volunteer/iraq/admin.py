@@ -14,13 +14,11 @@ class UserModel(UserAdmin):
 
 
 
-admin.site.register(Post)
-admin.site.register(Tag)
-admin.site.register(Follow)
-admin.site.register(Stream)
+# admin.site.register(Post)
+# admin.site.register(Tag)
+# admin.site.register(Follow)
+# admin.site.register(Stream)
 
-
-    
 admin.site.register(CustomUser,UserModel)
 admin.site.register(Region)
 admin.site.register(Gender)
@@ -33,6 +31,7 @@ admin.site.register(Member)
 admin.site.register(Poster)
 admin.site.register(NumVolunteer)
 admin.site.register(Comment)
+admin.site.register(Comment_User)
 admin.site.register(Reply)
 
 

@@ -1,9 +1,10 @@
+from django import template
 from django.shortcuts import render, redirect,  get_object_or_404
 from django.contrib.auth.decorators import login_required
-from .forms import UserUpdateForm,ProfileUpdateForm
+# from .forms import UserUpdateForm,ProfileUpdateForm
 from django.contrib import messages
 # from django.contrib.auth.models import User,Group
-from .models import Intity,AdminHOD,Member, People,Region,Classification,Comment,NumVolunteer,Poster,CustomUser,Reply,Gender,Post,Stream
+from .models import *
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.files.storage import FileSystemStorage
 from django.db.models import Q # new
@@ -11,7 +12,8 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.models import Count
 from django.views.generic import TemplateView, ListView ,CreateView
 from django.urls import reverse
-
+from django.template import loader
+# from stories.models import Story, StoryStream
 
 
 # from .decorators import notLoggedUsers
@@ -118,13 +120,36 @@ def ProfileEdit(request):
 
 @login_required(login_url='doLogin')
 def Intities(request):
+    region = Region.objects.all()
+    classification= Classification.objects.all()
+    # intitys = Intity.objects.latest('admin')
+    intitys = Intity.objects.all()
+    paginator = Paginator(intitys, 6)
+    page = request.GET.get('page')
+    try:
+        intitys = paginator.page(page)
+    except PageNotAnInteger:
+        intitys = paginator.page(1)
+    except EmptyPage:
+        intitys = paginator.page(paginator.num_page)
     context = {
-        'intitys' : Intity.objects.all(),
-        'region': Region.objects.all(),
-        'classification': Classification.objects.all(),
+        'num_intity': Intity.objects.filter().count(),
+        'intitys' : intitys,
+        'page': page,
+        'region': region,
+        'classification': classification,
         'title':'المؤسسات'
     }
     return render(request, 'hod_template/intities.html', context)
+
+
+
+
+
+
+
+
+
 
 
 @login_required(login_url='doLogin')
@@ -288,11 +313,8 @@ def Details(request):
 @login_required(login_url='doLogin')
 def comments(request):
     comments = Comment.objects.all()
+    comments_user = Comment_User.objects.all()
     customuser = CustomUser.objects.all()
-    # stuff = get_object_or_404(Comment, id=['pk'])
-    # total_likes = stuff.total_likes()
-    # adminhod = AdminHOD.objects.all()
-    # people  = People.objects.all()
     reply = Reply.objects.all()
     paginator = Paginator(comments, 4)
     page = request.GET.get('page')
@@ -303,15 +325,14 @@ def comments(request):
     except EmptyPage:
         comments = paginator.page(paginator.num_page)
     context = {
-        # 'Profile': Profile.objects.all(),
         # 'adminhod': adminhod,
         # 'people': people,
         'reply': reply,
         'customuser':customuser,
         'comments' : comments,
-        'intitys': Intity.objects.all(),
-        'num_com': Comment.objects.filter().count(),
-        # 'total_likes': total_likes,
+        'comments_user' : comments_user,
+        # 'intitys': Intity.objects.all(),
+        'num_com': Comment.objects.filter().count() + Comment_User.objects.filter().count(),
         'page': page,
         'title':'التعليقات',
     }
@@ -334,7 +355,9 @@ def Add_Comment_Save(request):
         # fs=FileSystemStorage()
         # commet_pic=fs.save(file.name,file)
         try:
-            com = Comment(comm_name=request.POST.get('comm_name',''),author=request.user,body=request.POST.get('body',''))
+            adminhod = AdminHOD.objects.all()
+            people = People.objects.all()
+            com = Comment(comm_name=request.POST.get('comm_name',''),author=request.user,body=request.POST.get('body',''), comment_pic=request.user.adminhod)
             com.save()
             messages.success(request,"تم الاضافة بنجاح")
             return redirect("/comments")
@@ -352,33 +375,11 @@ def LikeView(request,pk):
     return HttpResponseRedirect(reverse('comments'))
 
 
-
-
-
-
 @login_required(login_url='doLogin')
-# @allowedUsers(allowedGroups=['intityAdmin'])
-def ComReply(request):
-    if request.method!="POST":
-        return HttpResponse("<h2>Method Now Allowed</h2>")
-    else:
-        # comment_name=Comment.objects.get(id=request.POST.get('comm_name',''))
-        comment_name=Comment(comm_name=request.POST.get('comm_name',''))
-        rep = Reply(comment_name=comment_name,author=request.user,reply_body=request.POST.get('body',''),comment_pic=request.user)
-        rep.save()
-    return redirect("/comments")
-        # comment=Comment.objects.get(id=request.POST.get('comment',''))
-        # comm_name=Comment(request.POST.get('comm_name','')),
-        # comm_name = Comment(request.POST.get('comment',''))
-        # comment_name=Comment.objects.get(id=request.POST.get('comment',''))
-        # rep = Reply(comment=comment,reply_body=request.POST.get('reply_body',''),author=request.user)
-        # rep.save()
-        # return redirect("/comments")
-
-
-
-
-
+def LikeViewUser(request,pk):
+    comment= get_object_or_404(Comment_User, id=request.POST.get('comment_user_id'))
+    comment.likes.add(request.user)
+    return HttpResponseRedirect(reverse('comments'))
 
 
 @login_required(login_url='doLogin')
@@ -389,6 +390,33 @@ def delete_comment(request,comment_id):
     messages.error(request, "Deleted Successfully")
     return HttpResponseRedirect("/comments")  
     # return HttpResponse("Comment Id "+str(pk))
+
+
+@login_required(login_url='doLogin')
+# @allowedUsers(allowedGroups=['intityAdmin'])
+def delete_comment_user(request,comment_user_id):
+    comment=Comment_User.objects.get(id=comment_user_id)
+    comment.delete()
+    messages.error(request, "Deleted Successfully")
+    return HttpResponseRedirect("/comments")  
+    # return HttpResponse("Comment Id "+str(pk))
+
+
+
+@login_required(login_url='doLogin')
+# @allowedUsers(allowedGroups=['intityAdmin'])
+# def ComReply(request):
+#     if request.method!="POST":
+#         return HttpResponse("<h2>Method Now Allowed</h2>")
+#     else:
+#         # comment_name=Comment.objects.get(id=request.POST.get('comm_name',''))
+#         # comment_name=Comment.Post.get('comm_name','')
+#         # comments = Comment.objects.all()
+#         comment_name = Comment(request.POST.get('comm_name',''))
+#         rep = Reply(comment_name=comment_name,author=request.user,reply_body=request.POST.get('reply_body',''))
+#         rep.save()
+#     return redirect("/comments")
+      
 
 
 
@@ -494,14 +522,35 @@ def edit_member(request):
 
 @login_required(login_url='doLogin')
 def Declaration(request):
+    regions = Region.objects.all()
+    posters = Poster.objects.all()
+    classification= Classification.objects.all()
+    paginator = Paginator(posters, 6)
+    page = request.GET.get('page')
+    try:
+        posters = paginator.page(page)
+    except PageNotAnInteger:
+        posters = paginator.page(1)
+    except EmptyPage:
+        posters = paginator.page(paginator.num_page)
+        # 'num_intity': Intity.objects.filter().count(),
     context = {
-        'posters': Poster.objects.all(),
-        'regions': Region.objects.all(),
-        'num_poster': Poster.objects.filter().count(),
-        'classifications': Classification.objects.all(),
+        'posters': posters,
+        'regions': regions,
+        'page': page,
+        # 'num_poster': Poster.objects.filter().count(),
+        'classifications': classification,
         'title':'الاعلانات',
     }
     return render(request, 'hod_template/poster.html', context)
+
+
+
+
+
+
+
+
 
 
 # @login_required(login_url='doLogin')   
@@ -523,6 +572,8 @@ def Save_Poster(request):
             print(e)
             messages.error(request,"Failed to Add Student")
         return HttpResponseRedirect("/poster")
+
+
 
 @login_required(login_url='doLogin')
 def update_poster(request,poster_id):

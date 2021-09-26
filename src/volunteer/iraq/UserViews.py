@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 
 from django.contrib import messages
 # from django.contrib.auth.models import User,Group
-from .models import Intity,People, Member,Region,Classification,Comment,NumVolunteer,Poster,CustomUser,Reply,Gender
+from .models import *
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.files.storage import FileSystemStorage
 from django.db.models import Q # new
@@ -100,12 +100,24 @@ def ProfileEdit(request):
 
 @login_required(login_url='doLogin')
 def Intities2(request):
+    region = Region.objects.all()
+    classification= Classification.objects.all()
+    intitys = Intity.objects.all()
+    paginator = Paginator(intitys, 6)
+    page = request.GET.get('page')
+    try:
+        intitys = paginator.page(page)
+    except PageNotAnInteger:
+        intitys = paginator.page(1)
+    except EmptyPage:
+        intitys = paginator.page(paginator.num_page)
     context = {
-    'intitys' : Intity.objects.all(),
-    'classifications': Classification.objects.all(),
-    'regions': Region.objects.all(),
-    # 'num_com': Comment.objects.filter().count(),
-    'title':'المؤسسات'
+        'num_intity': Intity.objects.filter().count(),
+        'intitys' : intitys,
+        'page': page,
+        'region': region,
+        'classification': classification,
+        'title':'المؤسسات'
     }
     return render(request, 'user_template/intities.html', context)
 
@@ -155,39 +167,27 @@ def Profile_Intities1(request):
 
 @login_required(login_url='doLogin')
 def Declaration1(request):
+    regions = Region.objects.all()
+    posters = Poster.objects.all()
+    classification= Classification.objects.all()
+    paginator = Paginator(posters, 6)
+    page = request.GET.get('page')
+    try:
+        posters = paginator.page(page)
+    except PageNotAnInteger:
+        posters = paginator.page(1)
+    except EmptyPage:
+        posters = paginator.page(paginator.num_page)
+        # 'num_intity': Intity.objects.filter().count(),
     context = {
-        'posters': Poster.objects.all(),
-        'regions': Region.objects.all(),
+        'posters': posters,
+        'regions': regions,
+        'page': page,
         'num_poster': Poster.objects.filter().count(),
-        'classifications': Classification.objects.all(),
+        'classifications': classification,
         'title':'الاعلانات',
     }
     return render(request, 'user_template/poster.html', context)
-
-# # class SearchPosterEduResultsView(ListView):
-# #     model = Poster
-# #     template_name = 'hod_template/search_posterEdu_results.html'
-# #     queryset = Poster.objects.filter(classification__icontains='تعليم') # new
-
-# # class SearchPosterEnvResultsView(ListView):
-# #     model = Poster
-# #     template_name = 'hod_template/search_posterEnv_results.html'
-# #     queryset = Poster.objects.filter(classification__icontains='بيئي') # new
-
-# # class SearchPosterHeaResultsView(ListView):
-# #     model = Poster
-# #     template_name = 'hod_template/search_posterHea_results.html'
-# #     queryset = Poster.objects.filter(classification__icontains='صحي') # new
-
-# # class SearchPosterArtResultsView(ListView):
-# #     model = Poster
-# #     template_name = 'hod_template/search_posterArt_results.html'
-# #     queryset = Poster.objects.filter(classification__icontains='فنون') # new
-
-# # class SearchPosterOthResultsView(ListView):
-# #     model = Poster
-# #     template_name = 'hod_template/search_posterOth_results.html'
-# #     queryset = Poster.objects.filter(classification__icontains='أخرى') # new
 
 
 class SearchPosterEduResultsView1(ListView):
@@ -258,6 +258,9 @@ def Send_Notification(request):
 @login_required(login_url='doLogin')
 def comments1(request):
     comments = Comment.objects.all()
+    comments_user = Comment_User.objects.all()
+    customuser = CustomUser.objects.all()
+    reply = Reply.objects.all()
     paginator = Paginator(comments, 4)
     page = request.GET.get('page')
     try:
@@ -267,13 +270,18 @@ def comments1(request):
     except EmptyPage:
         comments = paginator.page(paginator.num_page) 
     context = {
+        'reply': reply,
+        'customuser':customuser,
         'comments' : comments,
+        'comments_user' : comments_user,
         'num_com': Comment.objects.filter().count(),
-        # 'total_likes': total_likes,
+         'num_com': Comment.objects.filter().count() + Comment_User.objects.filter().count(),
         'page': page,
         'title':'التعليقات',
     }
-    return render(request, 'user_template/comments.html', context)
+    return render(request, 'user_template/comments_user.html', context)
+
+
 
 @login_required(login_url='doLogin')
 def LikeView1(request,pk):
@@ -281,7 +289,34 @@ def LikeView1(request,pk):
     comment.likes.add(request.user)
     return HttpResponseRedirect(reverse('comments1'))
 
-   
+
+@login_required(login_url='doLogin')
+def LikeViewUser1(request,pk):
+    comment= get_object_or_404(Comment_User, id=request.POST.get('comment_user_id'))
+    comment.likes.add(request.user)
+    return HttpResponseRedirect(reverse('comments1'))
+
+
+@login_required(login_url='doLogin')
+# @allowedUsers(allowedGroups=['intityAdmin'])
+def Add_Comment_Save_User(request):
+    if request.method!="POST":
+        return HttpResponse("<h2>Method Now Allowed</h2>")
+    else:
+        # file=request.FILES['profile']
+        # fs=FileSystemStorage()
+        # commet_pic=fs.save(file.name,file)
+        try:
+            # adminhod = AdminHOD.objects.all()
+            people = People.objects.all()
+            com = Comment_User(comm_name=request.POST.get('comm_name',''),author=request.user,body=request.POST.get('body',''), comment_pic=request.user.people)
+            com.save()
+            messages.success(request,"تم الاضافة بنجاح")
+            return redirect("/comments1")
+        except Exception as e:
+            print(e)
+            messages.error(request,"لم يتم الاضافة ")
+            return redirect("/comments1")
 
 
 
@@ -291,13 +326,14 @@ def LikeView1(request,pk):
 
 @login_required(login_url='doLogin')
 # @allowedUsers(allowedGroups=['intityAdmin'])
-def Add_Comment_Save_User(request):
-    if request.method!="POST":
-        return HttpResponse("<h2>Method Now Allowed</h2>")
-    else:
-        com = Comment(comm_name=request.POST.get('comm_name',''),author=request.user,body=request.POST.get('body',''))
-        com.save()
-        return redirect("/comments1")
+def delete_comment_user1(request,comment_user_id):
+    comment=Comment_User.objects.get(id=comment_user_id)
+    comment.delete()
+    messages.error(request, "Deleted Successfully")
+    return HttpResponseRedirect("/comments1")  
+    # return HttpResponse("Comment Id "+str(pk))
+
+
 
 @login_required(login_url='doLogin')
 def About2(request):

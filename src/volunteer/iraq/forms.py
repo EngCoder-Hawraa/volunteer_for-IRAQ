@@ -3,10 +3,25 @@ from django import forms
 from .models import CustomUser,AdminHOD,Intity, Member,Region, Classification
 from django.forms import ModelForm
 
-# class IntityForm(ModelForm):
-#     class Meta:
-#         model = Intity
-#         fields ="__all__"
+
+
+# class NewPostForm(forms.ModelForm):
+#         picture = forms.ImageField(required=True)
+#         # content = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': True}), required=True)
+#         caption = forms.CharField(widget=forms.Textarea(attrs={'class': 'input is-medium'}), required=True)
+#         tags = forms.CharField(widget=forms.TextInput(attrs={'class': 'input is-medium'}), required=True)
+#         class Meta:
+#                 model = Post
+#                 fields = ('picture','caption', 'tags')
+
+
+
+# class CommentForm(forms.ModelForm):
+# 	body = forms.CharField(widget=forms.Textarea(attrs={'class': 'textarea'}), required=True)
+
+# 	class Meta:
+# 		model = Comment
+# 		fields = ('body',)
 
 
 
@@ -62,10 +77,10 @@ class UserUpdateForm(forms.ModelForm):
         model = CustomUser
         fields = ('username','email')
 
-class ProfileUpdateForm(forms.ModelForm):
-     class Meta:
-        model = AdminHOD
-        fields = ('phone','birth','facebook','gender','employee','region','profile_pic')
+# class ProfileUpdateForm(forms.ModelForm):
+#      class Meta:
+#         model = AdminHOD
+#         fields = ('phone','birth','facebook','gender','employee','region','profile_pic')
 #     class Meta:
 #         model = Profile
 #         fields = ('profile_img',)

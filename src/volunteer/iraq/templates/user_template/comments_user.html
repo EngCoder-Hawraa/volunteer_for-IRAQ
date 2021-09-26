@@ -1,15 +1,16 @@
-{% extends 'hod_template/base_template.html' %} {% load static %}
+{% extends 'user_template/base_template.html' %} {% load static %}
 <!-- /* ======== Start Comment Page======== */ -->
 {% block main_content %}
 <div class="background2">
     <p class="font-weight-bold pt-5 pb-5 mr-5 text-primary font-size1"> الآراء و المقترحات</p>
     <label class="pt-3 float-right mr-5 font-weight-bold">كتابة تعليق </label>
-    <form role="form" action="/add_comment_save" method="post" enctype="multipart/form-data">
+    <form role="form" action="/add_comment_save1" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <!-- <input type="hidden" name="comment.id" value="{{comment.id}}"> -->
-        <!-- <input type="hidden" name="user" value="{{user.adminhod}}"> -->
+        <!-- <input type="hidden" name="user" value="{{user}}"> -->
         <!-- <input type="hidden" name="user.adminhod" value="{{user.adminhod}}"> -->
-        <!-- <input type="" name="comment.comm_name" value="{{comment.comm_name}}"> -->
+        <!-- <input type="hidden" name="user.adminhod" value="{{user.adminhod}}"> -->
+        <!-- <input type="hidden" name="comment.comm_name" value="{{comment.comm_name}}"> -->
         <div class="mr-4 ml-3">
             <!-- <input type="text"  class="col-sm-12 Boxshadow" style="border: 1px solid #44A5E4;height:50px;border-radius:8px;" name="admin"> -->
             <textarea class="Borders border-0 Boxshadow bg-white p-4 mb-2" style="width:100%;height:160px" name="body" placeholder="  اترك تعليق......."></textarea>
@@ -23,25 +24,28 @@
         <span class="text-white badge rounded-circle mt-2 mr-5 mb-3 Boxshadow bg-primary pt-3" style="border:4px solid white;width:45px;height:45px;border-radius:50%" data-placement="top" title="عدد التعليقات">{{num_com}}</span>
     </div>
     {% if comments or comments_user %} {% for comment in comments %}
-    <div class="Borders border-0 bg-white Boxshadow pt-4 pb-2 mr-4 ml-4 Borders4 mb-2">
+    <div class="Borders border-0 bg-white Boxshadow pt-4 pb-2 mr-4 ml-4 Borders4 mt-4 mb-2">
         <img style="width:75px" class="rounded-circle mr-4" src="/media/{{comment.comment_pic.profile_pic}}" alt="Comment">
         <div class="row">
             <h4 class="text-primary mr-5">{{comment.author}}</h4>
             <!-- <div class="col">
-                <p class="mr-4">{{comment.comm_name}}</p>
-            </div> -->
+            <p class="mr-4">{{comment.comm_name}}</p> -->
+            <!-- </div> -->
             <div class="col mt-3 mr-4">
                 <p class="font-size3"><small><i class="text-danger">نشر  في ...</i></small>{{ comment.created_at}}</p>
             </div>
+
+            {% comment %}
             <div class="col">
                 <a class="float-left ml-5" href="{% url 'delete_comment' comment.id %}"><i class="text-primary fas fa-trash-alt"></i></a>
             </div>
+            {% endcomment %}
         </div>
         <div class="p-2 mr-3 ml-3 mt-3">
             {{ comment.body }}
         </div>
         <div class="row">
-            <form action="{% url 'like_comment' comment.pk %}" method="POST">
+            <form action="{% url 'like_comment1' comment.pk %}" method="POST">
                 {% csrf_token %}
                 <button type="submit" , name="comment_id" , value="{{ comment.id }}" class="bg-white border-0 mr-3" style="width:100px">
                     <i class="text-danger far fa-heart mt-4 mr-4"></i>
@@ -56,6 +60,8 @@
     </div>
     {% endfor %}
     <!--  -->
+
+
     {% for comment_user in comments_user %}
     <div class="Borders border-0 bg-white Boxshadow pt-4 pb-2 mr-4 ml-4 Borders4 mt-4 mb-2">
         <img style="width:75px" class="rounded-circle mr-4" src="/media/{{comment_user.comment_pic.profile_pic}}" alt="Comment">
@@ -68,14 +74,14 @@
                 <p class="font-size3"><small><i class="text-danger">نشر  في ...</i></small>{{ comment_user.created_at}}</p>
             </div>
             <div class="col">
-                <a class="float-left ml-5" href="{% url 'delete_comment_user' comment_user.id %}"><i class="text-primary fas fa-trash-alt"></i></a>
+                <a class="float-left ml-5" href="{% url 'delete_comment_user1' comment_user.id %}"><i class="text-primary fas fa-trash-alt"></i></a>
             </div>
         </div>
         <div class="p-2 mr-3 ml-3 mt-3">
             {{ comment_user.body }}
         </div>
         <div class="row">
-            <form action="{% url 'like_comment_user' comment_user.pk %}" method="POST">
+            <form action="{% url 'like_comment_user1' comment_user.pk %}" method="POST">
                 {% csrf_token %}
                 <button type="submit" , name="comment_user_id" , value="{{ comment_user.id }}" class="bg-white border-0 mr-3" style="width:100px">
                     <i class="text-danger far fa-heart mt-4 mr-4"></i>
@@ -99,12 +105,10 @@
             </div>
         </div>
     </div>
-    {% endif %}
-    <!--      -->
+    {% endif %} {% comment %} {% include 'iraq/reply.html' %} {% endcomment %}
     <!--======Start Pagination Member =========-->
     {% include 'iraq/pagination.html' with page=comments %}
     <!--======End Pagination Member =========-->
-    <!-- {% comment %}  {% include 'iraq/reply.html' %} {% endcomment %}  -->
 </div>
 {% endblock %}
 <!-- /* ======== End Comment Page======== */ -->

@@ -1,5 +1,6 @@
 {% extends 'hod_template/base_template.html' %} {% load static %} {% block main_content %}
-<div class="background2" style="padding-top:80px;padding-bottom:40px">
+<div class="background2" style="padding-top:40px;padding-bottom:40px">
+    {% include 'iraq/pagination_notification.html' with page=numvolunteers %}
     <div class="bg-white Boxshadow Borders1 mr-4 ml-4" style="padding-bottom:80px">
         {% if numvolunteers %} {% for numvolunteer in numvolunteers %}
         <i class="fas fa-user-plus mt-5 text-primary" style="margin-right:32%" data-placement="top" title="اضافة متطوعين" data-toggle="modal" data-target="#addVolunteer"></i>
@@ -70,7 +71,7 @@
     {% endif %}
 </div>
 <!--======Start Pagination Member =========-->
-{% include 'hod_template/add_volunteer.html' %} {% include 'hod_template/pagination_notification.html' with page=numvolunteers %}
+{% include 'hod_template/add_volunteer.html' %}
 </div>
 <!--======End Pagination Member =========-->
 </div>

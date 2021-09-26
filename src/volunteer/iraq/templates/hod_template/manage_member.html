@@ -2,7 +2,7 @@
 
 <!-- /* ======== Start Manage Member Page ======== */ -->
 {% block main_content %}
-<div class="background2 pt-5 pb-5">
+<div class="background2 pt-4 pb-2">
     <div class="row background Boxshadow mr-4 ml-4" style="border-radius:10px 10px 0px 0px">
         <div class="col-sm-12 col-lg-2 mr-lg-1 text-center" style="padding-top:23px">الاعضاء</div>
         <!--======Start Add Member =========-->
@@ -88,11 +88,12 @@
     </div>
 
     <!--======Start Pagination Member =========-->
-    {% include 'hod_template/pagination_member.html' with page=members %}
+    {% include 'iraq/pagination.html' with page=members %}
+    <!--======End Pagination Member =========-->
+
+    <!--======Start Add Member =========-->
+    {% include 'hod_template/add_member.html' %}
+    <!--======End Add Member =========-->
 </div>
-<!--======End Pagination Member =========-->
-<!--======Start Add Member =========-->
-{% include 'hod_template/add_member.html' %}
-<!--======End Add Member =========-->
-{% endblock main_content %}
+{% endblock %}
 <!-- /* ======== Start Manage Member Page ======== */ -->

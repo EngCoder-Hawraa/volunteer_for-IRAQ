@@ -72,7 +72,7 @@
 </div>
 
 <div style="border:4px solid white;" data-placement="top" title="عدد المؤسسات" class="mr-5 font-size3 text-white mt-3 badge rounded-circle pt-3 pb-3 pr-4 pl-4 Boxshadow bg-primary float-right">
-    {{intitys.count}}
+    {{ num_intity }}
 </div>
 <br><br><br>
 
@@ -126,7 +126,7 @@
 </div>
 {% endif %}
 <!--====== End Not found ======-->
-<div class="container">
+<!-- <div class="container">
     <div class="row">
         <div class="container">
             <div class="row pt-2 mb-4">
@@ -139,10 +139,10 @@
             </div>
         </div>
     </div>
-</div>
+</div> -->
 
 <div class="cup ">
 </div>
 
-{% endblock %}
+{% include 'iraq/pagination.html' with page=intitys %} {% endblock %}
 <!-- /* ======== End Intities Page ======== */ -->

@@ -32,6 +32,8 @@ from django.contrib.auth.views import LogoutView
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('iraq.urls')),
+    # path('post/', include('post.urls')),
+    # path('authy/', include('authy.urls')),
     path('',views.home, name='home'),
     path('details/', views.details, name='details'),
     path('intities/', views.Intities, name='intities'),
