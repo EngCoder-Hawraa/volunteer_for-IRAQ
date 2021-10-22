@@ -20,8 +20,8 @@
 
 
 
-<div style="border:4px solid white;" data-placement="top" title="عدد المؤسسات" class="mr-5 font-size3 text-white mt-3 badge rounded-circle pt-3 pb-3 pr-4 pl-4 Boxshadow bg-primary float-right">
-    {{intitys.count}}
+<div data-placement="top" title="عدد المؤسسات" class="mr-5 font-size3 text-white mt-3 badge rounded-circle pt-3 pb-3 pr-4 pl-4 Boxshadow bg-primary float-right button">
+    {{ num_intity }}
 </div>
 <br><br><br>
 
@@ -33,7 +33,7 @@
         <!--Grid row-->
         <div class="row wow fadeIn mr-1 ml-1" style="visibility: visible; animation-name: fadeIn;">
             {% if intitys %} {% for intity in intitys %}
-            <div class="col-sm-12 col-md-6 col-lg-3 rounded-top">
+            <div class="col-sm-12 col-md-6 col-lg-3 rounded-top button">
                 <!--Card image-->
                 <img class="card-img-top mt-4 Borders image-width1" style="height:150px;" src="/media/{{ intity.intities_pic }}" alt="Card image">
                 <!--Card content-->
@@ -80,6 +80,5 @@
 
 <div class="cup ">
 </div>
-
-{% endblock %}
+{% include 'iraq/pagination.html' with page=intitys %} {% endblock %}
 <!-- /* ======== End Intities Page ======== */ -->

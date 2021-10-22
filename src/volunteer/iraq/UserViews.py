@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect,  get_object_or_404
 from django.contrib.auth.decorators import login_required
-
+from django.http.response import Http404
 from django.contrib import messages
 # from django.contrib.auth.models import User,Group
 from .models import *
@@ -46,32 +46,28 @@ def Profile1(request):
 
 @login_required(login_url='do_login')
 def ProfileUpdate(request,user_id):
-    # return HttpResponse("Intity Id: "+str(user_id))
-    user=People.objects.get(id=user_id)
+    user=People.objects.get(admin=user_id)
     if user==None:
         return HttpResponse("Intity Not Found")
     else:
-        # return render(request, "hod_template/edit_intities_template.html",{'intity': intity})
         return HttpResponseRedirect("/profile1")
-
-          
-
-
-
-
 
 
 
 @login_required(login_url='doLogin')
-# @allowedUsers(allowedGroups=['intityAdmin'])
 def ProfileEdit(request):
     if request.method!="POST":
         return HttpResponse("<h2>Method Now Allowed</h2>")
     else:
-        user=People.objects.get(id=request.POST.get('id',''))
-        if user==None:
-            return HttpResponse("<h2>لا يوجد الملف الشخصي</h2>")
-        else:       
+        user_id=request.POST.get('user_id')  
+        username =request.POST.get('username')
+        email=request.POST.get('email')
+        try:      
+            user=CustomUser.objects.get(id=user_id) 
+            user.username = username
+            user.email = email
+            user.save()
+            people = People.objects.get(admin=user_id)
             if request.FILES.get('profile'):
                 file = request.FILES['profile']
                 fs = FileSystemStorage()
@@ -79,30 +75,28 @@ def ProfileEdit(request):
             else:
                     profile_pic=None
             if profile_pic!=None:  
-                user.profile_pic= profile_pic
-            # admin=CustomUser.objects.update()
-            # if admin == True:
-            #     admin.username =request.POST.get('user','')
-            #     admin.email=request.POST.get('email','')
-            #     admin.save()
-            user.username =request.POST.get('user','')
-            user.email=request.POST.get('email','')
-            user.phone=request.POST.get('phone','')
-            user.region=request.POST.get('region','')
-            user.birth=request.POST.get('birth','')
-            user.gender=request.POST.get('gender','')
-            user.employee=request.POST.get('employee','')
-            user.facebook=request.POST.get('facebook','')
-            user.save()
+                people.profile_pic= profile_pic
+                people.phone=request.POST.get('phone','')
+                people.region=request.POST.get('region','')
+                people.birth=request.POST.get('birth','')
+                people.gender=request.POST.get('gender','')
+                people.employee=request.POST.get('employee','')
+                people.facebook=request.POST.get('facebook','')
+                people.save()
             messages.success(request,",تم التعديل بنجاح")
-            return HttpResponseRedirect("profile_update1/"+str(user.id)+"")
+            return HttpResponseRedirect(reverse("profile_update1",kwargs={"user_id":user_id}))
+        except:
+            messages.error(request,"لا يوجد الملف الشخصي")
+            return HttpResponseRedirect(reverse("profile1",kwargs={"user_id":user_id}))
+
+
 
 
 @login_required(login_url='doLogin')
 def Intities2(request):
     region = Region.objects.all()
     classification= Classification.objects.all()
-    intitys = Intity.objects.all()
+    intitys = Intity.objects.all().order_by('-created_at')
     paginator = Paginator(intitys, 6)
     page = request.GET.get('page')
     try:
@@ -123,12 +117,25 @@ def Intities2(request):
 
 
 
-# @login_required(login_url='doLogin')
+@login_required(login_url='doLogin')
 def More_Read_Intities(request):
+    region = Region.objects.all()
+    classification= Classification.objects.all()
+    intitys = Intity.objects.all().order_by('-created_at').filter()
+    paginator = Paginator(intitys, 6)
+    page = request.GET.get('page')
+    try:
+        intitys = paginator.page(page)
+    except PageNotAnInteger:
+        intitys = paginator.page(1)
+    except EmptyPage:
+        intitys = paginator.page(paginator.num_page)
     context = {
-        'intitys' : Intity.objects.all(),
-        'region': Region.objects.all(),
-        'classification': Classification.objects.all(),
+        'num_intity': Intity.objects.filter().count(),
+        'intitys' : intitys,
+        'page': page,
+        'region': region,
+        'classification': classification,
         'title':'معلومات المؤسسة'
     }
     return render(request, 'user_template/more_read_intities.html', context)
@@ -168,7 +175,8 @@ def Profile_Intities1(request):
 @login_required(login_url='doLogin')
 def Declaration1(request):
     regions = Region.objects.all()
-    posters = Poster.objects.all()
+    posters=Poster.objects.order_by('-created_at')
+    # posters = Poster.objects.all()
     classification= Classification.objects.all()
     paginator = Paginator(posters, 6)
     page = request.GET.get('page')
@@ -178,7 +186,6 @@ def Declaration1(request):
         posters = paginator.page(1)
     except EmptyPage:
         posters = paginator.page(paginator.num_page)
-        # 'num_intity': Intity.objects.filter().count(),
     context = {
         'posters': posters,
         'regions': regions,
@@ -194,31 +201,71 @@ class SearchPosterEduResultsView1(ListView):
     model = Poster
     template_name = 'user_template/search_posterEdu_results1.html'
     queryset = Poster.objects.filter(classification__icontains='تعليم') # new
-
+    ordering = ['id']
+    paginate_by = 6
+    paginate_orphans = 1
+    def get_context_data(self, *args, **kwargs):
+        try:
+            return super(SearchPosterEduResultsView1,self).get_context_data(*args,**kwargs)
+        except Http404:
+            self.kwargs['page'] =1
+            return super(SearchPosterEduResultsView1,self).get_context_data(*args,**kwargs)
 
 class SearchPosterEnvResultsView1(ListView):
     model = Poster
     template_name = 'user_template/search_posterEnv_results1.html'
     queryset = Poster.objects.filter(classification__icontains='بيئة') # new
-
+    ordering = ['id']
+    paginate_by = 6
+    paginate_orphans = 1
+    def get_context_data(self, *args, **kwargs):
+        try:
+            return super(SearchPosterEnvResultsView1,self).get_context_data(*args,**kwargs)
+        except Http404:
+            self.kwargs['page'] =1
+            return super(SearchPosterEnvResultsView1,self).get_context_data(*args,**kwargs)
 
 class SearchPosterHeaResultsView1(ListView):
     model = Poster
     template_name = 'user_template/search_posterHea_results1.html'
     queryset = Poster.objects.filter(classification__icontains='صحي') # new
-
+    ordering = ['id']
+    paginate_by = 6
+    paginate_orphans = 1
+    def get_context_data(self, *args, **kwargs):
+        try:
+            return super(SearchPosterHeaResultsView1,self).get_context_data(*args,**kwargs)
+        except Http404:
+            self.kwargs['page'] =1
+            return super(SearchPosterHeaResultsView1,self).get_context_data(*args,**kwargs)
 
 class SearchPosterArtResultsView1(ListView):
     model = Poster
     template_name = 'user_template/search_posterArt_results1.html'
     queryset = Poster.objects.filter(classification__icontains='فنون') # new
-
+    ordering = ['id']
+    paginate_by = 6
+    paginate_orphans = 1
+    def get_context_data(self, *args, **kwargs):
+        try:
+            return super(SearchPosterArtResultsView1,self).get_context_data(*args,**kwargs)
+        except Http404:
+            self.kwargs['page'] =1
+            return super(SearchPosterArtResultsView1,self).get_context_data(*args,**kwargs)
 
 class SearchPosterOthResultsView1(ListView):
     model = Poster
     template_name = 'user_template/search_posterOth_results1.html'
     queryset = Poster.objects.filter(classification__icontains='أخرى') # new
-
+    ordering = ['id']
+    paginate_by = 6
+    paginate_orphans = 1
+    def get_context_data(self, *args, **kwargs):
+        try:
+            return super(SearchPosterOthResultsView1,self).get_context_data(*args,**kwargs)
+        except Http404:
+            self.kwargs['page'] =1
+            return super(SearchPosterOthResultsView1,self).get_context_data(*args,**kwargs)
 
 
 @login_required(login_url='doLogin')
@@ -245,7 +292,7 @@ def Send_Notification(request):
             region=Region.objects.get(id=request.POST.get('region',''))
             numvolunteer=NumVolunteer(name=request.POST.get('name',''),age=request.POST.get('age',''),gender=request.POST.get('gender',''),employee=request.POST.get('employee',''),volunteer_image=volunteer_img,region=region)
             numvolunteer.save()
-            messages.success(request,"Added Successfully")
+            messages.success(request,"تم الاضافة بنجاح")
         except Exception as e:
             print(e)
             messages.error(request,"فشل في ارسال الاشعار")
@@ -257,10 +304,12 @@ def Send_Notification(request):
 
 @login_required(login_url='doLogin')
 def comments1(request):
-    comments = Comment.objects.all()
-    comments_user = Comment_User.objects.all()
+    comments=Comment.objects.order_by('-created_at')
+    # comments = Comment.objects.all()
+    # comments_user = Comment_User.objects.all()
+    comments_user = Comment_User.objects.order_by('-created_at')
     customuser = CustomUser.objects.all()
-    reply = Reply.objects.all()
+    # reply = Reply.objects.all()
     paginator = Paginator(comments, 4)
     page = request.GET.get('page')
     try:
@@ -270,12 +319,11 @@ def comments1(request):
     except EmptyPage:
         comments = paginator.page(paginator.num_page) 
     context = {
-        'reply': reply,
+        # 'reply': reply,
         'customuser':customuser,
         'comments' : comments,
         'comments_user' : comments_user,
-        'num_com': Comment.objects.filter().count(),
-         'num_com': Comment.objects.filter().count() + Comment_User.objects.filter().count(),
+        'num_com': Comment.objects.filter().count() + Comment_User.objects.filter().count(),
         'page': page,
         'title':'التعليقات',
     }
@@ -298,16 +346,11 @@ def LikeViewUser1(request,pk):
 
 
 @login_required(login_url='doLogin')
-# @allowedUsers(allowedGroups=['intityAdmin'])
 def Add_Comment_Save_User(request):
     if request.method!="POST":
         return HttpResponse("<h2>Method Now Allowed</h2>")
     else:
-        # file=request.FILES['profile']
-        # fs=FileSystemStorage()
-        # commet_pic=fs.save(file.name,file)
         try:
-            # adminhod = AdminHOD.objects.all()
             people = People.objects.all()
             com = Comment_User(comm_name=request.POST.get('comm_name',''),author=request.user,body=request.POST.get('body',''), comment_pic=request.user.people)
             com.save()
@@ -325,13 +368,11 @@ def Add_Comment_Save_User(request):
 
 
 @login_required(login_url='doLogin')
-# @allowedUsers(allowedGroups=['intityAdmin'])
 def delete_comment_user1(request,comment_user_id):
     comment=Comment_User.objects.get(id=comment_user_id)
     comment.delete()
     messages.error(request, "Deleted Successfully")
     return HttpResponseRedirect("/comments1")  
-    # return HttpResponse("Comment Id "+str(pk))
 
 
 

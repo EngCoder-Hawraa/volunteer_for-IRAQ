@@ -2,13 +2,20 @@
 
 <!-- /* ======== Start Manage Member Page ======== */ -->
 {% block main_content %}
-<div class="background2 pt-4 pb-2">
-    <div class="row background Boxshadow mr-4 ml-4" style="border-radius:10px 10px 0px 0px">
-        <div class="col-sm-12 col-lg-2 mr-lg-1 text-center" style="padding-top:23px">الاعضاء</div>
+<div class="background2 pt-5 pb-5">
+    <div class="form-group pr-5 pl-5 pt-4">
+        {% if messages %} {% for message in messages %} {% if message.tags == 'success' %}
+        <div class="alert alert-success text-center Boxshadow border-0 Borders4">{{ message }}</div>
+        {% elif message.tags == 'error' %}
+        <div class="alert alert-danger text-center Boxshadow border-0 Borders4">{{ message }}</div>
+        {% endif %} {% endfor %} {% endif %}
+    </div>
+    <div class="row background Boxshadow" style="margin-right:20px;margin-left:20px;border-radius:10px 10px 0px 0px">
+        <div class="col pr-5 pt-4 pb-4">الاعضاء</div>
         <!--======Start Add Member =========-->
-        <div class="col-sm-12 col-lg-9">
-            <button type="button" style="width:204px;height:41px;margin-top:10px" class="float-left Borders1 border-0 bg-primary font-size4 text-white mb-2 Boxshadow text-center" data-toggle="modal" data-target="#addmem">
-        اضافة جديد
+        <div class="col mb-3">
+            <button type="button" style="width:204px;height:41px;margin-top:15px" class="Borders1 border-0 font-size text-white Boxshadow bg-primary text-center" data-toggle="modal" data-target="#addmem">
+                    اضافة جديد
             </button>
         </div>
     </div>
@@ -16,6 +23,8 @@
     <div class="row mt-1 bg-white Boxshadow table-hover Borders mr-4 ml-4">
         <div class="float-right table-responsive">
             <table class="table">
+                <input type="hidden" value="{{ member.id }}" name="id">
+                <!--  -->
                 {% if members %}
                 <thead class="font-size3 text-dark">
                     <tr>
@@ -31,14 +40,18 @@
                     </tr>
                 </thead>
                 <tbody>
+                    {% if user.members %} {% for member in members %} {{member.id}} {% endfor %} {% endif %}
+                    <!--  -->
+                    {% if user.member == user %} {% for member in members %} {{ user.member.name}} {% endfor %} {% endif %}
                     <tr>
+                        <!--  -->
                         {% for member in members %}
                         <td>
                             <p class="mt-4">{{ member.id}}</p>
                         </td>
                         <td><img class="Boxshadow mt-2" style="width:60px;height:60px;border-radius: 50%;border:3px #FAFAFA solid" src="/media/{{ member.member_image }}"></td>
                         <td>
-                            <p class="mt-4">{{member.name}}</p>
+                            <p class="mt-4">{{ member.name}}</p>
                         </td>
                         <td>
                             <p class="mt-4">{{ member.gender }}</p>
@@ -56,10 +69,8 @@
                             <p class="mt-4">{{ member.email }}</p>
                         </td>
                         <td>
-                            <i data-toggle="modal" data-target="#editmember" class="mt-4 mr-2 fas fa-user-edit text-primary"></i>
-                            <!--======Start Edit Member =========-->
-                            {% include 'hod_template/edit_member.html' %}
-                            <!--======End Edit Member =========-->
+                            <a href="{% url 'update_member' member.id %}"><i class="mt-4 mr-2 fas fa-user-edit text-primary"></i></a>
+
                         </td>
                         <td>
                             <!--======End Edit Member =========-->
@@ -84,16 +95,16 @@
             </table>
         </div>
     </div>
-    <div class="row Boxshadow bg-white mr-4 ml-4 mt-1" style="border-radius:0px 0px 10px 10px;height:60px">
+    <div class="row Boxshadow bg-white mr-4 ml-4 mt-1 mb-5" style="border-radius:0px 0px 10px 10px;height:60px">
     </div>
 
     <!--======Start Pagination Member =========-->
     {% include 'iraq/pagination.html' with page=members %}
     <!--======End Pagination Member =========-->
-
     <!--======Start Add Member =========-->
     {% include 'hod_template/add_member.html' %}
     <!--======End Add Member =========-->
 </div>
+
 {% endblock %}
 <!-- /* ======== Start Manage Member Page ======== */ -->

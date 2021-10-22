@@ -88,7 +88,9 @@ class AdminHOD(models.Model):
     phone=models.CharField(max_length=255,null=True)
     birth=models.DateField(max_length=255, null=True, default="1994-10-07",blank=True)
     facebook=models.URLField(max_length=255,default='https://www.facebook.com/')
-    gender=models.CharField(max_length=255, null=True)
+    Gender = (('MALE' ,'ذكر'),('FEMALE' , 'انثى'))
+    gender=models.CharField(max_length=255, choices=Gender)
+    # gender=models.CharField(max_length=255, null=True)
     employee=models.CharField(max_length=255, null=True)
     region=models.CharField(max_length=255,null=True)
     profile_pic=models.ImageField(default='default.png', upload_to='profile_pics')
@@ -96,6 +98,8 @@ class AdminHOD(models.Model):
     updated_at=models.DateTimeField(auto_now_add=True)
     fcm_token=models.TextField(default="")
     objects=models.Manager()
+    def __str__(self):
+        return self.admin.username
     def save(self,*args, **kwargs):
         super().save(*args, **kwargs)
         profile_pic =Image.open(self.profile_pic.path)
@@ -103,8 +107,7 @@ class AdminHOD(models.Model):
             output_size =(300, 300)
             profile_pic.thumbnail(output_size)
             profile_pic.save(self.profile_pic.path)
-
-
+   
     
 
 
@@ -113,7 +116,9 @@ class People(models.Model):
     phone=models.CharField(max_length=255,null=True)
     birth=models.DateField(max_length=255, null=True, default="1994-10-07")
     facebook=models.URLField(max_length=255,default='https://www.facebook.com/')
-    gender=models.CharField(max_length=255, null=True)
+    Gender = (('MALE' ,'ذكر'),('FEMALE' , 'انثى'))
+    gender=models.CharField(max_length=255, choices=Gender)
+    # gender=models.CharField(max_length=255, null=True)
     employee=models.CharField(max_length=255, null=True)
     region=models.CharField(max_length=255,null=True)
     profile_pic=models.ImageField(default='default.png', upload_to='profile_pics')
@@ -121,6 +126,8 @@ class People(models.Model):
     updated_at=models.DateTimeField(auto_now_add=True)
     fcm_token=models.TextField(default="")
     objects=models.Manager()
+    def __str__(self):
+        return self.admin.username
     def save(self,*args, **kwargs):
         super().save(*args, **kwargs)
         profile_pic =Image.open(self.profile_pic.path)
@@ -128,7 +135,7 @@ class People(models.Model):
             output_size =(300, 300)
             profile_pic.thumbnail(output_size)
             profile_pic.save(self.profile_pic.path)
-
+    
 
 
 
@@ -179,6 +186,7 @@ class Intity(models.Model):
 
 
 class Member(models.Model):
+    admin=models.ForeignKey(CustomUser,on_delete=models.CASCADE)
     name=models.CharField(max_length=255)
     gender=models.CharField(max_length=255)
     region=models.ForeignKey(Region,on_delete=models.CASCADE)

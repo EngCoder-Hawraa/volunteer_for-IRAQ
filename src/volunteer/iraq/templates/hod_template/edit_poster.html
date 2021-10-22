@@ -1,67 +1,78 @@
-<!-- ======== Start Edit poster ======== --> 
-<!-- Modal for Edit Comment -->
-{% for poster in posters %} 
-  <div class="modal fade" id="edit_poster" role="dialog">
-    <div class="modal-dialog">
-      <!-- Modal content-->
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title">Modal Header</h4>
-        </div>     
-      <form role="form" action="{% url 'edit_poster' %}" method="post" enctype="multipart/form-data" >
-        <div class="modal-body">
-          {% csrf_token %}
-          <div class="form-group">
-            <label class="control-label" required="true" style="float:right">اسم المؤسسة</label>
-            <input type="text"  class="form-control" name="name" value="{{poster.name}}">
-          </div>
-          {% comment %} <div class="form-group">
-            <label class="control-label" style="float:right">المحافظة </label>
-            <select class="form-control" name="region">
-              {% for region in regions %}
-                <option value="{{ region.id }}">{{ region.region_name }}</option>
-              {% endfor %}
-            </select>
-          </div>  {% endcomment %}
-          <div class="form-group">
-            <label class="control-label" style="float:right">المكان بالضبط</label>
-            <input type="text" class="form-control" name="place" value="{{poster.place}}">
-          </div>
-          {% comment %} <div class="form-group">
-            <label class="control-label" style="float:right">التصنيف</label>
-            <select class="form-control" name="classification">
-              {% for classification in classifications %}
-                <option value="{{ classification.id }}">{{ classification.classification_name }}</option>
-              {% endfor %}
-            </select> 
-          </div>  {% endcomment %}
-          <div class="form-group">
-            <label class="control-label" style="float:right">صورةالاعلان</label>
-            <img src="/media/{{ poster.poster_image }}" style="width:200px;height:100px">
-            <input type="file" style="float:right" name="profile" class="form-control" value="{{poster.profile}}">
-          </div>
-          <div class="form-group">
-            <label class="control-label" style="float:right">الاعلان</label>
-            <textarea class="form-control" rows="3" name="posts" placeholder="اكتب ..." value="{{poster.posts}}"></textarea>    
-          </div>
-          <div class="form-group">
-            <label class="control-label" style="float:right">التاريخ</label>
-            <input type="date" class="form-control" name="date_poster" value="{{poster.date_poster}}">
-          </div>
-          <div class="form-group">
-            <label class="control-label" style="float:right">الوقت</label>
-            <input type="time" class="form-control" name="time_poster" value="{{poster.time_poster}}">
-          </div> 
-           <!-- Modal footer -->
-          <div class="modal-footer center form-group">
-            <button type="button" class="btn btn-danger btn-block" data-dismiss="modal">اغلاق</button>
-            <input type="hidden" value="{{ member.id }}" name="id">
-            <button type="submit" name="submit" class="btn btn-primary btn-block" value="Edit Members">تم</button>
-          </div>
-      </form> 
-        </div>
-      </div>
+ {% extends 'hod_template/base_template.html' %} {% load static %}
+<!-- /* ======== Start Edit Poster Page ======== */ -->
+
+{% block main_content %}
+<div class="pb-5 pt-3 background4">
+    <div class="bg-white container mt-4 Boxshadow pb-5 Borders">
+        <p class="text-primary text-center font-weight-bolder pt-5">تعديل اعلان</p>
+        <form role="form" action="{% url 'edit_poster' %}" method="post" enctype="multipart/form-data">
+            <div class="modal-body">
+                <div class="form-group mt-3">
+                    <label class="control-label float-right">اسم المؤسسة</label>
+                    <input type="text" class="col-sm-12 Boxshadow Borders4 H2 Borders7" name="name" value="{{poster.name}}">
+                </div>
+                <div>
+                    <label class="control-label float-right">المحافظة </label>
+                </div>
+                <div class="col-sm-12 bg-white Boxshadow mt-5 pt-3 Borders4 H2 Borders7" style="height:50px">
+                    <span>{{ poster.region }}</span>
+                    <select name="region" class="bg-white border-0 float-left">
+                        {% for region in regions %}
+                            <option value="{{ region.id }}" {% if region.id == poster.region_id.id %} selected {% endif %}>{{ region}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group mt-3">
+                    <label class="control-label float-right">المكان بالضبط</label>
+                    <input type="text" class="col-sm-12 Boxshadow Borders4 H2 Borders7" name="place" value="{{poster.place}}">
+                </div>
+                <label class="control-label float-right">التصنيف</label>
+                <div class="col-sm-12 bg-white Boxshadow mt-5 pt-3 Borders4 H2 Borders7" style="height:50px">
+                    <span>{{ poster.classification }}</span>
+                    <select name="classification" class="bg-white border-0 float-left">
+                        {% for classification in classifications %}
+                        <option value="{{ classification}}">{{ classification }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="control-label float-right mt-5">صورةالاعلان</label>
+                    <img class="mt-2 float-left" src="/media/{{ poster.poster_image }} " style="width:200px;height:100px;margin-right:100px">
+                    <input type="file" name="profile" class="mt-2 col-sm-12 Boxshadow Borders4 H2 Borders7 pt-3">
+                </div>
+                <div class="form-group">
+                    <label class="control-label float-right">الاعلان</label>
+                    <textarea class="col-sm-12 Boxshadow Borders4 Borders7" rows="3" name="posts" placeholder="اكتب ...">{{ poster.posts }}</textarea>
+                    <!--  -->
+                </div>
+                <label class="control-label float-right">التاريخ</label>
+                <div class="col-sm-12 bg-white Boxshadow mt-5 pt-3 Borders4 H2 Borders7" style="height:50px">
+                    <span>{{ poster.date_poster}}</span>
+                    <input type="date" name="date_poster" class="float-left border-0" placeholder="تاريخ الميلاد">
+                </div>
+                <!-- <input type="date" class="col-sm-12 Boxshadow Borders4 H2 Borders7" name="date_poster"> -->
+                <!-- <div class="form-group">
+      <label class="control-label float-right">الوقت</label>
+      <input type="time" class="col-sm-12 Boxshadow" style="border: 1px solid #44A5E4;height:50px;border-radius:8px;" name="time_poster">
+    </div>  -->
+                <!-- Modal footer -->
+                <div class="row">
+                    <div class="col-sm-11 col-md-5 mr-5 ml-3 mt-5">
+                        <button type="submit" name="submit" class="text-center Borders1 bg-primary border-0 text-white Boxshadow" style="width:100%;height:45px">
+                    <i class="fas fa-check"></i> حفظ
+              </button>
+                        <input type="hidden" value="{{ poster.id }}" name="id"> {% csrf_token %}
+                    </div>
+                    <div class="col-sm-11 col-md-5 mr-3 ml-3 mt-5">
+                        <button data-dismiss="modal" class="text-center Borders1 bg-danger border-0 text-white Boxshadow" style="width:100%;height:45px"> 
+                  <i class="fas fa-times"></i> اغلاق
+              </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <!-- form end -->
     </div>
-  </div>
-{% endfor %}
+</div>
+{% endblock main_content %}
+<!-- /* ======== End Edit poster Page ======== */ -->

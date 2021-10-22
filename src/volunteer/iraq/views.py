@@ -2,6 +2,7 @@
 from django.shortcuts import render, redirect
 from .models import Intity,Region,Classification,CustomUser
 from django.views.generic import TemplateView, ListView
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.models import Q # new
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
@@ -39,12 +40,24 @@ def details(request):
 
 
 def Intities(request):
+    region = Region.objects.all()
+    classification= Classification.objects.all()
+    # intitys = Intity.objects.latest('admin')
+    intitys = Intity.objects.all()
+    paginator = Paginator(intitys, 6)
+    page = request.GET.get('page')
+    try:
+        intitys = paginator.page(page)
+    except PageNotAnInteger:
+        intitys = paginator.page(1)
+    except EmptyPage:
+        intitys = paginator.page(paginator.num_page)
     context = {
-        'intitys' : Intity.objects.all(),
-        'regions': Region.objects.all(),
-        'classifications': Classification.objects.all(),
-
-        # 'myFilter': searchFilter,
+        'num_intity': Intity.objects.filter().count(),
+        'intitys' : intitys,
+        'page': page,
+        'region': region,
+        'classification': classification,
         'title':'المؤسسات'
     }
     return render(request, 'iraq/intities.html', context)

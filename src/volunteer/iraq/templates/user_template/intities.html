@@ -71,7 +71,7 @@
     </div>
 </div>
 
-<div style="border:4px solid white;" data-placement="top" title="عدد المؤسسات" class="mr-5 font-size3 text-white mt-3 badge rounded-circle pt-3 pb-3 pr-4 pl-4 Boxshadow bg-primary float-right">
+<div data-placement="top" title="عدد المؤسسات" class="text-white badge rounded-circle mt-2 mr-5 mb-3 Boxshadow bg-primary pt-3 button" style="width:45px;height:45px;border-radius:50%">
     {{ num_intity }}
 </div>
 <br><br><br>
@@ -84,7 +84,7 @@
         <!--Grid row-->
         <div class="row wow fadeIn mr-1 ml-1" style="visibility: visible; animation-name: fadeIn;">
             {% if intitys %} {% for intity in intitys %}
-            <div class="col-sm-12 col-md-6 col-lg-3 rounded-top">
+            <div class="col-sm-12 col-md-6 col-lg-3 rounded-top button">
                 <!--Card image-->
                 <img class="card-img-top mt-4 Borders image-width1" style="height:150px;" src="/media/{{ intity.intities_pic }}" alt="Card image">
                 <!--Card content-->
@@ -102,31 +102,33 @@
                     <div class="Boxshadow text-center pt-2 pb-2 background1 text-white font-size Borders4" style="height:40px;">
                         <i class="fas fa-calendar-alt ml-3" data-placement="top" title="تاريخ التأسيس"></i> {{ intity.created}}
                     </div>
+                    <!-- <div class="Boxshadow mt-2 background1 Borders4" style="height:40px;">
+                        <a class="nav-link text-center font-size text-white" href="{% url 'more_read_intities1' %}">قراءة المزيد</a>
+                    </div> -->
                 </div>
+                {% endfor %}
             </div>
-            {% endfor %}
-        </div>
     </section>
     <!--Section: Cards-->
-</div>
-<!--====== EndCards ======-->
+    </div>
+    <!--====== EndCards ======-->
 
 
-<!--====== Start Not found ======-->
-{% else %}
-<div class="Boxshadow text-center background mt-4 Borders1 mr-4 ml-3 mb-3" style="height:440px;width:100%">
-    <div class="row">
-        <div class="m-auto">
-            <div class="mt-2 mb-2">
-                <p class="card-title font-weight-bold pb-4 pt-4 text-center text-primary" style="font-size:25px"> لا توجد معلومات</p>
-                <img class="mb-4 " src="{% static 'iraq/images/informationR.png' %} " style="height:228px; width:350px; margin-right: 70px;margin-top:20px" alt="Not Found">
+    <!--====== Start Not found ======-->
+    {% else %}
+    <div class="Boxshadow text-center background mt-4 Borders1 mr-4 ml-3 mb-3" style="height:440px;width:100%">
+        <div class="row">
+            <div class="m-auto">
+                <div class="mt-2 mb-2">
+                    <p class="card-title font-weight-bold pb-4 pt-4 text-center text-primary" style="font-size:25px"> لا توجد معلومات</p>
+                    <img class="mb-4 " src="{% static 'iraq/images/informationR.png' %} " style="height:228px; width:350px; margin-right: 70px;margin-top:20px" alt="Not Found">
+                </div>
             </div>
         </div>
     </div>
-</div>
-{% endif %}
-<!--====== End Not found ======-->
-<!-- <div class="container">
+    {% endif %}
+    <!--====== End Not found ======-->
+    <!-- <div class="container">
     <div class="row">
         <div class="container">
             <div class="row pt-2 mb-4">
@@ -141,9 +143,9 @@
     </div>
 </div> -->
 
-<div class="cup ">
-</div>
+    <div class="cup ">
+    </div>
 
-{% include 'iraq/pagination.html' with page=intitys %} {% endblock %}
+    {% include 'iraq/pagination.html' with page=intitys %} {% endblock %}
 
-<!-- /* ======== End Intities Page ======== */ -->
+    <!-- /* ======== End Intities Page ======== */ -->

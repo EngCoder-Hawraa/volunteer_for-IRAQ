@@ -1,0 +1,151 @@
+{% extends 'user_template/base_template.html' %} {% load static %} {% block custom_css %}
+
+<style>
+    .cardI:hover {
+        -ms-transform: scale(0.5);
+        /* IE 9 */
+        -webkit-transform: scale(.5);
+        /* Safari 3-8 */
+        transform: scale(1.1);
+    }
+    
+    .loading {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background: #4973ff;
+        border-radius: 50%;
+        box-shadow: inset 0 0 50px rgba(0, 0, 0, .5);
+    }
+    
+    .loading:before,
+    .loading:after {
+        content: '';
+        position: absolute;
+        width: 200%;
+        height: 200%;
+        top: 0;
+        left: 50%;
+        transform: translate(-50%, -75%);
+        background: #000;
+    }
+    
+    .loading:before {
+        border-radius: 45%;
+        background: rgba(255, 255, 255, 1);
+        animation: animate 5s linear infinite;
+    }
+    
+    .loading:after {
+        border-radius: 40%;
+        background: rgba(255, 255, 255, .5);
+        animation: animate 5s linear infinite;
+    }
+    
+    @keyframes animate {
+        0% {
+            transform: translate(-50%, -75%) rotate(0deg);
+        }
+        100% {
+            transform: translate(-50%, -75%) rotate(360deg);
+        }
+    }
+</style>
+{% endblock custom_css %}
+
+<!-- /* ======== Start Intities Page ======== */ -->
+{% block main_content %}
+<div class="row m-0 pt-2 background4" style="background-color:#F6FCFD">
+    <div class="col-sm-12 col-lg-5 p-5">
+        <img class="img-responsive image-width1" src="{% static 'iraq/images/volunteer.png' %}" alt="app">
+    </div>
+    <div class="col-sm-12 col-md-7" style="margin-top:100px">
+        <div class="row">
+            <div class="col-sm-12 col-md-9">
+                <form class="pb-5" action="{% url 'search_Intities_results1' %}" method="get">
+                    <input class="pr-3 Boxshadow bg-white Borders4 border-0 font-size3" style="height:45px;width:380px" name="q" stype="text" placeholder="ابحث المؤسسات حسب الاسم او المحافظة او التصنيف">
+                    <button type="submit" style="height:45px;width:40px" class="text-white border-0 text-center background1 Boxshadow Borders4"><i class="fa fa-search pr-1"></i></button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div data-placement="top" title="عدد المؤسسات" class="text-white badge rounded-circle mt-2 mr-5 mb-3 Boxshadow bg-primary pt-3 button" style="width:45px;height:45px;border-radius:50%">
+    {{ num_intity }}
+</div>
+<br><br><br>
+
+
+<!--====== Start Cards ======-->
+<div>
+    <!--Section: Cards-->
+    <section class="text-center">
+        <!--Grid row-->
+        <div class="row wow fadeIn mr-1 ml-1" style="visibility: visible; animation-name: fadeIn;">
+            {% if intitys %} {% for intity in intitys %}
+            <div class="col-sm-12 col-md-6 col-lg-3 rounded-top button">
+                <!--Card image-->
+                <img class="card-img-top mt-4 Borders image-width1" style="height:150px;" src="/media/{{ intity.intities_pic }}" alt="Card image">
+                <!--Card content-->
+                <div class="card-body Boxshadow image-width1 Borders4">
+                    <!--Title-->
+                    <div class="col text-center mb-3 Color2 font-size1" data-placement="top" title="اسم المؤسسة">{{ intity.name }}</div>
+                    <div class="row font-weight-normal text-white">
+                        <div class="col Boxshadow text-center pt-2 pb-2 background1 font-size Borders4" style="height:40px;">
+                            <i class="fas fa-map-marked-alt ml-3" data-placement="top" title="المحافظة"></i> {{ intity.region }}
+                        </div>
+                        <div class="col Boxshadow text-center pt-2 pb-2 background1 font-size Borders4 mb-2" style="height:40px;margin-right:5px">
+                            <i class="fas fa-book-reader ml-3" data-placement="top" title="التصنيف"></i> {{ intity.classification }}
+                        </div>
+                    </div>
+                    <div class="Boxshadow text-center pt-2 pb-2 background1 text-white font-size Borders4" style="height:40px;">
+                        <i class="fas fa-calendar-alt ml-3" data-placement="top" title="تاريخ التأسيس"></i> {{ intity.created}}
+                    </div>
+                    <div class="Boxshadow mt-2 background1 Borders4" style="height:40px;">
+                        <a class="nav-link text-center font-size text-white" href="{% url 'more_read_intities1' %}">قراءة المزيد</a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+    </section>
+    <!--Section: Cards-->
+    </div>
+    <!--====== EndCards ======-->
+
+
+    <!--====== Start Not found ======-->
+    {% else %}
+    <div class="Boxshadow text-center background mt-4 Borders1 mr-4 ml-3 mb-3" style="height:440px;width:100%">
+        <div class="row">
+            <div class="m-auto">
+                <div class="mt-2 mb-2">
+                    <p class="card-title font-weight-bold pb-4 pt-4 text-center text-primary" style="font-size:25px"> لا توجد معلومات</p>
+                    <img class="mb-4 " src="{% static 'iraq/images/informationR.png' %} " style="height:228px; width:350px; margin-right: 70px;margin-top:20px" alt="Not Found">
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    <!--====== End Not found ======-->
+    <!-- <div class="container">
+    <div class="row">
+        <div class="container">
+            <div class="row pt-2 mb-4">
+                <a href="#" class="intro-banner-vdo-play-btn pinkBg" target="_blank">
+                    <i class="glyphicon glyphicon-play whiteText" aria-hidden="true"></i>
+                    <span class="ripple pinkBg"></span>
+                    <span class="ripple pinkBg"></span>
+                    <span class="ripple pinkBg"></span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div> -->
+
+    <div class="cup ">
+    </div>
+
+    {% include 'iraq/pagination.html' with page=intitys %} {% endblock %}
+
+    <!-- /* ======== End Intities Page ======== */ -->

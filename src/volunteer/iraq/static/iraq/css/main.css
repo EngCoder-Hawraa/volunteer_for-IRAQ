@@ -1,45 +1,13 @@
-/* ======== Start Myframework ======== */
-
-
-/* @media (max-width: 700px) { */
-
-
-/* label #sidebar_btn {
-z-index: 1;
-color: #00A4ED;
-cursor: pointer;
-font-size: 20px;
-transition: 0.5s;
-transition-property: color;
-margin-left: 60px
-} */
-
-
-/* label #sidebar_btn:hover {
-color: #000000;
-}
-.content {
-display: none;
-} */
-
-
-/* #check:checked~.navigation {
-right: -190px;
-position: fixed;
-} */
-
-
-/* .content {
-display: block;
-} */
-
-
-/* } */
-
 * {
     direction: rtl;
     text-align: right;
     font-family: 'tajawal';
+}
+
+.button:hover {
+    box-shadow: 0px 37px 20px -20px #F1ECEC;
+    -webkit-transform: translate(0px, -10px) scale(1.1);
+    transform: translate(0px, -10px) scale(1.1);
 }
 
 .font-size {
@@ -267,7 +235,6 @@ label #sidebar_btn {
     font-size: 20px;
     transition: 0.5s;
     transition-property: color;
-    margin-left: 60px
 }
 
 label #sidebar_btn:hover {
@@ -299,12 +266,8 @@ label #sidebar_btn:hover {
 }
 
 .logout_btn {
-    background: #00A4ED;
-    color: white;
-    border-radius: 5px;
-    font-size: 13px;
     font-weight: 600;
-    margin-top: 2px;
+    width: 80px;
     height: 40px;
     transition: 0.5s;
     transition-property: 'background';
@@ -412,7 +375,7 @@ visibility: hidden;
 }
 } */
 
-@media (min-width: 360px) and (max-width: 374px) {}
+@media(max-width: 374px) {}
 
 @media (min-width: 375px) and (max-width: 383px) {}
 
@@ -424,6 +387,10 @@ visibility: hidden;
 
 @media (max-width: 576px) {
     /* ======== Start About ======== */
+    .content {
+        margin-right: 576px;
+        background-position: center;
+    }
     #col {
         width: 100%;
     }

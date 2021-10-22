@@ -3,7 +3,7 @@ from . import views, IntitiesViews ,UserViews
 from volunteer import settings
 from django.conf.urls.static import static
 from django.contrib.auth import views as authviews
-from .IntitiesViews import Intities, LikeViewUser,SearchIntitiesResultsView,SearchPosterEduResultsView,SearchPosterEnvResultsView,SearchPosterHeaResultsView,SearchPosterArtResultsView,SearchPosterOthResultsView,LikeView
+from .IntitiesViews import Intities, LikeViewUser,SearchMemberView ,SearchIntitiesResultsView,SearchPosterEduResultsView,SearchPosterEnvResultsView,SearchPosterHeaResultsView,SearchPosterArtResultsView,SearchPosterOthResultsView,LikeView
 from .UserViews import SearchIntitiesResultsView1,SearchPosterEduResultsView1,SearchPosterEnvResultsView1,SearchPosterHeaResultsView1,SearchPosterArtResultsView1,SearchPosterOthResultsView1,More_Read_Intities,LikeView1,LikeViewUser1
 # from django.contrib.auth.views import LogoutView
 
@@ -30,11 +30,6 @@ urlpatterns = [
     path('search_Intities/', SearchIntitiesResultsView.as_view(), name='search_Intities_results'),
 
     path('poster/', IntitiesViews.Declaration, name='poster'),
-    # path('new_post', IntitiesViews.NewPost, name='new_post'),
-    # path('<uuid:post_id>', IntitiesViews.PostDetails, name='post_details'),
-    # path('<uuid:post_id>/like', IntitiesViews.like, name='postlike'),
-   	# path('<uuid:post_id>/favorite', IntitiesViews.favorite, name='postfavorite'),
-    # path('tags/<slug:tag_slug>', IntitiesViews.tags, name='tags'),
     path('search_PosterEdu_results/', SearchPosterEduResultsView.as_view(), name='search_PosterEdu_results'),
     path('search_PosterEnv_results/', SearchPosterEnvResultsView.as_view(), name='search_PosterEnv_results'),
     path('search_PosterHea_results/', SearchPosterHeaResultsView.as_view(), name='search_PosterHea_results'),
@@ -42,8 +37,8 @@ urlpatterns = [
     path('search_PosterOth_results/', SearchPosterOthResultsView.as_view(), name='search_PosterOth_results'),
     path('save_poster', IntitiesViews.Save_Poster, name='save_poster'),
     path('delete_poster/<str:poster_id>', IntitiesViews.DeletePoster, name='delete_poster'),
-    # path('update_poster/<str:poster_id>', IntitiesViews.update_poster, name='update_poster'),
-    # path('edit_poster' , IntitiesViews.edit_poster, name='edit_poster'),
+    path('update_poster/<str:poster_id>', IntitiesViews.update_poster, name='update_poster'),
+    path('edit_poster' , IntitiesViews.edit_poster, name='edit_poster'),
     
     path('notification/', IntitiesViews.Notification, name='notification'),
     path('add_volunteer', IntitiesViews.AddVolunteer, name='add_volunteer'),
@@ -56,6 +51,7 @@ urlpatterns = [
     path('delete_comment/<str:comment_id>' ,IntitiesViews.delete_comment, name='delete_comment'),
     path('delete_comment_user/<str:comment_user_id>' ,IntitiesViews.delete_comment_user, name='delete_comment_user'),
     # path('reply',IntitiesViews.ComReply, name='reply'),
+    path('search_members/', SearchMemberView, name='search_members'),
     path('manage_members',IntitiesViews.Manage_Members,name="manage_members"),
     path('add_member_save',IntitiesViews.Add_Member_Save,name="add_member_save"),
     path('update_member/<str:member_id>' , IntitiesViews.update_member, name='update_member'),

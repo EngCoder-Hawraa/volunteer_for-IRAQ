@@ -1,7 +1,14 @@
 {% extends 'hod_template/base_template.html' %} {% load static %} {% block main_content %}
 <div class="background2" style="padding-top:40px;padding-bottom:40px">
+    <div class="form-group pr-5 pl-5 mt-3 mb-5">
+        {% if messages %} {% for message in messages %} {% if message.tags == 'success' %}
+        <div class="alert alert-success text-center Boxshadow border-0 Borders4">{{ message }}</div>
+        {% elif message.tags == 'error' %}
+        <div class="alert alert-danger text-center Boxshadow border-0 Borders4">{{ message }}</div>
+        {% endif %} {% endfor %} {% endif %}
+    </div>
     {% include 'iraq/pagination_notification.html' with page=numvolunteers %}
-    <div class="bg-white Boxshadow Borders1 mr-4 ml-4" style="padding-bottom:80px">
+    <div class="bg-white Boxshadow Borders1 mr-4 ml-3" style="padding-bottom:80px">
         {% if numvolunteers %} {% for numvolunteer in numvolunteers %}
         <i class="fas fa-user-plus mt-5 text-primary" style="margin-right:32%" data-placement="top" title="اضافة متطوعين" data-toggle="modal" data-target="#addVolunteer"></i>
         <img class="w3-circle Boxshadows" style="width:160px;height:160px;margin-right:10%;margin-top:-60px" src="/media/{{ numvolunteer.volunteer_image }}" alt="Volunteer">
@@ -72,7 +79,5 @@
 </div>
 <!--======Start Pagination Member =========-->
 {% include 'hod_template/add_volunteer.html' %}
-</div>
 <!--======End Pagination Member =========-->
-</div>
 {% endblock main_content %}

@@ -22,8 +22,18 @@
         border-radius: 27px;
     }
 </style>
-{% endblock custom_css %} {% block main_content %}
+{% endblock custom_css %}
+<!--  -->
+
+{% block main_content %}
 <div class="background2 pt-4 pb-4">
+    <div class="form-group pr-5 pl-5 mt-3 mb-5">
+        {% if messages %} {% for message in messages %} {% if message.tags == 'success' %}
+        <div class="alert alert-success text-center Boxshadow border-0 Borders4">{{ message }}</div>
+        {% elif message.tags == 'error' %}
+        <div class="alert alert-danger text-center Boxshadow border-0 Borders4">{{ message }}</div>
+        {% endif %} {% endfor %} {% endif %}
+    </div>
     <div class="bg-white Boxshadow Borders1 mr-4 ml-3 pb-5">
         <p class="font-weight-bolder col-12 text-center text-primary font-size1" style="padding-top:60px;padding-bottom:40px">إرسال إشعار للمؤسسة</p>
         <img style="width:90px;height:90px;margin-right:45%;border:4px solid white;" class="Boxshadow bg-primary rounded-circle" src="{% static 'iraq/images/avatar.svg' %}" alt="الصورة الشخصية">
@@ -65,20 +75,8 @@
                 <label class="col-form-label font-weight-bolder col-sm-12 col-md-1" style="font-size:14px;margin-right:20%">الوظيفة</label>
                 <input class="col-sm-11 col-md-6 col-lg-5 Boxshadow Borders7 Borders4 mr-4 ml-4" type="text" style="width:95%;height:50px" name="employee">
             </div>
-            <button type="submit" name="submit" class="col-sm-10 bg-primary btn-lg  mt-5 pt-3 pb-2 Boxshadow Borders1 text-white text-center border-0 font-size3 mb-5" style="margin-right:20%;margin-left:20%;width:57%">ارسال</button>
+            <button type="submit" name="submit" class="col-sm-10 bg-primary btn-lg  mt-5 pt-3 pb-2 Boxshadow text-white text-center border-0 font-size3 mb-5" style="margin-right:20%;margin-left:20%;width:57%;border-radius:27px;height:55px">ارسال</button>
+        </form>
     </div>
-    </form>
-
 </div>
-<div class="background4 m-5">
-    {% if messages %} {% for message in messages %} {% if message.tags == 'success' %}
-    <div class="alert alert-success text-center Boxshadow border-0 Borders4 text-primary font-weight-bold">{{ message }}</div>
-    {% elif message.tags == 'error' %}
-    <div class="alert alert-danger text-center Boxshadow border-0 Borders4 text-primary font-weight-bold">{{ message }}</div>
-    {% endif %} {% endfor %} {% endif %}
-</div>
-</div>
-</div>
-</div>
-
-{% endblock main_content %}
+{% endblock %}

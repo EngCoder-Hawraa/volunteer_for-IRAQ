@@ -1,16 +1,16 @@
 <!--=======Start Add poster Page========-->
 <!-- The Modal -->
-<div class="modal Boxshadow" id="myModal3">
+<div class="modal pl-3" id="add_poster">
     <div class="modal-dialog">
+        <!-- Modal Header -->
+        <div class="modal-header mt-5 float-center bg-primary border-0 Borders">
+            <button type="button" class="close text-dark" data-dismiss="modal">&times;</button>
+            <p class="modal-title text-white">اضافة اعلان</p>
+        </div>
+        <!-- Modal body -->
+        <!-- form start -->
         <div class="modal-content border-0">
-            <!-- Modal Header -->
-            <div class="modal-header bg-primary">
-                <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
-                <p class="modal-title text-center text-white font-size3">اضافة اعلان</p>
-            </div>
-            <!-- Modal body -->
-            <!-- form start -->
-            <form role="form" action="/save_poster" method="post" enctype="multipart/form-data">
+            <form role="form" action="{% url 'save_poster' %}" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="modal-body">
                     <div class="form-group mt-3">
@@ -21,7 +21,7 @@
                         <label class="control-label float-right">المحافظة </label>
                         <select class="col-sm-12 Boxshadow Borders4 H2 Borders7" name="region">
                       {% for region in regions %}
-                        <option value="{{ region.id }}">{{ region.region }}</option>
+                        <option value="{{ region.id }}">{{ region}}</option>
                       {% endfor %}
                     </select>
                     </div>
@@ -33,7 +33,7 @@
                         <label class="control-label float-right">التصنيف</label>
                         <select class="col-sm-12 Boxshadow Borders4 H2 Borders7" name="classification">
                             {% for classification in classifications %}
-                            <option value="{{ classification.id }}">{{ classification.classification }}</option>
+                            <option value="{{ classification.id }}">{{ classification }}</option>
                             {% endfor %}
                          </select>
                     </div>
@@ -43,7 +43,7 @@
                     </div>
                     <div class="form-group">
                         <label class="control-label float-right">الاعلان</label>
-                        <textarea class="col-sm-12 Boxshadow Borders4 H2 Borders7" rows="3" name="posts" placeholder="اكتب ..."></textarea>
+                        <textarea class="col-sm-12 Boxshadow Borders4 Borders7" rows="3" name="posts" placeholder="اكتب ..."></textarea>
                     </div>
                     <div class="form-group">
                         <label class="control-label float-right">التاريخ</label>
@@ -54,24 +54,22 @@
                     <input type="time" class="col-sm-12 Boxshadow" style="border: 1px solid #44A5E4;height:50px;border-radius:8px;" name="time_poster">
                   </div>  -->
                     <!-- Modal footer -->
-                    <div class="modal-footer center">
-                        <button type="submit" name="submit" class="text-center Borders1 bg-primary border-0 text-white font-size3" style="width:204px;height:41px">
-                        <i class="fas fa-check"></i> حفظ
-                    </button>
-                        <button data-dismiss="modal" class="text-center Borders1 bg-danger border-0 text-white font-size3" style="width:204px;height:41px"> 
-                      <i class="fas fa-times"></i> اغلاق
-                  </button>
+                    <div class="row">
+                        <div class="col-sm-11 col-md-5 mr-3 ml-3 mt-2">
+                            <button type="submit" name="submit" class="text-center Borders1 bg-primary border-0 text-white Boxshadow" style="width:100%;height:45px">
+                                <i class="fas fa-check"></i> حفظ
+                            </button>
+                        </div>
+                        <div class="col-sm-11 col-md-5 mr-3 ml-3 mt-2">
+                            <button data-dismiss="modal" class="text-center Borders1 bg-danger border-0 text-white Boxshadow" style="width:100%;height:45px"> 
+                                <i class="fas fa-times"></i> اغلاق
+                            </button>
+                        </div>
                     </div>
                 </div>
             </form>
             <!-- form end -->
         </div>
     </div>
-    <div class="form-group p-5 mb-5">
-        {% if messages %} {% for message in messages %} {% if message.tags == 'success' %}
-        <div class="alert alert-success text-center Boxshadow border-0 Borders4">{{ message }}</div>
-        {% elif message.tags == 'error' %}
-        <div class="alert alert-danger text-center Boxshadow border-0 Borders4">{{ message }}</div>
-        {% endif %} {% endfor %} {% endif %}
-    </div>
-    <!--=======End Add poster ========-->
+</div>
+<!--=======End Add poster ========-->

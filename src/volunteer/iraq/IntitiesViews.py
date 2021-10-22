@@ -1,4 +1,7 @@
+from typing import Any
 from django import template
+from django.contrib.auth.models import User
+from django.http.response import Http404
 from django.shortcuts import render, redirect,  get_object_or_404
 from django.contrib.auth.decorators import login_required
 # from .forms import UserUpdateForm,ProfileUpdateForm
@@ -43,7 +46,7 @@ from django.template import loader
 @login_required(login_url='doLogin')
 def dashboard(request):
     context = {
-    'title':'معلومات المؤسسة',
+        'title':'dashboard',
     }
     return render(request, 'hod_template/dashboard.html', context)
 
@@ -51,44 +54,66 @@ def dashboard(request):
 @login_required(login_url='doLogin')
 def admin_home(request):
     context = {
-        # 'profiles': Profile.objects.all(),
+        'title':'الرئيسية',
     }
     return render(request,"hod_template/home_content.html",context)
+
+
+@login_required(login_url='doLogin')  
+def Details(request):
+    context = {
+    'title':'قراءة المزيد',
+    }
+    return render(request, 'hod_template/details.html', context)
 
 
 @login_required(login_url='doLogin')
 def Profile(request):
     context = {
-        # 'adminhod': AdminHOD.objects.all(),
         'region': Region.objects.all(),
         'gender':Gender.objects.all(),
-        'admin': AdminHOD.objects.all(),
+        'adminhod': AdminHOD.objects.all(),
         'title':'الملف الشخصي',
     }
     return render(request,'hod_template/profile.html', context)
 
-
+# def update_poster(request,poster_id):
+#     poster=Poster.objects.get(id=poster_id)
+#     if poster==None:
+#         return HttpResponse("Member Not Found")
+#     else:
+#         context = {
+#             'classifications': Classification.objects.all(),
+#             'regions': Region.objects.all(),
+#             'poster':poster
+#         }
+#         return render(request,"hod_template/edit_poster.html", context)
 @login_required(login_url='do_login')
 def ProfileUpdate(request,user_id):
-    user=AdminHOD.objects.get(id=user_id)
+    user=AdminHOD.objects.get(admin=user_id)
     if user==None:
         return HttpResponse("Intity Not Found")
     else:
+        # return render(request,'hod_template/profile.html',{'user':user})
         return HttpResponseRedirect("/profile")
 
           
 
 
 @login_required(login_url='doLogin')
-# @allowedUsers(allowedGroups=['intityAdmin'])
 def ProfileEdit(request):
     if request.method!="POST":
         return HttpResponse("<h2>Method Now Allowed</h2>")
     else:
-        user=AdminHOD.objects.get(id=request.POST.get('id',''))
-        if user==None:
-            return HttpResponse("<h2>لا يوجد الملف الشخصي</h2>")
-        else:       
+        user_id=request.POST.get('user_id')  
+        username =request.POST.get('user')
+        email=request.POST.get('email')
+        try:      
+            user=CustomUser.objects.get(id=user_id) 
+            user.username = username
+            user.email = email
+            user.save()
+            adminhod = AdminHOD.objects.get(admin=user_id)
             if request.FILES.get('profile'):
                 file = request.FILES['profile']
                 fs = FileSystemStorage()
@@ -96,23 +121,22 @@ def ProfileEdit(request):
             else:
                     profile_pic=None
             if profile_pic!=None:  
-                user.profile_pic= profile_pic
-            # admin=CustomUser.objects.update()
-            # if admin == True:
-            #     admin.username =request.POST.get('user','')
-            #     admin.email=request.POST.get('email','')
-            #     admin.save()
-            user.username =request.POST.get('user','')
-            user.email=request.POST.get('email','')
-            user.phone=request.POST.get('phone','')
-            user.region=request.POST.get('region','')
-            user.birth=request.POST.get('birth','')
-            user.gender=request.POST.get('gender','')
-            user.employee=request.POST.get('employee','')
-            user.facebook=request.POST.get('facebook','')
-            user.save()
+                adminhod.profile_pic= profile_pic
+            adminhod.phone=request.POST.get('phone','')
+            adminhod.region=request.POST.get('region','')
+            adminhod.birth=request.POST.get('birth','')
+            adminhod.gender=request.POST.get('gender','')
+            adminhod.employee=request.POST.get('employee','')
+            adminhod.facebook=request.POST.get('facebook','')
+            adminhod.save()
             messages.success(request,",تم التعديل بنجاح")
-            return HttpResponseRedirect("profile_update/"+str(user.id)+"")
+            return HttpResponseRedirect(reverse("profile_update",kwargs={"user_id":user_id}))
+        except:
+            messages.error(request,"لا يوجد الملف الشخصي")
+            return HttpResponseRedirect(reverse("profile",kwargs={"user_id":user_id}))
+
+           
+
 
 
 
@@ -122,8 +146,7 @@ def ProfileEdit(request):
 def Intities(request):
     region = Region.objects.all()
     classification= Classification.objects.all()
-    # intitys = Intity.objects.latest('admin')
-    intitys = Intity.objects.all()
+    intitys = Intity.objects.all().order_by('-created_at')
     paginator = Paginator(intitys, 6)
     page = request.GET.get('page')
     try:
@@ -175,10 +198,10 @@ def More_Read_Intities(request):
 
 
 @login_required(login_url='doLogin')
-# # @allowedUsers(allowedGroups=['intityAdmin'])
 def Profile_Intities(request):
     context = {
         'title':'معلومات المؤسسة',
+        # 'user': CustomUser.objects.all(),
         'intitys': Intity.objects.all(),
         'region': Region.objects.all(),
         # 'users': Intity.objects.filter(user=request.abstrs),
@@ -266,7 +289,7 @@ def Edit_Intities_Save(request):
             if (intities_pic!=None and permission!=None):   
                 intity.intities_picture = intities_pic
                 intity.permission=permission
-            User =request.POST.get('user','')
+            user =request.POST.get('user','')
             intity.name=request.POST.get('name','')
             intity.region=request.POST.get('region','')
             intity.classification=request.POST.get('classification','')
@@ -301,21 +324,411 @@ class SearchIntitiesResultsView(ListView):
 
 
 
-@login_required(login_url='doLogin')  
-def Details(request):
-    context = {
-    'title':'قراءة المزيد',
-    }
-    return render(request, 'hod_template/details.html', context)
+
 
 
  
+
+
+
+
+@login_required(login_url='doLogin')
+# @allowedUsers(allowedGroups=['intityAdmin'])
+# def ComReply(request):
+#     if request.method!="POST":
+#         return HttpResponse("<h2>Method Now Allowed</h2>")
+#     else:
+#         # comment_name=Comment.objects.get(id=request.POST.get('comm_name',''))
+#         # comment_name=Comment.Post.get('comm_name','')
+#         # comments = Comment.objects.all()
+#         comment_name = Comment(request.POST.get('comm_name',''))
+#         rep = Reply(comment_name=comment_name,author=request.user,reply_body=request.POST.get('reply_body',''))
+#         rep.save()
+#     return redirect("/comments")
+      
+class SearchMemberView(ListView):
+    pass
+    # model = Member
+    # model = Intity
+    # template_name = 'hod_template/manage_member.html'
+
+    # def get_queryset(self): # new
+    #     query = self.request.GET.get('q')
+    #     object_list = Member.objects.filter(Q(mem__icontains=query,))
+    #     return object_list
+
+
+
+
+
+@login_required(login_url='doLogin')
+def Manage_Members(request):
+    admin = CustomUser.objects.all()
+    # for i in admin:
+    #     i =+ 1
+    #     if i == admin:
+    #         members = Member.objects.order_by('-created_at').filter(admin = i)
+    #     else:  
+    members = Member.objects.order_by('-created_at').filter()
+    paginator = Paginator(members, 10)
+    page = request.GET.get('page')
+    try:
+        members = paginator.page(page)
+    except PageNotAnInteger:
+        members = paginator.page(1)
+    except EmptyPage:
+        members = paginator.page(paginator.num_page)
+    context = {
+        'members': members,
+        'admin':admin,
+        # 'intitys': intitys,
+        'regions': Region.objects.all(),
+        'genders': Gender.objects.all(),
+        'page': page,
+        'title':'الاعضاء'
+    }
+    return render(request,"hod_template/manage_member.html", context)
+
+
+
+
+@login_required(login_url='doLogin')
+def Add_Member_Save(request):
+    if request.method!="POST":
+        return HttpResponse("<h2>Method Now Allowed</h2>")
+    else:
+        file=request.FILES['profile']
+        fs=FileSystemStorage()
+        member_img=fs.save(file.name,file)
+        try:
+            region=Region.objects.get(id=request.POST.get('region',''))
+            gender=Gender.objects.get(id=request.POST.get('gender','')) 
+            member=Member(name=request.POST.get('name',''),employee=request.POST.get('employee',''),
+            phone=request.POST.get('phone',''),email=request.POST.get('email',''),
+            member_image=member_img,region=region,gender=gender,admin=request.user)
+            member.save()
+            messages.success(request,"تم الاضافة بنجاح")
+        except Exception as e:
+            print(e)
+            messages.error(request,"فشل في الاضافة")
+        return HttpResponseRedirect("/manage_members")
+
+
+
+@login_required(login_url='doLogin')
+def delete_member(request,member_id):
+    member=Member.objects.get(id=member_id)
+    member.delete()
+    messages.error(request, "تم الحذف بنجاح")
+    return HttpResponseRedirect("/manage_members",{'member':member})
+
+
+@login_required(login_url='doLogin')
+def update_member(request,member_id):
+    member=Member.objects.get(id=member_id)
+    if member==None:
+        return HttpResponse("Member Not Found")
+    else:
+        context = {
+        'regions': Region.objects.all(),
+        'genders': Gender.objects.all(),
+        'intitys':Intity.objects.all(),
+        'member':member,
+        }
+        return render(request,"hod_template/edit_member.html", context)
+
+
+
+
+
+@login_required(login_url='doLogin')
+def edit_member(request):
+    if request.method!="POST":
+        return HttpResponse("<h2>Method Not Allowed</h2>")
+    else:
+        member=Member.objects.get(id=request.POST.get('id',''))
+        if member==None:
+            return HttpResponse("<h2>Poster Not Found</h2>")
+        else:
+            if request.FILES.get('profile')!=None:
+                file = request.FILES['profile']
+                fs = FileSystemStorage()
+                member_img = fs.save(file.name, file)
+            else:
+                try:
+                    member_img=None
+                    if member_img!=None:
+                        member.member_image=member_img
+                    member.admin =request.user
+                    member.name=request.POST.get('name','')
+                    member.gender=request.POST.get('gender','')
+                    region=Region.objects.get(id=request.POST.get('region',''))
+                    member.region=region
+                    member.employee=request.POST.get('employee','')
+                    member.phone=request.POST.get('phone','')
+                    member.email=request.POST.get('email','')
+                    member.save()
+                    messages.success(request,"تم التعديل بنجاح")     
+                    return HttpResponseRedirect("/manage_members")
+                except Exception as e:
+                    print(e)
+                    messages.error(request,"فشل في التعديل")
+                return HttpResponseRedirect("/manage_members")
+
+
+
+@login_required(login_url='doLogin')
+def Declaration(request):
+    regions = Region.objects.all()
+    posters=Poster.objects.order_by('-created_at')
+    # posters = Poster.objects.all()
+    classifications= Classification.objects.all()
+    paginator = Paginator(posters, 6)
+    page = request.GET.get('page')
+    try:
+        posters = paginator.page(page)
+    except PageNotAnInteger:
+        posters = paginator.page(1)
+    except EmptyPage:
+        posters = paginator.page(paginator.num_page)
+    context = {
+        'posters': posters,
+        'regions': regions,
+        'page': page,
+        'num_poster': Poster.objects.filter().count(),
+        'classifications': classifications,
+        'title':'الاعلانات',
+    }
+    return render(request, 'hod_template/poster.html', context)
+
+
+
+
+
+
+
+
+
+@login_required(login_url='doLogin')   
+def Save_Poster(request):
+    if request.method!="POST":
+        return HttpResponse("<h2>Method Now Allowed</h2>")
+    else:
+        file=request.FILES['profile']
+        fs=FileSystemStorage()
+        poster_img=fs.save(file.name,file)
+        try:
+            region=Region.objects.get(id=request.POST.get('region',''))
+            classification=Classification.objects.get(id=request.POST.get('classification',''))
+            poster = Poster(name=request.POST.get('name',''),place=request.POST.get('place',''),posts=request.POST.get('posts',''),date_poster=request.POST.get('date_poster',''),poster_image=poster_img,region=region, classification=classification)
+            poster.save() 
+            messages.success(request,"تم الاضافة بنجاح")
+        except Exception as e:
+            print(e)
+            messages.error(request,"فشل في الاضافة")
+        return HttpResponseRedirect("/poster")
+
+
+
+@login_required(login_url='doLogin')
+def update_poster(request,poster_id):
+    poster=Poster.objects.get(id=poster_id)
+    if poster==None:
+        return HttpResponse("Member Not Found")
+    else:
+        context = {
+            'classifications': Classification.objects.all(),
+            'regions': Region.objects.all(),
+            'poster':poster
+        }
+        return render(request,"hod_template/edit_poster.html", context)
+        # return HttpResponseRedirect("/poster")
+
+
+
+@login_required(login_url='doLogin')
+def edit_poster(request):
+    if request.method!="POST":
+        return HttpResponse("<h2>Method Not Allowed</h2>")
+    else:
+        poster=Poster.objects.get(id=request.POST.get('id',''))
+        if poster==None:
+            return HttpResponse("<h2>Poster Not Found</h2>")
+        else:
+            if request.FILES.get('profile')!=None:
+                file = request.FILES['profile']
+                fs = FileSystemStorage()
+                poster_img = fs.save(file.name, file)
+            else:
+                poster_img=None
+
+            if poster_img!=None:
+                poster.poster_image=poster_img   
+            poster.name=request.POST.get('name','')
+            poster.place=request.POST.get('place','')
+            poster.posts=request.POST.get('posts','')
+            poster.date_poster=request.POST.get('date_poster','')
+            poster.time_poster=request.POST.get('time_poster','')
+            region=Region.objects.get(id=request.POST.get('region',''))
+            poster.region=region
+            poster.classification=request.POST.get('classification','')          
+            poster.save()
+            messages.success(request,"تم التحديث بنجاح")
+            return HttpResponseRedirect("/poster")
+
+
+                
+
+@login_required(login_url='doLogin')
+def DeletePoster(request,poster_id):
+    poster=Poster.objects.get(id=poster_id)
+    poster.delete()
+    messages.error(request, "تم الحذف بنجاح")
+    return HttpResponseRedirect("/poster")
+ 
+
+
+class SearchPosterEduResultsView(ListView):
+    model = Poster
+    regions = Region.objects.all(),
+    template_name = 'hod_template/search_posterEdu_results.html'
+    queryset = Poster.objects.filter(classification__icontains='تعليم') # new
+    ordering = ['id']
+    paginate_by = 6
+    paginate_orphans = 1
+    def get_context_data(self, *args, **kwargs):
+        try:
+            return super(SearchPosterEduResultsView,self).get_context_data(*args,**kwargs)
+        except Http404:
+            self.kwargs['page'] =1
+            return super(SearchPosterEduResultsView,self).get_context_data(*args,**kwargs)
+
+
+class SearchPosterEnvResultsView(ListView):
+    model = Poster
+    template_name = 'hod_template/search_posterEnv_results.html'
+    queryset = Poster.objects.filter(classification__icontains='بيئة') # new
+    ordering = ['id']
+    paginate_by = 6
+    paginate_orphans = 1
+    def get_context_data(self, *args, **kwargs):
+        try:
+            return super(SearchPosterEnvResultsView,self).get_context_data(*args,**kwargs)
+        except Http404:
+            self.kwargs['page'] =1
+            return super(SearchPosterEnvResultsView,self).get_context_data(*args,**kwargs)
+
+
+class SearchPosterHeaResultsView(ListView):
+    model = Poster
+    template_name = 'hod_template/search_posterHea_results.html'
+    queryset = Poster.objects.filter(classification__icontains='صحة') # new
+    ordering = ['id']
+    paginate_by = 6
+    paginate_orphans = 1
+    def get_context_data(self, *args, **kwargs):
+        try:
+            return super(SearchPosterHeaResultsView,self).get_context_data(*args,**kwargs)
+        except Http404:
+            self.kwargs['page'] =1
+            return super(SearchPosterHeaResultsView,self).get_context_data(*args,**kwargs)
+
+
+class SearchPosterArtResultsView(ListView):
+    model = Poster
+    template_name = 'hod_template/search_posterArt_results.html'
+    queryset = Poster.objects.filter(classification__icontains='فنون') # new
+    ordering = ['id']
+    paginate_by = 6
+    paginate_orphans = 1
+    def get_context_data(self, *args, **kwargs):
+        try:
+            return super(SearchPosterArtResultsView,self).get_context_data(*args,**kwargs)
+        except Http404:
+            self.kwargs['page'] =1
+            return super(SearchPosterArtResultsView,self).get_context_data(*args,**kwargs)
+
+
+class SearchPosterOthResultsView(ListView):
+    model = Poster
+    template_name = 'hod_template/search_posterOth_results.html'
+    queryset = Poster.objects.filter(classification__icontains='أخرى') # new
+    ordering = ['id']
+    paginate_by = 6
+    paginate_orphans = 1
+    def get_context_data(self, *args, **kwargs):
+        try:
+            return super(SearchPosterOthResultsView,self).get_context_data(*args,**kwargs)
+        except Http404:
+            self.kwargs['page'] =1
+            return super(SearchPosterOthResultsView,self).get_context_data(*args,**kwargs)
+
+
+
+
+@login_required(login_url='doLogin')
+def Notification(request):
+    # numvolunteers = NumVolunteer.objects.all()
+    numvolunteers = NumVolunteer.objects.order_by('-created_at')
+    paginator = Paginator(numvolunteers, 1)
+    page = request.GET.get('page')
+    try:
+        numvolunteers = paginator.page(page)
+    except PageNotAnInteger:
+        numvolunteers = paginator.page(1)
+    except EmptyPage:
+        numvolunteers = paginator.page(paginator.num_page)
+    context = {
+        'num_volunteer':NumVolunteer.objects.filter().count(),
+        'region': Region.objects.all(),
+        'gender':Gender.objects.all(),
+        'numvolunteers': numvolunteers,
+        'page': page,
+        'title':'الاشعارات'
+    }
+    return render(request, 'hod_template/notification.html', context)
+
+
+
+
+@login_required(login_url='doLogin')
+def AddVolunteer(request):
+    if request.method!="POST":
+        return HttpResponse("<h2>Method Now Allowed</h2>")
+    else:
+        file=request.FILES['profile']
+        fs=FileSystemStorage()
+        volunteer_img=fs.save(file.name,file)
+        try:
+            region=Region.objects.get(id=request.POST.get('region',''))
+            gender=Gender.objects.get(id=request.POST.get('gender',''))
+            numvolunteer=NumVolunteer(name=request.POST.get('name',''),age=request.POST.get('age',''),employee=request.POST.get('employee',''),volunteer_image=volunteer_img,region=region,gender=gender)
+            numvolunteer.save()
+            messages.success(request,"تم الاضافة بنجاح")
+        except Exception as e:
+            print(e)
+            messages.error(request,"فشل في ارسال الاشعار")
+        return HttpResponseRedirect("/notification")
+
+
+
+@login_required(login_url='doLogin')
+def DeleteVolunteer(request,notification_id):
+    notification=NumVolunteer.objects.get(id=notification_id)
+    notification.delete()
+    messages.error(request, "تم الحذف بنجاح")
+    return HttpResponseRedirect("/notification")
+
+
+
 @login_required(login_url='doLogin')
 def comments(request):
-    comments = Comment.objects.all()
-    comments_user = Comment_User.objects.all()
+    comments=Comment.objects.order_by('-created_at')
+    # comments = Comment.objects.all()
+    comments_user = Comment_User.objects.order_by('-created_at')
+    # comments_user = Comment_User.objects.all()
     customuser = CustomUser.objects.all()
-    reply = Reply.objects.all()
+    # reply = Reply.objects.all()
     paginator = Paginator(comments, 4)
     page = request.GET.get('page')
     try:
@@ -325,13 +738,9 @@ def comments(request):
     except EmptyPage:
         comments = paginator.page(paginator.num_page)
     context = {
-        # 'adminhod': adminhod,
-        # 'people': people,
-        'reply': reply,
         'customuser':customuser,
         'comments' : comments,
         'comments_user' : comments_user,
-        # 'intitys': Intity.objects.all(),
         'num_com': Comment.objects.filter().count() + Comment_User.objects.filter().count(),
         'page': page,
         'title':'التعليقات',
@@ -346,14 +755,10 @@ def comments(request):
 
 
 @login_required(login_url='doLogin')
-# @allowedUsers(allowedGroups=['intityAdmin'])
 def Add_Comment_Save(request):
     if request.method!="POST":
         return HttpResponse("<h2>Method Now Allowed</h2>")
     else:
-        # file=request.FILES['profile']
-        # fs=FileSystemStorage()
-        # commet_pic=fs.save(file.name,file)
         try:
             adminhod = AdminHOD.objects.all()
             people = People.objects.all()
@@ -383,341 +788,19 @@ def LikeViewUser(request,pk):
 
 
 @login_required(login_url='doLogin')
-# @allowedUsers(allowedGroups=['intityAdmin'])
 def delete_comment(request,comment_id):
     comment=Comment.objects.get(id=comment_id)
     comment.delete()
-    messages.error(request, "Deleted Successfully")
+    messages.error(request, "تم الحذف بنجاح")
     return HttpResponseRedirect("/comments")  
-    # return HttpResponse("Comment Id "+str(pk))
 
 
 @login_required(login_url='doLogin')
-# @allowedUsers(allowedGroups=['intityAdmin'])
 def delete_comment_user(request,comment_user_id):
     comment=Comment_User.objects.get(id=comment_user_id)
     comment.delete()
-    messages.error(request, "Deleted Successfully")
+    messages.error(request, "تم الحذف بنجاح")
     return HttpResponseRedirect("/comments")  
-    # return HttpResponse("Comment Id "+str(pk))
-
-
-
-@login_required(login_url='doLogin')
-# @allowedUsers(allowedGroups=['intityAdmin'])
-# def ComReply(request):
-#     if request.method!="POST":
-#         return HttpResponse("<h2>Method Now Allowed</h2>")
-#     else:
-#         # comment_name=Comment.objects.get(id=request.POST.get('comm_name',''))
-#         # comment_name=Comment.Post.get('comm_name','')
-#         # comments = Comment.objects.all()
-#         comment_name = Comment(request.POST.get('comm_name',''))
-#         rep = Reply(comment_name=comment_name,author=request.user,reply_body=request.POST.get('reply_body',''))
-#         rep.save()
-#     return redirect("/comments")
-      
-
-
-
-
-
-
-@login_required(login_url='doLogin')
-# # @allowedUsers(allowedGroups=['intityAdmin'])
-def Manage_Members(request):
-    members = Member.objects.all()
-    paginator = Paginator(members, 6)
-    page = request.GET.get('page')
-    try:
-        members = paginator.page(page)
-    except PageNotAnInteger:
-        members = paginator.page(1)
-    except EmptyPage:
-        members = paginator.page(paginator.num_page)
-    context = {
-        'members': members ,
-        'region': Region.objects.all(),
-        'gender': Gender.objects.all(),
-        'page': page,
-        'title':'الاعضاء'
-        # 'form':form
-    }
-    return render(request,"hod_template/manage_member.html", context)
-
-
-
-
-@login_required(login_url='doLogin')
-# @allowedUsers(allowedGroups=['intityAdmin'])
-def Add_Member_Save(request):
-    if request.method!="POST":
-        return HttpResponse("<h2>Method Now Allowed</h2>")
-    else:
-        file=request.FILES['profile']
-        fs=FileSystemStorage()
-        member_img=fs.save(file.name,file)
-        try:
-            region=Region.objects.get(id=request.POST.get('region',''))
-            gender=Gender.objects.get(id=request.POST.get('gender',''))
-            member=Member(name=request.POST.get('name',''),employee=request.POST.get('employee',''),phone=request.POST.get('phone',''),email=request.POST.get('email',''),member_image=member_img,region=region,gender=gender)
-            member.save()
-            messages.success(request,"Added Successfully")
-        except Exception as e:
-            print(e)
-            messages.error(request,"Failed to Add Student")
-        return HttpResponseRedirect("/manage_members")
-
-
-@login_required(login_url='doLogin')
-# @allowedUsers(allowedGroups=['intityAdmin'])
-def delete_member(request,member_id):
-    member=Member.objects.get(id=member_id)
-    member.delete()
-    messages.error(request, "Deleted Successfully")
-    return HttpResponseRedirect("/manage_members",{'member':member})
-
-
-@login_required(login_url='doLogin')
-# @allowedUsers(allowedGroups=['intityAdmin'])
-def update_member(request,member_id):
-    member=Member.objects.get(id=member_id)
-    if member==None:
-        return HttpResponse("Member Not Found")
-    else:
-        return HttpResponseRedirect("/manage_members")
-
-
-
-@login_required(login_url='doLogin')
-# @allowedUsers(allowedGroups=['intityAdmin'])
-def edit_member(request):
-    if request.method!="POST":
-        return HttpResponse("<h2>Method Not Allowed</h2>")
-    else:
-        member=Member.objects.get(id=request.POST.get('id',''))
-        if member==None:
-            return HttpResponse("<h2>Member Not Found</h2>")
-        else:
-            if request.FILES.get('profile')!=None:
-                file = request.FILES['profile']
-                fs = FileSystemStorage()
-                member_img = fs.save(file.name, file)
-            else:
-                member_img=None
-
-            if member_img!=None:
-                member.member_image=member_img
-            member.name=request.POST.get('name','')
-            member.gender=request.POST.get('gender','')
-            member.employee=request.POST.get('employee','')
-            member.phone=request.POST.get('phone','')
-            member.email=request.POST.get('email','')
-            member.save()
-
-            messages.success(request,"Updated Successfully")
-            return HttpResponseRedirect("update_member/"+str(member.id)+"")
-
-
-
-@login_required(login_url='doLogin')
-def Declaration(request):
-    regions = Region.objects.all()
-    posters = Poster.objects.all()
-    classification= Classification.objects.all()
-    paginator = Paginator(posters, 6)
-    page = request.GET.get('page')
-    try:
-        posters = paginator.page(page)
-    except PageNotAnInteger:
-        posters = paginator.page(1)
-    except EmptyPage:
-        posters = paginator.page(paginator.num_page)
-        # 'num_intity': Intity.objects.filter().count(),
-    context = {
-        'posters': posters,
-        'regions': regions,
-        'page': page,
-        # 'num_poster': Poster.objects.filter().count(),
-        'classifications': classification,
-        'title':'الاعلانات',
-    }
-    return render(request, 'hod_template/poster.html', context)
-
-
-
-
-
-
-
-
-
-
-# @login_required(login_url='doLogin')   
-# @allowedUsers(allowedGroups=['intityAdmin'])
-def Save_Poster(request):
-    if request.method!="POST":
-        return HttpResponse("<h2>Method Now Allowed</h2>")
-    else:
-        file=request.FILES['profile']
-        fs=FileSystemStorage()
-        poster_img=fs.save(file.name,file)
-        try:
-            region=Region.objects.get(id=request.POST.get('region',''))
-            classification=Classification.objects.get(id=request.POST.get('classification',''))
-            poster = Poster(name=request.POST.get('name',''),place=request.POST.get('place',''),posts=request.POST.get('posts',''),date_poster=request.POST.get('date_poster',''),poster_image=poster_img,region=region, classification=classification)
-            poster.save() 
-            messages.success(request,"Added Successfully")
-        except Exception as e:
-            print(e)
-            messages.error(request,"Failed to Add Student")
-        return HttpResponseRedirect("/poster")
-
-
-
-@login_required(login_url='doLogin')
-def update_poster(request,poster_id):
-    poster=Poster.objects.get(id=poster_id)
-    if poster==None:
-        return HttpResponse("Member Not Found")
-    else:
-        return HttpResponseRedirect("/poster")
-
-
-
-@login_required(login_url='doLogin')
-def edit_poster(request):
-    if request.method!="POST":
-        return HttpResponse("<h2>Method Not Allowed</h2>")
-    else:
-        poster=Poster.objects.get(id=request.POST.get('id',''))
-        if poster==None:
-            return HttpResponse("<h2>Poster Not Found</h2>")
-        else:
-            if request.FILES.get('profile')!=None:
-                file = request.FILES['profile']
-                fs = FileSystemStorage()
-                poster_img = fs.save(file.name, file)
-            else:
-                poster_img=None
-
-            if poster_img!=None:
-                poster.poster_image=poster_img
-            poster.name=request.POST.get('name','')
-            # poster.region=request.POST.get('region','')
-            poster.place=request.POST.get('place','')
-            # poster.classification=request.POST.get('classification','')
-            poster.posts=request.POST.get('posts','')
-            poster.date_poster=request.POST.get('date_poster','')
-            poster.time_poster=request.POST.get('time_poster','')
-            poster.save()
-            messages.success(request,"Updated Successfully")
-            return HttpResponseRedirect("update_poster/"+str(poster.id)+"")        
-                
-
-@login_required(login_url='doLogin')
-# @allowedUsers(allowedGroups=['intityAdmin'])
-def DeletePoster(request,poster_id):
-    poster=Poster.objects.get(id=poster_id)
-    poster.delete()
-    messages.error(request, "Deleted Successfully")
-    return HttpResponseRedirect("/poster")
- 
-
-
-class SearchPosterEduResultsView(ListView):
-    model = Poster
-    template_name = 'hod_template/search_posterEdu_results.html'
-    queryset = Poster.objects.filter(classification__icontains='تعليم') # new
-
-class SearchPosterEnvResultsView(ListView):
-    model = Poster
-    template_name = 'hod_template/search_posterEnv_results.html'
-    queryset = Poster.objects.filter(classification__icontains='بيئة') # new
-
-class SearchPosterHeaResultsView(ListView):
-    model = Poster
-    template_name = 'hod_template/search_posterHea_results.html'
-    queryset = Poster.objects.filter(classification__icontains='صحة') # new
-
-class SearchPosterArtResultsView(ListView):
-    model = Poster
-    template_name = 'hod_template/search_posterArt_results.html'
-    queryset = Poster.objects.filter(classification__icontains='فنون') # new
-
-class SearchPosterOthResultsView(ListView):
-    model = Poster
-    template_name = 'hod_template/search_posterOth_results.html'
-    queryset = Poster.objects.filter(classification__icontains='أخرى') # new
-
-
-
-
-
-
-
-
-
-  
-
-@login_required(login_url='doLogin')
-def Notification(request):
-    numvolunteers = NumVolunteer.objects.all()
-    paginator = Paginator(numvolunteers, 1)
-    page = request.GET.get('page')
-    try:
-        numvolunteers = paginator.page(page)
-    except PageNotAnInteger:
-        numvolunteers = paginator.page(1)
-    except EmptyPage:
-        numvolunteers = paginator.page(paginator.num_page)
-    context = {
-        'num_volunteer':NumVolunteer.objects.filter().count(),
-        'region': Region.objects.all(),
-        'gender':Gender.objects.all(),
-        'numvolunteers': numvolunteers,
-        'page': page,
-        'title':'الاشعارات'
-    }
-    return render(request, 'hod_template/notification.html', context)
-
-
-
-
-@login_required(login_url='doLogin')
-# @IntityAdmins
-# @allowedUsers(allowedGroups=['intityAdmin'])
-def AddVolunteer(request):
-    if request.method!="POST":
-        return HttpResponse("<h2>Method Now Allowed</h2>")
-    else:
-        file=request.FILES['profile']
-        fs=FileSystemStorage()
-        volunteer_img=fs.save(file.name,file)
-        try:
-            region=Region.objects.get(id=request.POST.get('region',''))
-            gender=Gender.objects.get(id=request.POST.get('gender',''))
-            numvolunteer=NumVolunteer(name=request.POST.get('name',''),age=request.POST.get('age',''),employee=request.POST.get('employee',''),volunteer_image=volunteer_img,region=region,gender=gender)
-            numvolunteer.save()
-            messages.success(request,"Added Successfully")
-        except Exception as e:
-            print(e)
-            messages.error(request,"فشل في ارسال الاشعار")
-        return HttpResponseRedirect("/notification")
-
-
-
-@login_required(login_url='doLogin')
-# @allowedUsers(allowedGroups=['intityAdmin'])
-def DeleteVolunteer(request,notification_id):
-    notification=NumVolunteer.objects.get(id=notification_id)
-    notification.delete()
-    messages.error(request, "Deleted Successfully")
-    return HttpResponseRedirect("/notification")
-
-
-
-
 
    
 

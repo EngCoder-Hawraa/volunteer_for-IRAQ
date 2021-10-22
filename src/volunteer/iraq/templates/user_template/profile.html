@@ -48,7 +48,7 @@
                             <div class="col-sm-11 col-lg-6">
                                 <label class="mr-4 font-size3 text-dark font-weight-bold mt-3">اسم المستخدم</label>
                                 <div>
-                                    <input style="height:50px" type="text" class="mr-4 mt-2 form-control border-0 Boxshadow bg-dark text-white" placeholder="الاسم" name="user" value="{{user.username}}">
+                                    <input style="height:50px" type="text" class="mr-4 mt-2 form-control border-0 Boxshadow bg-dark text-white" placeholder="الاسم" name="username" value="{{user.username}}">
                                 </div>
                             </div>
                             <div class="col-sm-11 col-lg-6">
@@ -103,7 +103,7 @@
                                 <input style="height:50px" type="url" class="mr-4 mt-2 form-control border-0 Boxshadow bg-dark text-white" placeholder="فيسبوك" name="facebook" value="{{user.people.facebook}}">
                             </div>
                         </div>
-                        <input type="hidden" value="{{ user.people.id }}" name="id">
+                        <input type="hidden" value="{{ user.id }}" name="user_id">
                         <button style="width:100%;height:60px" type="submit" class="mt-5 mb-5 mr-5 font-weight-bolder border-0 text-center text-white Borders1 bg-primary">اضافة</button>
                     </div>
                 </div>

@@ -1,7 +1,18 @@
 from django import forms
+from django.db.models import fields
 # from django.contrib.auth.forms import UserCreationForm
-from .models import CustomUser,AdminHOD,Intity, Member,Region, Classification
+from .models import CustomUser,AdminHOD,Intity, Member, Poster,Region, Classification
 from django.forms import ModelForm
+
+
+
+# class PosterForm(ModelForm):
+#     name = forms.CharField(label='اسم المستخدم', max_length=255,help_text='اسم المستخدم يجب الا يحتوي على مسافات' ,
+#                         widget= forms.TextInput(attrs={'class': 'form-control  mb-3'}))
+#     class Meta:
+#         model = Poster
+#         fields = ('__all__')
+
 
 
 
@@ -16,12 +27,6 @@ from django.forms import ModelForm
 
 
 
-# class CommentForm(forms.ModelForm):
-# 	body = forms.CharField(widget=forms.Textarea(attrs={'class': 'textarea'}), required=True)
-
-# 	class Meta:
-# 		model = Comment
-# 		fields = ('body',)
 
 
 
