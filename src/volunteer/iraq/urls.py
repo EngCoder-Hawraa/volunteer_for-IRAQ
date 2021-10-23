@@ -3,7 +3,7 @@ from . import views, IntitiesViews ,UserViews
 from volunteer import settings
 from django.conf.urls.static import static
 from django.contrib.auth import views as authviews
-from .IntitiesViews import Intities, LikeViewUser,SearchMemberView ,SearchIntitiesResultsView,SearchPosterEduResultsView,SearchPosterEnvResultsView,SearchPosterHeaResultsView,SearchPosterArtResultsView,SearchPosterOthResultsView,LikeView
+from .IntitiesViews import Intities, LikeViewUser,SearchIntitiesResultsView,SearchPosterEduResultsView,SearchPosterEnvResultsView,SearchPosterHeaResultsView,SearchPosterArtResultsView,SearchPosterOthResultsView,LikeView
 from .UserViews import SearchIntitiesResultsView1,SearchPosterEduResultsView1,SearchPosterEnvResultsView1,SearchPosterHeaResultsView1,SearchPosterArtResultsView1,SearchPosterOthResultsView1,More_Read_Intities,LikeView1,LikeViewUser1
 # from django.contrib.auth.views import LogoutView
 
@@ -12,7 +12,7 @@ from .UserViews import SearchIntitiesResultsView1,SearchPosterEduResultsView1,Se
 urlpatterns = [
 
 # url Path For Intities
-    # path('dashboard/', IntitiesViews.dashboard, name='dashboard'),
+    path('dashboard/', IntitiesViews.dashboard, name='dashboard'),
     path('admin_home',IntitiesViews.admin_home,name="admin_home"),
     path('profile/',IntitiesViews.Profile,name="profile"),
     path('profile_update/<str:user_id>', IntitiesViews.ProfileUpdate, name='profile_update'),
@@ -21,7 +21,7 @@ urlpatterns = [
     path('details1/', IntitiesViews.Details, name='details1'),
     path('intities1/', IntitiesViews.Intities, name='intities1'),
     path('view_imageP/', IntitiesViews.ViewImageP, name='view_imageP'),
-    path('more_read_intities/', IntitiesViews.More_Read_Intities, name='more_read_intities'),
+    # path('more_read_intities/', IntitiesViews.More_Read_Intities, name='more_read_intities'),
     path('profile_intities/', IntitiesViews.Profile_Intities,name="profile_intities"),
     path('add_intities_save',IntitiesViews.Add_Intities_Save,name="add_intities_save"),
     path('update_intities/<str:intity_id>',IntitiesViews.Update_Intities,name='update_intities'),
@@ -51,7 +51,7 @@ urlpatterns = [
     path('delete_comment/<str:comment_id>' ,IntitiesViews.delete_comment, name='delete_comment'),
     path('delete_comment_user/<str:comment_user_id>' ,IntitiesViews.delete_comment_user, name='delete_comment_user'),
     # path('reply',IntitiesViews.ComReply, name='reply'),
-    path('search_members/', SearchMemberView, name='search_members'),
+    # path('search_members/', SearchMemberView, name='search_members'),
     path('manage_members',IntitiesViews.Manage_Members,name="manage_members"),
     path('add_member_save',IntitiesViews.Add_Member_Save,name="add_member_save"),
     path('update_member/<str:member_id>' , IntitiesViews.update_member, name='update_member'),

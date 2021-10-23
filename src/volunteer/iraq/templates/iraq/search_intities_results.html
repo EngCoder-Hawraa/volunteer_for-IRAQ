@@ -6,10 +6,10 @@
     <div class="col-sm-12 col-lg-5 p-5">
         <img class="img-responsive image-width1" src="{% static 'iraq/images/volunteer.png' %}" alt="app">
     </div>
-    <div class="col-sm-12 col-md-7" style="margin-top:100px">
+    <div class="col-sm-12 col-lg-7" style="margin-top:100px">
         <div class="row">
-            <div class="col-sm-12 col-lg-8">
-                <form class="pb-5" action="{% url 'search_Intities_results2' %}" method="get">
+            <div class="col-sm-12 col-md-9">
+                <form class="pb-5" action="{% url 'search_Intities_results' %}" method="get">
                     <input class="pr-3 Boxshadow bg-white Borders4 border-0 font-size3" style="height:45px;width:380px" name="q" stype="text" placeholder="ابحث المؤسسات حسب الاسم او المحافظة او التصنيف">
                     <button type="submit" style="height:45px;width:40px" class="text-white border-0 text-center background1 Boxshadow Borders4"><i class="fa fa-search pr-1"></i></button>
                 </form>
@@ -74,9 +74,9 @@
 {% endif %}
 <!--====== End Not found ======-->
 
+{% include 'iraq/pagination_obj.html' with page=intitys %}
+<!-- /* ======== End Intities Page ======== */ -->
 
-<div class="cup ">
-</div>
 
 {% endblock %}
 <!-- /* ======== End Intities Page ======== */ -->

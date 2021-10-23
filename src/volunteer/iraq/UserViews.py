@@ -147,12 +147,19 @@ class SearchIntitiesResultsView1(ListView):
     model = Classification
     template_name = 'user_template/search_intities_results.html'
 
-    def get_queryset(self): # new
+    ordering = ['id']
+    paginate_by = 6
+    paginate_orphans = 1  
+    def get_queryset(self,*args): # new
         query = self.request.GET.get('q')
         object_list = Intity.objects.filter(
-            Q(name__icontains=query) | Q(region__icontains=query) | Q(classification__icontains=query)
+            Q(name__icontains=query)  | Q(classification__icontains=query)
         )
-        return object_list
+        try:
+            return object_list
+        except Http404:
+            self['page'] =1
+            return object_list
 
 
 

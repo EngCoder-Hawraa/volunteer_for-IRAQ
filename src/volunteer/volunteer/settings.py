@@ -174,8 +174,8 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST ='smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'hawraa.arkan.engineer@gmail.com'
-EMAIL_HOST_PASSWORD = '#####'
+EMAIL_HOST_USER = 'testhawraa9@gmail.com'
+EMAIL_HOST_PASSWORD = '######'
 
 AUTH_USER_MODEL="iraq.CustomUser"
 AUTHENTICATION_BACKENDS=['iraq.EmailBackEnd.EmailBackEnd']

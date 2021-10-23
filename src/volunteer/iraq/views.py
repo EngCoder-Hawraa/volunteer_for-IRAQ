@@ -1,21 +1,22 @@
 # Create your views here. 
 from django.shortcuts import render, redirect
 from .models import Intity,Region,Classification,CustomUser
-from django.views.generic import TemplateView, ListView
+from django.views.generic import  ListView
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.models import Q # new
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import  HttpResponseRedirect
+from django.http.response import Http404
 from django.contrib.auth import authenticate, login, logout
 from iraq.EmailBackEnd import EmailBackEnd
 from django.contrib import messages
 from django.urls import reverse
 import requests
 from django.conf import settings
-from django.contrib.auth.models import Group
 from .forms import CreateNewUser
 from .decorators import notLoggedUsers
 
 # import json
+# from django.contrib.auth.models import Group
 # from django.core.files.storage import FileSystemStorage
 # from django.contrib.auth.forms import UserCreationForm
 # from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
@@ -42,8 +43,7 @@ def details(request):
 def Intities(request):
     region = Region.objects.all()
     classification= Classification.objects.all()
-    # intitys = Intity.objects.latest('admin')
-    intitys = Intity.objects.all()
+    intitys = Intity.objects.all().order_by('-created_at')
     paginator = Paginator(intitys, 6)
     page = request.GET.get('page')
     try:
@@ -69,14 +69,20 @@ class SearchIntitiesResultsView2(ListView):
     model = Region
     model = Classification
     template_name = 'iraq/search_intities_results.html'
-
-    def get_queryset(self): # new
+    ordering = ['id']
+    paginate_by = 6
+    paginate_orphans = 1  
+    def get_queryset(self,*args): # new
         query = self.request.GET.get('q')
         object_list = Intity.objects.filter(
             Q(name__icontains=query)  | Q(classification__icontains=query)
         )
-        return object_list
-
+        try:
+            return object_list
+        except Http404:
+            self['page'] =1
+            return object_list
+     
 
 def about(request):
     context = {
@@ -165,15 +171,12 @@ def doLogin(request):
                 username = request.POST.get('email')
                 password = request.POST.get('password1')
                 user=EmailBackEnd.authenticate(request,username=username,password=password)
-                messages.success(request , f'تهانينا  {username} تم التسجيل بنجاح . ')
                 if user != None: 
                     login(request, user)
                     if user.user_type =="1":
                         return HttpResponseRedirect('/admin_home')
                     elif user.user_type =="2":
                         return HttpResponseRedirect(reverse("user_home"))
-                    # else:
-                    #     return HttpResponseRedirect(reverse("user_home"))
                 else:
                     messages.error(request ,  ' هناك خطأ في اسم المستخدم او كلمة المرور !')
             else:

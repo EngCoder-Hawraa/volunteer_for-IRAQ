@@ -1,6 +1,4 @@
 from typing import Any
-from django import template
-from django.contrib.auth.models import User
 from django.http.response import Http404
 from django.shortcuts import render, redirect,  get_object_or_404
 from django.contrib.auth.decorators import login_required
@@ -17,8 +15,8 @@ from django.views.generic import TemplateView, ListView ,CreateView
 from django.urls import reverse
 from django.template import loader
 # from stories.models import Story, StoryStream
-
-
+# from django.contrib.auth.models import User
+# from django import template
 # from .decorators import notLoggedUsers
 # import json
 # import requests
@@ -77,24 +75,13 @@ def Profile(request):
     }
     return render(request,'hod_template/profile.html', context)
 
-# def update_poster(request,poster_id):
-#     poster=Poster.objects.get(id=poster_id)
-#     if poster==None:
-#         return HttpResponse("Member Not Found")
-#     else:
-#         context = {
-#             'classifications': Classification.objects.all(),
-#             'regions': Region.objects.all(),
-#             'poster':poster
-#         }
-#         return render(request,"hod_template/edit_poster.html", context)
+
 @login_required(login_url='do_login')
 def ProfileUpdate(request,user_id):
     user=AdminHOD.objects.get(admin=user_id)
     if user==None:
         return HttpResponse("Intity Not Found")
     else:
-        # return render(request,'hod_template/profile.html',{'user':user})
         return HttpResponseRedirect("/profile")
 
           
@@ -185,14 +172,14 @@ def ViewImageP(request):
 
 
 # @login_required(login_url='doLogin')
-def More_Read_Intities(request):
-    context = {
-        'intitys' : Intity.objects.all(),
-        'region': Region.objects.all(),
-        'classification': Classification.objects.all(),
-        'title':'معلومات المؤسسة'
-    }
-    return render(request, 'hod_template/more_read_intities.html', context)
+# def More_Read_Intities(request):
+#     context = {
+#         'intitys' : Intity.objects.all(),
+#         'region': Region.objects.all(),
+#         'classification': Classification.objects.all(),
+#         'title':'معلومات المؤسسة'
+#     }
+#     return render(request, 'hod_template/more_read_intities.html', context)
 
 
 
@@ -201,10 +188,8 @@ def More_Read_Intities(request):
 def Profile_Intities(request):
     context = {
         'title':'معلومات المؤسسة',
-        # 'user': CustomUser.objects.all(),
         'intitys': Intity.objects.all(),
         'region': Region.objects.all(),
-        # 'users': Intity.objects.filter(user=request.abstrs),
         'classification': Classification.objects.all(),
     }
     return render(request,"hod_template/profile_intities_template.html", context)  
@@ -236,7 +221,6 @@ def Add_Intities_Save(request):
 
 
 
-# # @allowedUsers(allowedGroups=['intityAdmin'])
 @login_required(login_url='doLogin')
 def delete_intities(request, intity_id):
     intity=Intity.objects.get(id=intity_id)
@@ -267,7 +251,6 @@ def Update_Intities(request,intity_id):
 
 
 @login_required(login_url='doLogin')
-# @allowedUsers(allowedGroups=['intityAdmin'])
 def Edit_Intities_Save(request):
     if request.method!="POST":
         return HttpResponse("<h2>Method Now Allowed</h2>")
@@ -310,12 +293,19 @@ class SearchIntitiesResultsView(ListView):
     model = Classification
     template_name = 'hod_template/search_intities_results.html'
 
-    def get_queryset(self): # new
+    ordering = ['id']
+    paginate_by = 6
+    paginate_orphans = 1  
+    def get_queryset(self,*args): # new
         query = self.request.GET.get('q')
         object_list = Intity.objects.filter(
-            Q(name__icontains=query) | Q(region__icontains=query) | Q(classification__icontains=query)
+            Q(name__icontains=query)  | Q(classification__icontains=query)
         )
-        return object_list
+        try:
+            return object_list
+        except Http404:
+            self['page'] =1
+            return object_list
 
 
 
@@ -332,7 +322,7 @@ class SearchIntitiesResultsView(ListView):
 
 
 
-@login_required(login_url='doLogin')
+# @login_required(login_url='doLogin')
 # @allowedUsers(allowedGroups=['intityAdmin'])
 # def ComReply(request):
 #     if request.method!="POST":
@@ -346,8 +336,7 @@ class SearchIntitiesResultsView(ListView):
 #         rep.save()
 #     return redirect("/comments")
       
-class SearchMemberView(ListView):
-    pass
+# class SearchMemberView(ListView):
     # model = Member
     # model = Intity
     # template_name = 'hod_template/manage_member.html'
@@ -455,7 +444,6 @@ def edit_member(request):
                 fs = FileSystemStorage()
                 member_img = fs.save(file.name, file)
             else:
-                try:
                     member_img=None
                     if member_img!=None:
                         member.member_image=member_img
@@ -470,10 +458,12 @@ def edit_member(request):
                     member.save()
                     messages.success(request,"تم التعديل بنجاح")     
                     return HttpResponseRedirect("/manage_members")
-                except Exception as e:
-                    print(e)
-                    messages.error(request,"فشل في التعديل")
-                return HttpResponseRedirect("/manage_members")
+                # except Exception as e:
+                #     print(e)
+                #     messages.error(request,"فشل في التعديل")
+                # return HttpResponseRedirect("/manage_members")
+        # return HttpResponseRedirect("/manage_members")
+            
 
 
 
@@ -481,7 +471,6 @@ def edit_member(request):
 def Declaration(request):
     regions = Region.objects.all()
     posters=Poster.objects.order_by('-created_at')
-    # posters = Poster.objects.all()
     classifications= Classification.objects.all()
     paginator = Paginator(posters, 6)
     page = request.GET.get('page')
