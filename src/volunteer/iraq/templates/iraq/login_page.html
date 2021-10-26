@@ -26,45 +26,43 @@
             <div class="alert alert-danger text-center Boxshadow border-0 Borders4">{{ message }}</div>
             {% endif %} {% endfor %} {% endif %}
         </div>
-        <div class="container">
-            <div class="d-flex justify-content-center">
-                <div class="user_card flex-direction-column Boxshadow bg-white">
-                    <form action="" method="POST">
-                        {% csrf_token %}
-                        <div class="head-title H4 background1 Borders5">
-                            <img class="mr-5" style="width:100px;height:185px;margin-top:-120px" src="{% static 'iraq/images/Login3.png' %}" alt="Login">
-                            <p class="text-center pt-2 text-white" style="margin-top:-80px">تسجيل الدخول</p>
+        <div class="d-flex justify-content-center" style="margin-top:-80px">
+            <div class="user_card flex-direction-column Boxshadow bg-white">
+                <form action="" method="POST">
+                    {% csrf_token %}
+                    <div class="head-title H4 background1 Borders5">
+                        <img class="mr-5" style="width:100px;height:185px;margin-top:-120px" src="{% static 'iraq/images/Login3.png' %}" alt="Login">
+                        <p class="text-center pt-2 text-white" style="margin-top:-80px">تسجيل الدخول</p>
+                    </div>
+                    <div class="form-group row mt-5">
+                        <label for="email" class="col-sm-3 col-form-label mr-2 font-size4">{{ form.email.label}}</label>
+                        <div class="col-sm-8">
+                            <input type="email" class="fa pr-3 Borders7 Boxshadow Borders4 Color2" placeholder="&#xf658" style="height:46px;width:370px" name="email">
                         </div>
-                        <div class="form-group row mt-5">
-                            <label for="email" class="col-sm-3 col-form-label mr-2 font-size4">{{ form.email.label}}</label>
-                            <div class="col-sm-8">
-                                <input type="email" class="fa pr-3 Borders7 Boxshadow Borders4 Color2" placeholder="&#xf658" style="height:46px;width:370px" name="email">
-                            </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="password" class="col-sm-3 col-form-label mr-2 font-size4">{{ form.password1.label}}</label>
+                        <div class="col-sm-8">
+                            <input type="password" class="fa pr-3 Borders7 Boxshadow Borders4 Color2" placeholder="&#xf084" style="height:46px;width:370px" name="password1">
                         </div>
-                        <div class="form-group row">
-                            <label for="password" class="col-sm-3 col-form-label mr-2 font-size4">{{ form.password1.label}}</label>
-                            <div class="col-sm-8">
-                                <input type="password" class="fa pr-3 Borders7 Boxshadow Borders4 Color2" placeholder="&#xf084" style="height:46px;width:370px" name="password1">
-                            </div>
+                    </div>
+                    <div class="input-group mb-3">
+                        <div style="padding-right:100px" class="g-recaptcha pt-2 pb-2" data-sitekey="6LefydgZAAAAAEn2C5V0OKVEAWpJMGnHD-M4qjzn">
                         </div>
-                        <div class="input-group mb-3">
-                            <div style="padding-right:100px" class="g-recaptcha pt-2 pb-2" data-sitekey="6LefydgZAAAAAEn2C5V0OKVEAWpJMGnHD-M4qjzn">
-                            </div>
-                        </div>
-                        <input class="H3 btn font-weight-normal image-width1 login_btn text-white background1 Boxshadow mb-3 Borders1 font-size1" name="submit" type="submit" value="تسجيل الدخول">
-                        <a class="text-decoration-none" href="{% url 'reset_password' %}">نسيت كلمة المرور  ؟</a>
-                        <div class="border-top mt-4 pt-2 pb-4">
-                        </div>
-                        <small class="mt-2 text-center">  إذا لم يكن لديك حساب من قبل فيمكنك التسجيل اما
+                    </div>
+                    <input class="H3 btn font-weight-normal image-width1 login_btn text-white background1 Boxshadow mb-3 Borders1 font-size1" name="submit" type="submit" value="تسجيل الدخول">
+                    <a class="text-decoration-none" href="{% url 'reset_password' %}">نسيت كلمة المرور  ؟</a>
+                    <div class="border-top mt-4 pt-2 pb-4">
+                    </div>
+                    <small class="mt-2 text-center">  إذا لم يكن لديك حساب من قبل فيمكنك التسجيل اما
                             <a class="text-decoration-none mr-3 font-size3" href="{% url 'register_intities' %}">مؤسسة</a>
                         </small>
-                        <small class="mr-2 ml-2 font-size4">أو</small>
-                        <small class="pt-2 font-size3">
+                    <small class="mr-2 ml-2 font-size4">أو</small>
+                    <small class="pt-2 font-size3">
                             <a class="text-decoration-none" href="{% url 'register_user' %}">مستخدم</a>
                         </small>
-                    </form>
-                    <div class="head-title1 H4 background1 Boxshadow Borders6"></div>
-                </div>
+                </form>
+                <div class="head-title1 H4 background1 Boxshadow Borders6"></div>
             </div>
         </div>
     </div>

@@ -27,52 +27,45 @@
 
 
 <!--====== Start Cards ======-->
-<div>
-    <!--Section: Cards-->
-    <section class="text-center">
-        <!--Grid row-->
-        <div class="row wow fadeIn mr-1 ml-1" style="visibility: visible; animation-name: fadeIn;">
-            {% if intitys %} {% for intity in intitys %}
-            <div class="col-sm-12 col-md-6 col-lg-3 rounded-top button">
-                <!--Card image-->
-                <img class="card-img-top mt-4 Borders image-width1" style="height:150px;" src="/media/{{ intity.intities_pic }}" alt="Card image">
-                <!--Card content-->
-                <div class="card-body Boxshadow image-width1 Borders4">
-                    <!--Title-->
-                    <div class="col text-center mb-3 Color2 font-size1" data-placement="top" title="اسم المؤسسة">{{ intity.name }}</div>
-                    <div class="row font-weight-normal text-white">
-                        <div class="col Boxshadow text-center pt-2 pb-2 background1 font-size Borders4" style="height:40px;">
-                            <i class="fas fa-map-marked-alt ml-3" data-placement="top" title="المحافظة"></i> {{ intity.region }}
-                        </div>
-                        <div class="col Boxshadow text-center pt-2 pb-2 background1 font-size Borders4 mb-2" style="height:40px;margin-right:5px">
-                            <i class="fas fa-book-reader ml-3" data-placement="top" title="التصنيف"></i> {{ intity.classification }}
-                        </div>
+<!--Section: Cards-->
+<section class="text-center">
+    <!--Grid row-->
+    <div class="wow fadeIn" style="visibility: visible; animation-name: fadeIn;">
+        {% if intitys %} {% for intity in intitys %}
+        <div class="col-sm-12 col-md-6 col-lg-3 rounded-top button">
+            Card image
+            <img class="card-img-top mt-4 Borders image-width1" style="height:150px;" src="/media/{{ intity.intities_pic }}" alt="Card image"> Card content
+            <div class="card-body Boxshadow image-width1 Borders4">
+                Title
+                <div class="col text-center mb-3 Color2 font-size1" data-placement="top" title="اسم المؤسسة">{{ intity.name }}</div>
+                <div class="row font-weight-normal text-white">
+                    <div class="col Boxshadow text-center pt-2 pb-2 background1 font-size Borders4" style="height:40px;">
+                        <i class="fas fa-map-marked-alt ml-3" data-placement="top" title="المحافظة"></i> {{ intity.region }}
                     </div>
-                    <div class="Boxshadow text-center pt-2 pb-2 background1 text-white font-size Borders4" style="height:40px;">
-                        <i class="fas fa-calendar-alt ml-3" data-placement="top" title="تاريخ التأسيس"></i> {{ intity.created}}
+                    <div class="col Boxshadow text-center pt-2 pb-2 background1 font-size Borders4 mb-2" style="height:40px;margin-right:5px">
+                        <i class="fas fa-book-reader ml-3" data-placement="top" title="التصنيف"></i> {{ intity.classification }}
                     </div>
                 </div>
+                <div class="Boxshadow text-center pt-2 pb-2 background1 text-white font-size Borders4" style="height:40px;">
+                    <i class="fas fa-calendar-alt ml-3" data-placement="top" title="تاريخ التأسيس"></i> {{ intity.created}}
+                </div>
             </div>
-            {% endfor %}
         </div>
-    </section>
-    <!--Section: Cards-->
-</div>
+        {% endfor %}
+    </div>
+</section <!--Section: Cards-->
 <!--====== EndCards ======-->
 
 
 <!--====== Start Not found ======-->
 {% else %}
-<div class="Boxshadow text-center background mt-4 Borders1 mr-4 ml-3 mb-3" style="height:440px;width:100%">
-    <div class="row">
-        <div class="m-auto">
-            <div class="mt-2 mb-2">
-                <p class="card-title font-weight-bold pb-4 pt-4 text-center Color" style="font-size:25px"> لا توجد معلومات</p>
-                <img class="mb-4 " src="{% static 'iraq/images/informationR.png' %} " style="height:228px; width:350px; margin-right: 70px;margin-top:20px" alt="Not Found">
-            </div>
+<div class="Boxshadow text-center background mt-4 Borders1 mb-3 mr-3 ml-3" style="height:440px">
+    <div class="m-auto">
+        <div class="mt-2 mb-2">
+            <p class="card-title font-weight-bold pb-4 pt-4 text-center Color" style="font-size:25px"> لا توجد معلومات</p>
+            <img class="mb-4 mx-auto d-block" src="{% static 'iraq/images/informationR.png' %} " style="height:320px;width:350px" alt="Not Found">
         </div>
     </div>
-</div>
 </div>
 {% endif %}
 <!--====== End Not found ======-->
