@@ -228,64 +228,7 @@ nav ul li a:hover,
 
 /* ======== End login & register ======== */
 
-label #sidebar_btn {
-    z-index: 1;
-    color: #00A4ED;
-    cursor: pointer;
-    font-size: 20px;
-    transition: 0.5s;
-    transition-property: color;
-}
 
-label #sidebar_btn:hover {
-    color: #000000;
-}
-
-#check:checked~.navigation {
-    right: -190px;
-    position: fixed;
-}
-
-#check:checked~.navigation a .title {
-    display: none;
-}
-
-#check:checked~.navigation .dd {
-    display: none;
-}
-
-#check:checked~.navigation a {
-    text-align: center;
-    font-size: 16px;
-    width: 60px;
-    margin-right: 170px;
-}
-
-#check {
-    display: none
-}
-
-.logout_btn {
-    font-weight: 600;
-    width: 80px;
-    height: 40px;
-    transition: 0.5s;
-    transition-property: 'background';
-}
-
-.logout_btn:hover {
-    background: #00A4ED;
-    color: #fff
-}
-
-.content {
-    margin-right: 240px;
-    background-position: center;
-}
-
-#check:checked~.content {
-    margin-right: 40px;
-}
 
 .pinkBg {
     background-color: #ed184f!important;
@@ -362,7 +305,6 @@ label #sidebar_btn:hover {
 
 /* ======== // Small devices (landscape phones, 576px and up) ======== */
 
-@media (min-width: 320px) and (max-width: 800px) {
     .A1 {
         margin: 50px 40%;
     }
@@ -383,26 +325,29 @@ visibility: hidden;
 
 @media (min-width: 411px) and (max-width: 413px) {}
 
-@media (min-width: 414px) and (max-width: 449px) {}
+@media (max-width: 650px){
+
+}
+
 
 @media (max-width: 576px) {
     /* ======== Start About ======== */
-    .content {
-        margin-right: 576px;
-        background-position: center;
-    }
-    #col {
-        width: 100%;
-    }
-    #col1 {
-        width: 100%;
-        margin-top: 20px;
-    }
-    .c4i {
-        margin: -40px 35% 0px 0px;
-    }
-    /* ======== End About ======== */
+
+*/ #col {
+    width: 100%;
 }
+
+#col1 {
+    width: 100%;
+    margin-top: 20px;
+}
+
+.c4i {
+    margin: -40px 35% 0px 0px;
+}
+
+
+/* ======== End About ======== */
 
 
 /* ======== // Medium devices (tablets, 768px and up) ======== */
