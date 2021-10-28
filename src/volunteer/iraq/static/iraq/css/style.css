@@ -1,24 +1,23 @@
+/*Start Sidebar*/
+
 @media(max-width: 800px) {
     .navigation {
+        position: fixed;
         right: 0px;
-        bottom: 0px;
-        top: 63px;
+        top: 0px;
         border-radius: 8px;
         position: fixed;
-        width: 0px;
-        height: 100%;
+        width: 240px;
+        height: 100vh;
         transition: .5s;
         background-color: #fff;
     }
-    .navigation:hover {
-        transition: 1.5s;
-        width: 0px;
-        overflow: auto;
-        background-color: #fff;
-    }
-    .navigation ul {
-        position: absolute;
-    }
+    /*  .navigation:hover{*/
+    /*    transition: .5s;*/
+    /*    width: 240px;*/
+    /*    overflow: auto;*/
+    /*    background-color: #fff;*/
+    /*}*/
     .navigation ul {
         position: absolute;
     }
@@ -105,14 +104,26 @@
         background: #00A4ED;
         color: #fff
     }
+    footer {
+        opacity: 0;
+    }
+    #check:checked~footer {
+        opacity: 100%;
+    }
     .content {
-        margin-right: 240px;
-        background-position: center;
+        display: none;
     }
     #check:checked~.content {
+        display: block;
         margin-right: 40px;
     }
 }
+
+
+/*End Sidebar*/
+
+
+/*Start Sidebar*/
 
 @media(min-width: 800px) {
     .navigation {
@@ -228,6 +239,9 @@
 }
 
 
+/*End Sidebar*/
+
+
 /* .navigation ul li a.active {*/
 
 
@@ -247,40 +261,3 @@
 
 
 /*}*/
-
-
-/* .navigation ul li a .icon .title {
-position: relative;
-display: block;
-height: 50px;
-line-height: 60px;
-text-align: center;
-}  */
-
-
-/* .toggle {
-position: absolute;
-top: 0;
-left: 0;
-width: 60px;
-height: 60px;
-background: #2699FB;
-cursor: pointer;
-}
-
-.toggle:hover {
-background: #6F2DBD;
-} */
-
-
-/* .toggle:before {
-content: '\f0c9';
-font-family: fontAwesome;
-position: absolute;
-width: 100%;
-height: 100%;
-line-height: 60px;
-text-align: center;
-font-size: 24px;
-color: #fff;
-} */

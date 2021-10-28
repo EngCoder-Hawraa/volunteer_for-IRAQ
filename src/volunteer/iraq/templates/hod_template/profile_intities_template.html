@@ -40,21 +40,21 @@
         <!-- </div> -->
         <div class="row">
             <label class="col-sm-12 col-lg-2 text-dark font-weight-bolder pr-5" style="margin-top:60px">اسم المؤسسة</label>
-            <div class="col-sm-11 col-lg-3 Boxshadow text-center pt-3 Borders4" style="margin-right:20px;margin-top:30px;height:60px;width:350px">
+            <div class="col-sm-9 col-lg-3 Boxshadow text-center pt-3 Borders4" style="margin-right:20px;margin-top:30px;height:60px;width:315px">
                 {{ user.intity.name }}
             </div>
-            <label class="col-sm-12 col-lg-2 text-dark font-weight-bolder pr-5" style="margin-top:60px">المحافظة</label>
-            <div class="col-sm-11 col-lg-3 Boxshadow text-center pt-3 Borders4" style="margin-right:20px;height:60px;margin-top:30px;width:350px">
+            <label class="col-sm-9 col-lg-2 text-dark font-weight-bolder pr-5" style="margin-top:60px">المحافظة</label>
+            <div class="col-sm-11 col-lg-3 Boxshadow text-center pt-3 Borders4" style="margin-right:20px;height:60px;margin-top:30px;width:315px">
                 {{ user.intity.region }}
             </div>
         </div>
         <div class="row">
-            <label class="col-sm-12 col-lg-2 text-dark font-weight-bolder pr-5" style="margin-top:35px;">تأريخ التأسيس</label>
-            <div class="col-sm-11 col-lg-3 Boxshadow text-center pt-3 Borders4" style="height:60px;margin-top:20px;margin-right:18px;width:350px">
+            <label class="col-sm-9 col-lg-2 text-dark font-weight-bolder pr-5" style="margin-top:35px;">تأريخ التأسيس</label>
+            <div class="col-sm-11 col-lg-3 Boxshadow text-center pt-3 Borders4" style="height:60px;margin-top:20px;margin-right:18px;width:315px">
                 {{ user.intity.created}}
             </div>
-            <label class="col-sm-12 col-lg-2 text-dark font-weight-bolder pr-5" style="margin-top:35px;">التصنيف</label>
-            <div class="col-sm-11 col-lg-3 Boxshadow text-center pt-3 Borders4" style="height:60px;margin-top:20px;margin-right:18px;width:350px">
+            <label class="col-sm-9 col-lg-2 text-dark font-weight-bolder pr-5" style="margin-top:35px;">التصنيف</label>
+            <div class="col-sm-11 col-lg-3 Boxshadow text-center pt-3 Borders4" style="height:60px;margin-top:20px;margin-right:18px;width:315px">
                 {{ user.intity.classification }}
             </div>
         </div>
@@ -80,13 +80,11 @@
         </div>
     </div>
     {% else %}
-    <div class="Boxshadow text-center background mt-1 mr-4 ml-4 mb-1" style="height:440px">
-        <div class="row">
-            <div class="m-auto">
-                <div class="mt-2 mb-2">
-                    <p class="card-title font-weight-bold pb-4 pt-4 text-center Color" style="font-size:25px"> لا توجد معلومات</p>
-                    <img class="mb-4 " src="{% static 'iraq/images/informationR.png' %} " style="height:228px; width:350px; margin-right: 70px;margin-top:20px" alt="Not Found">
-                </div>
+    <div class="Boxshadow text-center background mr-4 ml-4" style="height:440px">
+        <div class="m-auto">
+            <div class="mt-2 mb-2">
+                <p class="card-title font-weight-bold pb-4 pt-4 text-center Color" style="font-size:25px"> لا توجد معلومات</p>
+                <img class="mb-4 mx-auto d-block" src="{% static 'iraq/images/informationR.png' %} " style="height:320px;width:350px;background-position:center" alt="Not Found">
             </div>
         </div>
     </div>

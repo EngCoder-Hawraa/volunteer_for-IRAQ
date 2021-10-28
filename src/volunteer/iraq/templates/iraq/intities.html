@@ -33,10 +33,11 @@
     <div class="wow fadeIn" style="visibility: visible; animation-name: fadeIn;">
         {% if intitys %} {% for intity in intitys %}
         <div class="col-sm-12 col-md-6 col-lg-3 rounded-top button">
-            Card image
-            <img class="card-img-top mt-4 Borders image-width1" style="height:150px;" src="/media/{{ intity.intities_pic }}" alt="Card image"> Card content
+            <!--Card image-->
+            <img class="card-img-top mt-4 Borders image-width1" style="height:150px;" src="/media/{{ intity.intities_pic }}" alt="Card image">
+            <!--Card content-->
             <div class="card-body Boxshadow image-width1 Borders4">
-                Title
+                <!--Title-->
                 <div class="col text-center mb-3 Color2 font-size1" data-placement="top" title="اسم المؤسسة">{{ intity.name }}</div>
                 <div class="row font-weight-normal text-white">
                     <div class="col Boxshadow text-center pt-2 pb-2 background1 font-size Borders4" style="height:40px;">
