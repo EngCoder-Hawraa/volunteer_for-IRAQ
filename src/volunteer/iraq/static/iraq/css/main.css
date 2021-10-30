@@ -2,6 +2,21 @@
     direction: rtl;
     text-align: right;
     font-family: 'tajawal';
+    scrollbar-width: normal;
+    scrollbar-color: #d4f4fd #d4f4fd;
+}
+
+*::-webkit-scrollbar {
+    width: 13px;
+}
+
+*::-webkit-scrollbar-thumb {
+    background-color: #d4f4fd;
+    border-radius: 27px;
+}
+
+html::-webkit-scrollbar-track {
+    background-color: #d4f4fd;
 }
 
 .button:hover {
@@ -166,7 +181,7 @@
     margin: 25px 20px 20px 20px;
 }
 
-*/
+
 /* ======== End Myframework ======== */
 
 .c4i {
@@ -228,83 +243,60 @@ nav ul li a:hover,
 
 /* ======== End login & register ======== */
 
-
-
-.pinkBg {
-    background-color: #ed184f!important;
-    background-image: linear-gradient(90deg, #fd5581, #fd8b55);
+label #sidebar_btn {
+    z-index: 1;
+    color: #00A4ED;
+    cursor: pointer;
+    font-size: 20px;
+    transition: 0.5s;
+    transition-property: color;
 }
 
-.intro-banner-vdo-play-btn {
-    height: 60px;
-    width: 60px;
-    position: absolute;
-    top: 153%;
-    left: 75%;
+label #sidebar_btn:hover {
+    color: #000000;
+}
+
+#check:checked~.navigation {
+    right: -190px;
+    position: fixed;
+}
+
+#check:checked~.navigation a .title {
+    display: none;
+}
+
+#check:checked~.navigation .dd {
+    display: none;
+}
+
+#check:checked~.navigation a {
     text-align: center;
-    margin: -30px 0 40 -30px;
-    border-radius: 100px;
-    z-index: 1
+    font-size: 16px;
+    width: 60px;
+    margin-right: 170px;
 }
 
-.intro-banner-vdo-play-btn i {
-    line-height: 56px;
-    font-size: 30px
+#check {
+    display: none
 }
 
-.intro-banner-vdo-play-btn .ripple {
-    position: absolute;
-    width: 160px;
-    height: 160px;
-    z-index: -1;
-    left: 50%;
-    top: 50%;
-    opacity: 0;
-    margin: -80px 0 0 -80px;
-    border-radius: 100px;
-    -webkit-animation: ripple 1.8s infinite;
-    animation: ripple 1.8s infinite
+.logout_btn {
+    font-weight: 600;
+    width: 80px;
+    height: 40px;
+    transition: 0.5s;
+    transition-property: 'background';
 }
 
-@-webkit-keyframes ripple {
-    0% {
-        opacity: 1;
-        -webkit-transform: scale(0);
-        transform: scale(0)
-    }
-    100% {
-        opacity: 0;
-        -webkit-transform: scale(1);
-        transform: scale(1)
-    }
-}
-
-@keyframes ripple {
-    0% {
-        opacity: 1;
-        -webkit-transform: scale(0);
-        transform: scale(0)
-    }
-    100% {
-        opacity: 0;
-        -webkit-transform: scale(1);
-        transform: scale(1)
-    }
-}
-
-.intro-banner-vdo-play-btn .ripple:nth-child(2) {
-    animation-delay: .3s;
-    -webkit-animation-delay: .3s
-}
-
-.intro-banner-vdo-play-btn .ripple:nth-child(3) {
-    animation-delay: .6s;
-    -webkit-animation-delay: .6s
+.logout_btn:hover {
+    background: #00A4ED;
+    color: #fff
 }
 
 
 /* ======== // Small devices (landscape phones, 576px and up) ======== */
 
+@media (min-width: 320px) and (max-width: 800px) {
     .A1 {
         margin: 50px 40%;
     }
@@ -325,29 +317,26 @@ visibility: hidden;
 
 @media (min-width: 411px) and (max-width: 413px) {}
 
-@media (max-width: 650px){
-
-}
-
+@media (min-width: 414px) and (max-width: 449px) {}
 
 @media (max-width: 576px) {
     /* ======== Start About ======== */
-
-*/ #col {
-    width: 100%;
+    .content {
+        margin-right: 576px;
+        background-position: center;
+    }
+    #col {
+        width: 100%;
+    }
+    #col1 {
+        width: 100%;
+        margin-top: 20px;
+    }
+    .c4i {
+        margin: -40px 35% 0px 0px;
+    }
+    /* ======== End About ======== */
 }
-
-#col1 {
-    width: 100%;
-    margin-top: 20px;
-}
-
-.c4i {
-    margin: -40px 35% 0px 0px;
-}
-
-
-/* ======== End About ======== */
 
 
 /* ======== // Medium devices (tablets, 768px and up) ======== */
@@ -358,9 +347,9 @@ visibility: hidden;
         /* width: 100%; */
         margin-top: 20px;
     }
-    .c4i {
-        margin: -40px 42% 0px 0px;
-    }
+    /*.c4i {*/
+    /*    margin: -40px 42% 0px 0px;*/
+    /*}*/
     /* ======== End About ======== */
 }
 
