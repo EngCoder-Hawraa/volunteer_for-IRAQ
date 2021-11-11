@@ -12,11 +12,13 @@
         <img class="img-responsive image-width1" src="{% static 'iraq/images/volunteer.png' %}" alt="app">
     </div>
     <div class="col-sm-12 col-md-7" style="margin-top:100px">
-        <div class="col-sm-12 col-md-10">
-            <form class="pb-5" action="{% url 'search_Intities_results1' %}" method="get">
-                <input class="pr-3 Boxshadow bg-white Borders4 border-0 font-size3 col-sm-6 col-md-10" style="height:45px" name="q" stype="text" placeholder="ابحث المؤسسات حسب الاسم او المحافظة او التصنيف">
-                <button type="submit" style="height:45px;width:40px" class="text-white border-0 text-center background1 Boxshadow Borders4"><i class="fa fa-search pr-1"></i></button>
-            </form>
+        <div class="row">
+            <div class="col-sm-1 col-lg-8">
+                <form class="pb-5" action="{% url 'search_Intities_results1' %}" method="get">
+                    <input class="pr-3 Boxshadow bg-white Borders4 border-0 font-size3" style="height:45px;width:90%" name="q" stype="text" placeholder="ابحث المؤسسات حسب الاسم او المحافظة او التصنيف">
+                    <button type="submit" style="height:45px;width:8%" class="pl-2 text-white border-0 text-center background1 Boxshadow Borders4"><i class="fa fa-search pr-1"></i></button>
+                </form>
+            </div>
         </div>
     </div>
 </div>

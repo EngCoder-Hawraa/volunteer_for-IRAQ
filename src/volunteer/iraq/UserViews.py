@@ -28,6 +28,7 @@ from django.urls import reverse
 
 
 # # ========Views for User=================#
+
 @login_required(login_url='doLogin')
 def user_home(request):
     return render(request,"user_template/home_content.html")
@@ -59,11 +60,11 @@ def ProfileEdit(request):
     if request.method!="POST":
         return HttpResponse("<h2>Method Now Allowed</h2>")
     else:
-        user_id=request.POST.get('user_id')  
+        user_id=request.POST.get('user_id')
         username =request.POST.get('username')
         email=request.POST.get('email')
-        try:      
-            user=CustomUser.objects.get(id=user_id) 
+        try:
+            user=CustomUser.objects.get(id=user_id)
             user.username = username
             user.email = email
             user.save()
@@ -74,7 +75,7 @@ def ProfileEdit(request):
                 profile_pic = fs.save(file.name, file)
             else:
                     profile_pic=None
-            if profile_pic!=None:  
+            if profile_pic!=None:
                 people.profile_pic= profile_pic
                 people.phone=request.POST.get('phone','')
                 people.region=request.POST.get('region','')
@@ -149,7 +150,7 @@ class SearchIntitiesResultsView1(ListView):
 
     ordering = ['id']
     paginate_by = 6
-    paginate_orphans = 1  
+    paginate_orphans = 1
     def get_queryset(self,*args): # new
         query = self.request.GET.get('q')
         object_list = Intity.objects.filter(
@@ -163,7 +164,7 @@ class SearchIntitiesResultsView1(ListView):
 
 
 
-@login_required(login_url='doLogin')  
+@login_required(login_url='doLogin')
 def Details2(request):
     context = {
     'title':'قراءة المزيد',
@@ -176,7 +177,7 @@ def Profile_Intities1(request):
     context = {
         'title':'معلومات المؤسسة'
     }
-    return render(request,'user_template/profile_intities_template.html', context) 
+    return render(request,'user_template/profile_intities_template.html', context)
 
 
 @login_required(login_url='doLogin')
@@ -324,7 +325,7 @@ def comments1(request):
     except PageNotAnInteger:
         comments = paginator.page(1)
     except EmptyPage:
-        comments = paginator.page(paginator.num_page) 
+        comments = paginator.page(paginator.num_page)
     context = {
         # 'reply': reply,
         'customuser':customuser,
@@ -379,7 +380,7 @@ def delete_comment_user1(request,comment_user_id):
     comment=Comment_User.objects.get(id=comment_user_id)
     comment.delete()
     messages.error(request, "Deleted Successfully")
-    return HttpResponseRedirect("/comments1")  
+    return HttpResponseRedirect("/comments1")
 
 
 
@@ -430,9 +431,9 @@ def About2(request):
 
 
 
-      
 
- 
+
+
 
 
 

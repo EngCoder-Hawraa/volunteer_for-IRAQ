@@ -152,6 +152,7 @@
         list-style: none;
     }
     .navigation ul li a {
+        font-size: 13px;
         text-align: center;
         position: relative;
         display: flex;
@@ -163,7 +164,7 @@
         border-radius: 10px;
         background-color: #2699FB;
         color: white;
-        font-size: 14px;
+        font-size: 13px;
         position: relative;
         display: block;
         display: flex;

@@ -46,7 +46,7 @@
                 <a class="float-left ml-5" href="{% url 'delete_comment_user' comment_user.id %}"><i class="text-primary fas fa-trash-alt"></i></a>
             </div>
         </div>
-        <div class="p-2 mr-3 ml-3 mt-3">
+        <div class="p-2 mr-3 ml-3 mt-3" style="line-height: 30px;">
             {{ comment_user.body }}
         </div>
         <div class="row">
@@ -80,7 +80,7 @@
                 <a class="float-left ml-5" href="{% url 'delete_comment' comment.id %}"><i class="text-primary fas fa-trash-alt"></i></a>
             </div>
         </div>
-        <div class="p-2 mr-3 ml-3 mt-3">
+        <div class="p-2 mr-3 ml-3 mt-3" style="line-height: 30px;">
             {{ comment.body }}
         </div>
         <div class="row">

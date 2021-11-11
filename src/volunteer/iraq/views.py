@@ -1,4 +1,4 @@
-# Create your views here. 
+# Create your views here.
 from django.shortcuts import render, redirect
 from .models import Intity,Region,Classification,CustomUser
 from django.views.generic import  ListView
@@ -71,7 +71,7 @@ class SearchIntitiesResultsView2(ListView):
     template_name = 'iraq/search_intities_results.html'
     ordering = ['id']
     paginate_by = 6
-    paginate_orphans = 1  
+    paginate_orphans = 1
     def get_queryset(self,*args): # new
         query = self.request.GET.get('q')
         object_list = Intity.objects.filter(
@@ -82,7 +82,7 @@ class SearchIntitiesResultsView2(ListView):
         except Http404:
             self['page'] =1
             return object_list
-     
+
 
 def about(request):
     context = {
@@ -102,7 +102,6 @@ def register_type(request):
 
 
 
-@notLoggedUsers
 def RegisterIntities(request):
     # if request.user.is_authenticated:
         # //this code save the user. So, enter directly without anything(information)
@@ -144,7 +143,7 @@ def RegisterIntities(request):
                     messages.error(request ,  ' هناك خطأ في اسم المستخدم او كلمة المرور!')
                     return HttpResponseRedirect(reverse("register_intities"))
             else:
-                messages.error(request ,  ' invalid Recaptcha please try again!') 
+                messages.error(request ,  ' invalid Recaptcha please try again!')
     context = {
         'form':form,
         'title':'تسجيل المؤسسة',
@@ -153,10 +152,10 @@ def RegisterIntities(request):
 
 
 
-  
 
 
-@notLoggedUsers
+
+
 def doLogin(request):
         form = CreateNewUser()
         if request.method == 'POST':
@@ -171,7 +170,7 @@ def doLogin(request):
                 username = request.POST.get('email')
                 password = request.POST.get('password1')
                 user=EmailBackEnd.authenticate(request,username=username,password=password)
-                if user != None: 
+                if user != None:
                     login(request, user)
                     if user.user_type =="1":
                         return HttpResponseRedirect('/admin_home')
@@ -180,24 +179,24 @@ def doLogin(request):
                 else:
                     messages.error(request ,  ' هناك خطأ في اسم المستخدم او كلمة المرور !')
             else:
-                messages.error(request ,  ' invalid Recaptcha please try again!')
+                messages.error(request ,' invalid Recaptcha please try again!')
                 return HttpResponseRedirect("doLogin")
         context= {
             'title':'دخول',
             'form':form,
         }
         return render(request, 'iraq/login_page.html',context)
-        
 
 
 
-    
 
 
-@notLoggedUsers
+
+
+
 def RegisterUser(request):
     # if request.user.is_authenticated: //this code save the user. So, enter directly without anything(information)
-    # #     return redirect('/admin_home')
+    #     return redirect('/user_home')
     form=CreateNewUser()
     if request.method=="POST":
         username=request.POST.get("username")
@@ -234,7 +233,7 @@ def RegisterUser(request):
                     messages.error(request ,  ' هناك خطأ في اسم المستخدم او كلمة المرور!')
                     return HttpResponseRedirect(reverse("register_user"))
             else:
-                messages.error(request ,  ' invalid Recaptcha please try again!') 
+                messages.error(request ,  ' invalid Recaptcha please try again!')
     context = {
     'form':form,
     'title':'تسجيل المستخدم',
@@ -245,14 +244,14 @@ def RegisterUser(request):
 
 
 
-    
-
-
-   
 
 
 
-         
-        
+
+
+
+
+
+
 
 

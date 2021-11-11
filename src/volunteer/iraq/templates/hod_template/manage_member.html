@@ -23,9 +23,8 @@
     <div class="row mt-1 bg-white Boxshadow table-hover Borders mr-4 ml-4">
         <div class="float-right table-responsive">
             <table class="table">
-                <input type="hidden" value="{{ member.id }}" name="id">
                 <!--  -->
-                {% if members %}
+                {% if adminhod or members%}
                 <thead class="font-size3 text-dark">
                     <tr>
                         <th>#</th>
@@ -40,9 +39,6 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% if user.members %} {% for member in members %} {{member.id}} {% endfor %} {% endif %}
-                    <!--  -->
-                    {% if user.member == user %} {% for member in members %} {{ user.member.name}} {% endfor %} {% endif %}
                     <tr>
                         <!--  -->
                         {% for member in members %}
@@ -70,7 +66,6 @@
                         </td>
                         <td>
                             <a href="{% url 'update_member' member.id %}"><i class="mt-4 mr-2 fas fa-user-edit text-primary"></i></a>
-
                         </td>
                         <td>
                             <!--======End Edit Member =========-->
@@ -106,5 +101,4 @@
     <!--======End Add Member =========-->
 </div>
 
-{% endblock %}
-<!-- /* ======== Start Manage Member Page ======== */ -->
+{% endblock %} /* ======== Start Manage Member Page ======== */

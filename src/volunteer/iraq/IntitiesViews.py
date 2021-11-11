@@ -40,10 +40,13 @@ from django.template import loader
 
 # # ========Views for Admin=================#
 
-
 @login_required(login_url='doLogin')
 def dashboard(request):
+    members=Member.objects.all()
+    # customusers=CustomUser.objects.all()
     context = {
+        # 'customusers':customusers,
+        'members':members,
         'title':'dashboard',
     }
     return render(request, 'hod_template/dashboard.html', context)
@@ -51,13 +54,15 @@ def dashboard(request):
 
 @login_required(login_url='doLogin')
 def admin_home(request):
+    # users=AdminHOD.objects.all()
     context = {
+        # 'users':users,
         'title':'الرئيسية',
     }
     return render(request,"hod_template/home_content.html",context)
 
 
-@login_required(login_url='doLogin')  
+@login_required(login_url='doLogin')
 def Details(request):
     context = {
     'title':'قراءة المزيد',
@@ -67,7 +72,9 @@ def Details(request):
 
 @login_required(login_url='doLogin')
 def Profile(request):
+    # members=Member.objects.all()
     context = {
+        # 'members':members,
         'region': Region.objects.all(),
         'gender':Gender.objects.all(),
         'adminhod': AdminHOD.objects.all(),
@@ -84,7 +91,7 @@ def ProfileUpdate(request,user_id):
     else:
         return HttpResponseRedirect("/profile")
 
-          
+
 
 
 @login_required(login_url='doLogin')
@@ -92,11 +99,11 @@ def ProfileEdit(request):
     if request.method!="POST":
         return HttpResponse("<h2>Method Now Allowed</h2>")
     else:
-        user_id=request.POST.get('user_id')  
+        user_id=request.POST.get('user_id')
         username =request.POST.get('user')
         email=request.POST.get('email')
-        try:      
-            user=CustomUser.objects.get(id=user_id) 
+        try:
+            user=CustomUser.objects.get(id=user_id)
             user.username = username
             user.email = email
             user.save()
@@ -107,7 +114,7 @@ def ProfileEdit(request):
                 profile_pic = fs.save(file.name, file)
             else:
                     profile_pic=None
-            if profile_pic!=None:  
+            if profile_pic!=None:
                 adminhod.profile_pic= profile_pic
             adminhod.phone=request.POST.get('phone','')
             adminhod.region=request.POST.get('region','')
@@ -122,7 +129,7 @@ def ProfileEdit(request):
             messages.error(request,"لا يوجد الملف الشخصي")
             return HttpResponseRedirect(reverse("profile",kwargs={"user_id":user_id}))
 
-           
+
 
 
 
@@ -192,7 +199,7 @@ def Profile_Intities(request):
         'region': Region.objects.all(),
         'classification': Classification.objects.all(),
     }
-    return render(request,"hod_template/profile_intities_template.html", context)  
+    return render(request,"hod_template/profile_intities_template.html", context)
 
 
 
@@ -226,11 +233,11 @@ def delete_intities(request, intity_id):
     intity=Intity.objects.get(id=intity_id)
     intity.delete()
     messages.error(request, "تم الحذف بنجاح")
-    return HttpResponseRedirect("/profile_intities") 
+    return HttpResponseRedirect("/profile_intities")
 
 
 
- 
+
 
 @login_required(login_url='doLogin')
 def Update_Intities(request,intity_id):
@@ -246,8 +253,8 @@ def Update_Intities(request,intity_id):
 
 
 
- 
-          
+
+
 
 
 @login_required(login_url='doLogin')
@@ -258,7 +265,7 @@ def Edit_Intities_Save(request):
         intity=Intity.objects.get(id=request.POST.get('id',''))
         if intity==None:
             return HttpResponse("<h2>المؤسسة غير موجودة</h2>")
-        else:       
+        else:
             if request.FILES.get('profile1') and request.FILES.get('profile2'):
                 file = request.FILES['profile1']
                 fs = FileSystemStorage()
@@ -269,7 +276,7 @@ def Edit_Intities_Save(request):
             else:
                 intities_pic=None
                 permission=None
-            if (intities_pic!=None and permission!=None):   
+            if (intities_pic!=None and permission!=None):
                 intity.intities_picture = intities_pic
                 intity.permission=permission
             user =request.POST.get('user','')
@@ -282,9 +289,9 @@ def Edit_Intities_Save(request):
             intity.save()
             messages.success(request,"تم التحديث بنجاح")
             return HttpResponseRedirect("update_intities/"+str(intity.id)+"")
- 
-      
-          
+
+
+
 
 
 class SearchIntitiesResultsView(ListView):
@@ -295,7 +302,7 @@ class SearchIntitiesResultsView(ListView):
 
     ordering = ['id']
     paginate_by = 6
-    paginate_orphans = 1  
+    paginate_orphans = 1
     def get_queryset(self,*args): # new
         query = self.request.GET.get('q')
         object_list = Intity.objects.filter(
@@ -317,7 +324,7 @@ class SearchIntitiesResultsView(ListView):
 
 
 
- 
+
 
 
 
@@ -335,7 +342,7 @@ class SearchIntitiesResultsView(ListView):
 #         rep = Reply(comment_name=comment_name,author=request.user,reply_body=request.POST.get('reply_body',''))
 #         rep.save()
 #     return redirect("/comments")
-      
+
 # class SearchMemberView(ListView):
     # model = Member
     # model = Intity
@@ -351,14 +358,11 @@ class SearchIntitiesResultsView(ListView):
 
 
 @login_required(login_url='doLogin')
-def Manage_Members(request):
-    admin = CustomUser.objects.all()
-    # for i in admin:
-    #     i =+ 1
-    #     if i == admin:
-    #         members = Member.objects.order_by('-created_at').filter(admin = i)
-    #     else:  
-    members = Member.objects.order_by('-created_at').filter()
+def Manage_Members(request,member_id):
+    # admin = CustomUser.objects.all()
+    adminhod=CustomUser.objects.get(id=member_id)
+    members=adminhod.member_set.all()
+    # members = Member.objects.order_by('-created_at').filter()
     paginator = Paginator(members, 10)
     page = request.GET.get('page')
     try:
@@ -368,8 +372,9 @@ def Manage_Members(request):
     except EmptyPage:
         members = paginator.page(paginator.num_page)
     context = {
+        'adminhod':adminhod,
         'members': members,
-        'admin':admin,
+        # 'admin':admin,
         # 'intitys': intitys,
         'regions': Region.objects.all(),
         'genders': Gender.objects.all(),
@@ -390,8 +395,9 @@ def Add_Member_Save(request):
         fs=FileSystemStorage()
         member_img=fs.save(file.name,file)
         try:
+            member_id=request.POST.get('id')
             region=Region.objects.get(id=request.POST.get('region',''))
-            gender=Gender.objects.get(id=request.POST.get('gender','')) 
+            gender=Gender.objects.get(id=request.POST.get('gender',''))
             member=Member(name=request.POST.get('name',''),employee=request.POST.get('employee',''),
             phone=request.POST.get('phone',''),email=request.POST.get('email',''),
             member_image=member_img,region=region,gender=gender,admin=request.user)
@@ -400,7 +406,8 @@ def Add_Member_Save(request):
         except Exception as e:
             print(e)
             messages.error(request,"فشل في الاضافة")
-        return HttpResponseRedirect("/manage_members")
+        return HttpResponseRedirect(reverse("manage_members",kwargs={"member_id":member_id}))
+        # return HttpResponseRedirect("/manage_members")
 
 
 
@@ -456,14 +463,14 @@ def edit_member(request):
                     member.phone=request.POST.get('phone','')
                     member.email=request.POST.get('email','')
                     member.save()
-                    messages.success(request,"تم التعديل بنجاح")     
+                    messages.success(request,"تم التعديل بنجاح")
                     return HttpResponseRedirect("/manage_members")
                 # except Exception as e:
                 #     print(e)
                 #     messages.error(request,"فشل في التعديل")
                 # return HttpResponseRedirect("/manage_members")
         # return HttpResponseRedirect("/manage_members")
-            
+
 
 
 
@@ -498,7 +505,7 @@ def Declaration(request):
 
 
 
-@login_required(login_url='doLogin')   
+@login_required(login_url='doLogin')
 def Save_Poster(request):
     if request.method!="POST":
         return HttpResponse("<h2>Method Now Allowed</h2>")
@@ -510,7 +517,7 @@ def Save_Poster(request):
             region=Region.objects.get(id=request.POST.get('region',''))
             classification=Classification.objects.get(id=request.POST.get('classification',''))
             poster = Poster(name=request.POST.get('name',''),place=request.POST.get('place',''),posts=request.POST.get('posts',''),date_poster=request.POST.get('date_poster',''),poster_image=poster_img,region=region, classification=classification)
-            poster.save() 
+            poster.save()
             messages.success(request,"تم الاضافة بنجاح")
         except Exception as e:
             print(e)
@@ -552,7 +559,7 @@ def edit_poster(request):
                 poster_img=None
 
             if poster_img!=None:
-                poster.poster_image=poster_img   
+                poster.poster_image=poster_img
             poster.name=request.POST.get('name','')
             poster.place=request.POST.get('place','')
             poster.posts=request.POST.get('posts','')
@@ -560,13 +567,13 @@ def edit_poster(request):
             poster.time_poster=request.POST.get('time_poster','')
             region=Region.objects.get(id=request.POST.get('region',''))
             poster.region=region
-            poster.classification=request.POST.get('classification','')          
+            poster.classification=request.POST.get('classification','')
             poster.save()
             messages.success(request,"تم التحديث بنجاح")
             return HttpResponseRedirect("/poster")
 
 
-                
+
 
 @login_required(login_url='doLogin')
 def DeletePoster(request,poster_id):
@@ -574,23 +581,31 @@ def DeletePoster(request,poster_id):
     poster.delete()
     messages.error(request, "تم الحذف بنجاح")
     return HttpResponseRedirect("/poster")
- 
+
 
 
 class SearchPosterEduResultsView(ListView):
     model = Poster
     regions = Region.objects.all(),
+    poster=Poster.objects.all()
+    num_poster = poster.filter(classification='تعليم').count()
     template_name = 'hod_template/search_posterEdu_results.html'
-    queryset = Poster.objects.filter(classification__icontains='تعليم') # new
+    queryset = Poster.objects.filter(classification__icontains='تعليم')# new
+    # num_poster = Poster.objects.filter(classification__icontains='تعليم').count()
     ordering = ['id']
     paginate_by = 6
     paginate_orphans = 1
+    # def count(request):
+    #     poster=Poster.objects.all()
+    #     num_poster = poster.filter(classification='تعليم').count()
+    #     return render(request,'search_posterEdu_results.html',{'num_poster':num_poster})
     def get_context_data(self, *args, **kwargs):
         try:
             return super(SearchPosterEduResultsView,self).get_context_data(*args,**kwargs)
         except Http404:
             self.kwargs['page'] =1
             return super(SearchPosterEduResultsView,self).get_context_data(*args,**kwargs)
+   
 
 
 class SearchPosterEnvResultsView(ListView):
@@ -781,7 +796,7 @@ def delete_comment(request,comment_id):
     comment=Comment.objects.get(id=comment_id)
     comment.delete()
     messages.error(request, "تم الحذف بنجاح")
-    return HttpResponseRedirect("/comments")  
+    return HttpResponseRedirect("/comments")
 
 
 @login_required(login_url='doLogin')
@@ -789,9 +804,9 @@ def delete_comment_user(request,comment_user_id):
     comment=Comment_User.objects.get(id=comment_user_id)
     comment.delete()
     messages.error(request, "تم الحذف بنجاح")
-    return HttpResponseRedirect("/comments")  
+    return HttpResponseRedirect("/comments")
 
-   
+
 
 
 @login_required(login_url='doLogin')

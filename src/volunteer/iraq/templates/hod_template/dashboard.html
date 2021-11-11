@@ -35,7 +35,7 @@
             </a>
         </li>
         <li class="">
-            <a href="{% url 'manage_members' %}">
+            <a href="{% url 'manage_members' user.id %}">
                 <span class="icon"><i class="fas fa-users mt-3"></i></span>
                 <span class="title nav-link mt-1">الاعضاء</span>
             </a>
@@ -75,8 +75,6 @@
 <div class="toggle">
 </div>
 <!-- ========  End Sidebar  ======== -->
-
-
 
 {% endblock %}
 <!-- /* ======== End Dashboard Page======== */ -->
