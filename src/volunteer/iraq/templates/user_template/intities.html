@@ -54,6 +54,9 @@
                     <div class="Boxshadow text-center pt-2 pb-2 background1 text-white font-size Borders4" style="height:40px;">
                         <i class="fas fa-calendar-alt ml-3" data-placement="top" title="تاريخ التأسيس"></i> {{ intity.created}}
                     </div>
+                    <div class="Boxshadow text-center mt-2 pt-2 pb-2 background1 text-white font-size Borders4" style="height:40px;">
+                        <a class="text-decoration-none text-white" href="{% url 'more_read_intities1' intity.id %}">قراءة المزيد</a>
+                    </div>
                 </div>
             </div>
             {% endfor %}

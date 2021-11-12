@@ -119,24 +119,12 @@ def Intities2(request):
 
 
 @login_required(login_url='doLogin')
-def More_Read_Intities(request):
-    region = Region.objects.all()
-    classification= Classification.objects.all()
-    intitys = Intity.objects.all().order_by('-created_at').filter()
-    paginator = Paginator(intitys, 6)
-    page = request.GET.get('page')
-    try:
-        intitys = paginator.page(page)
-    except PageNotAnInteger:
-        intitys = paginator.page(1)
-    except EmptyPage:
-        intitys = paginator.page(paginator.num_page)
+def More_Read_Intities1(request,intity_id):
+    intity=Intity.objects.get(id=intity_id)
     context = {
-        'num_intity': Intity.objects.filter().count(),
-        'intitys' : intitys,
-        'page': page,
-        'region': region,
-        'classification': classification,
+        'intity' : intity,
+        'region': Region.objects.all(),
+        'classification': Classification.objects.all(),
         'title':'معلومات المؤسسة'
     }
     return render(request, 'user_template/more_read_intities.html', context)

@@ -4,7 +4,7 @@ from volunteer import settings
 from django.conf.urls.static import static
 from django.contrib.auth import views as authviews
 from .IntitiesViews import Intities, LikeViewUser,SearchIntitiesResultsView,SearchPosterEduResultsView,SearchPosterEnvResultsView,SearchPosterHeaResultsView,SearchPosterArtResultsView,SearchPosterOthResultsView,LikeView
-from .UserViews import SearchIntitiesResultsView1,SearchPosterEduResultsView1,SearchPosterEnvResultsView1,SearchPosterHeaResultsView1,SearchPosterArtResultsView1,SearchPosterOthResultsView1,More_Read_Intities,LikeView1,LikeViewUser1
+from .UserViews import SearchIntitiesResultsView1,SearchPosterEduResultsView1,SearchPosterEnvResultsView1,SearchPosterHeaResultsView1,SearchPosterArtResultsView1,SearchPosterOthResultsView1,LikeView1,LikeViewUser1
 # from django.contrib.auth.views import LogoutView
 
 # # from .IntitiesViews import IntitiesCreateView,IntitiesUpdateView
@@ -17,11 +17,10 @@ urlpatterns = [
     path('profile/',IntitiesViews.Profile,name="profile"),
     path('profile_update/<str:user_id>', IntitiesViews.ProfileUpdate, name='profile_update'),
     path('profile_edit_admin', IntitiesViews.ProfileEdit, name='profile_edit_admin'),
-    # path('add_picture_profile',IntitiesViews.AddProfile,name="add_picture_profile"),
     path('details1/', IntitiesViews.Details, name='details1'),
     path('intities1/', IntitiesViews.Intities, name='intities1'),
     path('view_imageP/', IntitiesViews.ViewImageP, name='view_imageP'),
-    # path('more_read_intities/', IntitiesViews.More_Read_Intities, name='more_read_intities'),
+    path('more_read_intities/<str:intity_id>', IntitiesViews.More_Read_Intities, name='more_read_intities'),
     path('profile_intities/', IntitiesViews.Profile_Intities,name="profile_intities"),
     path('add_intities_save',IntitiesViews.Add_Intities_Save,name="add_intities_save"),
     path('update_intities/<str:intity_id>',IntitiesViews.Update_Intities,name='update_intities'),
@@ -73,7 +72,7 @@ urlpatterns = [
     path('profile_edit_user', UserViews.ProfileEdit, name='profile_edit_user'),
     path('details2/', UserViews.Details2, name='details2'),
     path('intities2/', UserViews.Intities2, name='intities2'),
-    path('more_read_intities1/', UserViews.More_Read_Intities, name='more_read_intities1'),
+    path('more_read_intities1/<str:intity_id>', UserViews.More_Read_Intities1, name='more_read_intities1'),
     path('search_Intities1/', SearchIntitiesResultsView1.as_view(), name='search_Intities_results1'),
     path('profile_intities1/', UserViews.Profile_Intities1,name="profile_intities1"),
 

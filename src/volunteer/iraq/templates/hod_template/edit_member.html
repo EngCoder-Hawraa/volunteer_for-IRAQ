@@ -1,83 +1,72 @@
-{% extends 'hod_template/base_template.html' %} {% load static %}
-<!-- /* ======== Start Edit Member Page ======== */ -->
-
-{% block main_content %}
-<div class="pb-5 pt-3 background4">
-    <div class="bg-white container mt-4 Boxshadow pb-5 Borders">
-        <p class="text-primary text-center font-weight-bolder pt-5">تعديل معلومات العضو</p>
+{% load static %}
+<!-- /* ======== Start Add Member Page ======== */ -->
+<!-- The Modal -->
+<div class="modal pl-3" id="addmem">
+    <div class="modal-dialog">
+        <!-- Modal Header -->
+        <div class="modal-header mt-5 float-center bg-primary border-0 Borders">
+            <button type="button" class="close text-dark" data-dismiss="modal">&times;</button>
+            <p class="modal-title text-white">اضافة عضو</p>
+        </div>
+        <!-- Modal body -->
         <!-- form start -->
-        <form role="form" action="{% url 'edit_member' %}" method="post" enctype="multipart/form-data">
-            <div class="modal-body">
+        <div class="modal-content border-0">
+            <form role="form" action="/add_member_save" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
-                <!--  -->
-                <!-- <div class="form-group">
-                    <label class="control-label float-right">المؤسسة</label>
-                    <select type="hidden" name="intity" class="col-sm-12 Boxshadow Borders4 H2 Borders7">
-                        {% for intity in intitys %}
-                            <option value="{{ intity.id }}">{{ intity }}</option>
-                        {% endfor %}    
-                    </select>
-                </div> -->
-                <div class="form-group mt-3">
-                    <label class="control-label float-right">اسم العضو</label>
-                    <input type="text" name="name" value="{{ member.name }}" class="col-sm-12 Boxshadow Borders4 H2 Borders7">
-                </div>
-                <div>
-                    <label class="control-label float-right">الجنس </label>
-                </div>
-                <div class="col-sm-12 bg-white Boxshadow mt-5 pt-3 Borders4 H2 Borders7" style="height:50px">
-                    <span>{{ member.gender }}</span>
-                    <select name="gender" class="bg-white border-0 float-left">
+                <div class="modal-body">
+                    <input type="text" name="id" value="{{user.id}}">
+                    <div class="form-group mt-3">
+                        <label class="control-label float-right">اسم العضو</label>
+                        <input type="text" name="name" class="col-sm-12 Boxshadow Borders4 H2 Borders7">
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label float-right">الجنس</label>
+                        <select type="text" name="gender" class="col-sm-12 Boxshadow Borders4 H2 Borders7">
                             {% for gender in genders %}
-                            <option value="{{ gender }}">{{ gender }}</option>
-                            {% endfor %} 
-                    </select>
-                </div>
-                <div>
-                    <label class="control-label float-right mt-3">المحافظة </label>
-                </div>
-                <div class="col-sm-12 bg-white Boxshadow mt-5 pt-3 Borders4 H2 Borders7" style="height:50px">
-                    <span>{{ member.region }}</span>
-                    <select name="region" class="bg-white border-0 float-left">
-                        {% for region in regions %}
-                            <option value="{{ region.id }}" {% if region.id == member.region_id.id %} selected {% endif %}>{{ region}}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label class="control-label float-right mt-3">الوظيفة </label>
-                    <input type="text" name="employee" value="{{ member.employee }}" class="col-sm-12 Boxshadow Borders4 H2 Borders7">
-                </div>
-                <div class="form-group">
-                    <label class="control-label float-right">رقم الهاتف </label>
-                    <input type="text" name="phone" value="{{ member.phone }}" class="col-sm-12 Boxshadow Borders4 H2 Borders7">
-                </div>
-                <div class="form-group">
-                    <label class="control-label float-right">البريد الالكتروني</label>
-                    <input type="text" name="email" value="{{ member.email }}" class="col-sm-12 Boxshadow Borders4 H2 Borders7">
-                </div>
-                <div class="form-group">
-                    <label class="control-label float-right">صورة العضو </label>
-                    <img class="mt-2 float-left mb-4" src="/media/{{ member.member_image }} " style="width:200px;height:100px;margin-right:100px">
-                    <input type="file" name="profile" class="pt-3 col-sm-12 Boxshadow Borders4 H2 Borders7">
-                </div>
-                <!-- Modal footer -->
-                <div class="row">
-                    <div class="col-sm-11 col-md-5 mr-3 ml-3 mt-2">
-                        <button type="submit" name="submit" class="text-center Borders1 bg-primary border-0 text-white Boxshadow" style="width:100%;height:45px">
-                            <i class="fas fa-check"></i> حفظ
-                        </button>
-                        <input type="hidden" value="{{ member.id }}" name="id"> {% csrf_token %}
+                                <option value="{{ gender.id }}">{{ gender }}</option>
+                            {% endfor %}
+                        </select>
                     </div>
-                    <div class="col-sm-11 col-md-5 mr-3 ml-3 mt-2">
-                        <button data-dismiss="modal" class="text-center Borders1 bg-danger border-0 text-white Boxshadow" style="width:100%;height:45px"> 
-                            <i class="fas fa-times"></i> اغلاق
-                        </button>
+                    <div class="form-group">
+                        <label class="control-label float-right">المحافظة </label>
+                        <select name="region" class="col-sm-12 Boxshadow Borders4 H2 Borders7">
+                            {% for region in regions %}
+                                <option value="{{ region.id }}">{{ region }}</option>
+                            {% endfor %}
+                        </select>
                     </div>
-                </div>
+                    <div class="form-group">
+                        <label class="control-label float-right">الوظيفة </label>
+                        <input type="text" name="employee" class="col-sm-12 Boxshadow Borders4 H2 Borders7">
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label float-right">رقم الهاتف </label>
+                        <input type="text" name="phone" class="col-sm-12 Boxshadow Borders4 H2 Borders7">
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label float-right">البريد الالكتروني</label>
+                        <input type="text" name="email" class="col-sm-12 Boxshadow Borders4 H2 Borders7">
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label float-right">صورة العضو </label>
+                        <input type="file" name="profile" class="pt-3 col-sm-12 Boxshadow Borders4 H2 Borders7">
+                    </div>
+                    <!-- Modal footer -->
+                    <div class="row">
+                        <div class="col-sm-11 col-md-5 mr-3 ml-3 mt-2">
+                            <button type="submit" name="submit" class="text-center Borders1 bg-primary border-0 text-white Boxshadow" style="width:100%;height:45px">
+                                <i class="fas fa-check"></i> حفظ
+                            </button>
+                        </div>
+                        <div class="col-sm-11 col-md-5 mr-3 ml-3 mt-2">
+                            <button data-dismiss="modal" class="text-center Borders1 bg-danger border-0 text-white Boxshadow" style="width:100%;height:45px">
+                                <i class="fas fa-times"></i> اغلاق
+                            </button>
+                        </div>
+                    </div>
+            </form>
             </div>
-        </form>
+        </div>
     </div>
 </div>
-{% endblock %}
-<!-- /* ======== End Edit Member Page ======== */ -->
+<!-- /* ======== End Add Member Page ======== */ -->

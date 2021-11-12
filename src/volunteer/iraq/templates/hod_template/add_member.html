@@ -14,6 +14,7 @@
             <form role="form" action="/add_member_save" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="modal-body">
+                    <input type="text" name="id" value="{{user.id}}">
                     <div class="form-group mt-3">
                         <label class="control-label float-right">اسم العضو</label>
                         <input type="text" name="name" class="col-sm-12 Boxshadow Borders4 H2 Borders7">
@@ -23,7 +24,7 @@
                         <select type="text" name="gender" class="col-sm-12 Boxshadow Borders4 H2 Borders7">
                             {% for gender in genders %}
                                 <option value="{{ gender.id }}">{{ gender }}</option>
-                            {% endfor %}    
+                            {% endfor %}
                         </select>
                     </div>
                     <div class="form-group">
@@ -58,7 +59,7 @@
                             </button>
                         </div>
                         <div class="col-sm-11 col-md-5 mr-3 ml-3 mt-2">
-                            <button data-dismiss="modal" class="text-center Borders1 bg-danger border-0 text-white Boxshadow" style="width:100%;height:45px"> 
+                            <button data-dismiss="modal" class="text-center Borders1 bg-danger border-0 text-white Boxshadow" style="width:100%;height:45px">
                                 <i class="fas fa-times"></i> اغلاق
                             </button>
                         </div>

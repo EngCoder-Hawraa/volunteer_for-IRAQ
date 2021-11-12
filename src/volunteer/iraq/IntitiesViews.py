@@ -43,9 +43,7 @@ from django.template import loader
 @login_required(login_url='doLogin')
 def dashboard(request):
     members=Member.objects.all()
-    # customusers=CustomUser.objects.all()
     context = {
-        # 'customusers':customusers,
         'members':members,
         'title':'dashboard',
     }
@@ -54,9 +52,7 @@ def dashboard(request):
 
 @login_required(login_url='doLogin')
 def admin_home(request):
-    # users=AdminHOD.objects.all()
     context = {
-        # 'users':users,
         'title':'الرئيسية',
     }
     return render(request,"hod_template/home_content.html",context)
@@ -72,9 +68,7 @@ def Details(request):
 
 @login_required(login_url='doLogin')
 def Profile(request):
-    # members=Member.objects.all()
     context = {
-        # 'members':members,
         'region': Region.objects.all(),
         'gender':Gender.objects.all(),
         'adminhod': AdminHOD.objects.all(),
@@ -178,15 +172,16 @@ def ViewImageP(request):
     return render(request, 'hod_template/permission.html', context)
 
 
-# @login_required(login_url='doLogin')
-# def More_Read_Intities(request):
-#     context = {
-#         'intitys' : Intity.objects.all(),
-#         'region': Region.objects.all(),
-#         'classification': Classification.objects.all(),
-#         'title':'معلومات المؤسسة'
-#     }
-#     return render(request, 'hod_template/more_read_intities.html', context)
+@login_required(login_url='doLogin')
+def More_Read_Intities(request,intity_id):
+    intity=Intity.objects.get(id=intity_id)
+    context = {
+        'intity' : intity,
+        'region': Region.objects.all(),
+        'classification': Classification.objects.all(),
+        'title':'معلومات المؤسسة'
+    }
+    return render(request, 'hod_template/more_read_intities.html', context)
 
 
 
@@ -359,7 +354,6 @@ class SearchIntitiesResultsView(ListView):
 
 @login_required(login_url='doLogin')
 def Manage_Members(request,member_id):
-    # admin = CustomUser.objects.all()
     adminhod=CustomUser.objects.get(id=member_id)
     members=adminhod.member_set.all()
     # members = Member.objects.order_by('-created_at').filter()
@@ -374,8 +368,6 @@ def Manage_Members(request,member_id):
     context = {
         'adminhod':adminhod,
         'members': members,
-        # 'admin':admin,
-        # 'intitys': intitys,
         'regions': Region.objects.all(),
         'genders': Gender.objects.all(),
         'page': page,
@@ -407,7 +399,6 @@ def Add_Member_Save(request):
             print(e)
             messages.error(request,"فشل في الاضافة")
         return HttpResponseRedirect(reverse("manage_members",kwargs={"member_id":member_id}))
-        # return HttpResponseRedirect("/manage_members")
 
 
 
@@ -451,6 +442,7 @@ def edit_member(request):
                 fs = FileSystemStorage()
                 member_img = fs.save(file.name, file)
             else:
+                try:
                     member_img=None
                     if member_img!=None:
                         member.member_image=member_img
@@ -464,12 +456,11 @@ def edit_member(request):
                     member.email=request.POST.get('email','')
                     member.save()
                     messages.success(request,"تم التعديل بنجاح")
-                    return HttpResponseRedirect("/manage_members")
-                # except Exception as e:
-                #     print(e)
-                #     messages.error(request,"فشل في التعديل")
-                # return HttpResponseRedirect("/manage_members")
-        # return HttpResponseRedirect("/manage_members")
+                    return redirect("manage_members/"+str(member.id)+"")                
+                except Exception as e:
+                    print(e)
+                    messages.error(request,"فشل في التعديل")
+                    return redirect("/manage_members"+str(member.id)+"")
 
 
 
@@ -538,7 +529,6 @@ def update_poster(request,poster_id):
             'poster':poster
         }
         return render(request,"hod_template/edit_poster.html", context)
-        # return HttpResponseRedirect("/poster")
 
 
 

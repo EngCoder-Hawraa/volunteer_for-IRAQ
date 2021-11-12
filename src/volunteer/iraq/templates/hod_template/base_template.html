@@ -32,7 +32,7 @@
     <input type="checkbox" id="check">
     <nav class="main-header navbar navbar-light Boxshadow">
         <img class="image-width image-height mr-5" src="{% static 'iraq/images/logo.png' %}" alt="Logo">
-        <button class="font-size bg-primary Borders1 nav-link ml-5 Boxshadow logout_btn text-center text-white border-0"><a href="{% url 'logout' %}">خروج</a></button>
+        <button class="bg-primary font-size Borders1 nav-link ml-5 Boxshadow logout_btn text-center text-white border-0"><a href="{% url 'logout' %}">خروج</a></button>
         <label for="check">
             <i class="fas fa-bars ml-5 mt-2" id="sidebar_btn"></i>
         </label>
@@ -49,6 +49,8 @@
     <div class="content">
         {% block main_content %} {% endblock main_content %}
         <!--  -->
+
+
     </div>
 
     <!--====== Footer =======-->
