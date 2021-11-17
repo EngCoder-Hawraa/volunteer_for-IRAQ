@@ -10,6 +10,7 @@
         height: 100vh;
         transition: .5s;
         background-color: #fff;
+        z-index: 100;
     }
     /*  .navigation:hover{*/
     /*    transition: .5s;*/
@@ -103,14 +104,8 @@
         background: #00A4ED;
         color: #fff
     }
-    footer {
-        opacity: 0;
-    }
-    #check:checked~footer {
-        opacity: 100%;
-    }
     .content {
-        display: none;
+        background-position: center;
     }
     #check:checked~.content {
         display: block;

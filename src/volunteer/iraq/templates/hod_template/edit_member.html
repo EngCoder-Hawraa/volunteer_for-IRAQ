@@ -1,72 +1,67 @@
-{% load static %}
-<!-- /* ======== Start Add Member Page ======== */ -->
-<!-- The Modal -->
-<div class="modal pl-3" id="addmem">
-    <div class="modal-dialog">
-        <!-- Modal Header -->
-        <div class="modal-header mt-5 float-center bg-primary border-0 Borders">
-            <button type="button" class="close text-dark" data-dismiss="modal">&times;</button>
-            <p class="modal-title text-white">اضافة عضو</p>
-        </div>
-        <!-- Modal body -->
-        <!-- form start -->
-        <div class="modal-content border-0">
-            <form role="form" action="/add_member_save" method="post" enctype="multipart/form-data">
-                {% csrf_token %}
-                <div class="modal-body">
-                    <input type="text" name="id" value="{{user.id}}">
-                    <div class="form-group mt-3">
-                        <label class="control-label float-right">اسم العضو</label>
-                        <input type="text" name="name" class="col-sm-12 Boxshadow Borders4 H2 Borders7">
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label float-right">الجنس</label>
-                        <select type="text" name="gender" class="col-sm-12 Boxshadow Borders4 H2 Borders7">
-                            {% for gender in genders %}
-                                <option value="{{ gender.id }}">{{ gender }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label float-right">المحافظة </label>
-                        <select name="region" class="col-sm-12 Boxshadow Borders4 H2 Borders7">
-                            {% for region in regions %}
-                                <option value="{{ region.id }}">{{ region }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label float-right">الوظيفة </label>
-                        <input type="text" name="employee" class="col-sm-12 Boxshadow Borders4 H2 Borders7">
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label float-right">رقم الهاتف </label>
-                        <input type="text" name="phone" class="col-sm-12 Boxshadow Borders4 H2 Borders7">
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label float-right">البريد الالكتروني</label>
-                        <input type="text" name="email" class="col-sm-12 Boxshadow Borders4 H2 Borders7">
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label float-right">صورة العضو </label>
-                        <input type="file" name="profile" class="pt-3 col-sm-12 Boxshadow Borders4 H2 Borders7">
-                    </div>
-                    <!-- Modal footer -->
-                    <div class="row">
-                        <div class="col-sm-11 col-md-5 mr-3 ml-3 mt-2">
-                            <button type="submit" name="submit" class="text-center Borders1 bg-primary border-0 text-white Boxshadow" style="width:100%;height:45px">
-                                <i class="fas fa-check"></i> حفظ
-                            </button>
-                        </div>
-                        <div class="col-sm-11 col-md-5 mr-3 ml-3 mt-2">
-                            <button data-dismiss="modal" class="text-center Borders1 bg-danger border-0 text-white Boxshadow" style="width:100%;height:45px">
-                                <i class="fas fa-times"></i> اغلاق
-                            </button>
-                        </div>
-                    </div>
-            </form>
+{% extends 'hod_template/base_template.html' %} {% load static %}
+<!-- /* ======== Start Edit Member Page ======== */ -->
+{% block main_content %}
+<div class="background2 pb-5 pt-5">
+    <div class="row background Boxshadow" style="margin-right:20px;margin-left:20px;border-radius:10px 10px 0px 0px">
+        <div class="col pr-5 pt-4 pb-4">تعديل معلومات العضو</div>
+    </div>
+    <div class="bg-white Boxshadow pb-5 Borders mr-4 ml-4">
+        <form role="form" action="{% url 'edit_member' %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="modal-body">
+                <input type="hidden" name="id" value="{{user.id}}">
+                <div class="form-group mt-3">
+                    <label class="control-label float-right">اسم العضو</label>
+                    <input type="text" name="name" class="col-sm-12 Boxshadow Borders4 H2 Borders7" value="{{member.name}}">
+                </div>
+                <div>
+                    <label class="control-label float-right">الجنس</label>
+                </div>
+                <div class="col-sm-12 bg-white Boxshadow mt-5 pt-3 Borders4 H2 Borders7" style="height:50px">
+                    <span>{{ member.gender }}</span>
+                    <select name="gender" class="bg-white border-0 float-left">
+                        {% for gender in genders %}
+                            <option value="{{ gender }}" {% if gender.id == member.gender_id.id %} selected {% endif %}>{{ gender}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div>
+                    <label class="control-label float-right mt-3">المحافظة </label>
+                </div>
+                <div class="col-sm-12 bg-white Boxshadow mt-5 pt-3 Borders4 H2 Borders7" style="height:50px">
+                    <span>{{ member.region }}</span>
+                    <select name="region" class="bg-white border-0 float-left">
+                        {% for region in regions %}
+                            <option value="{{ region.id }}" {% if region.id == member.region_id.id %} selected {% endif %}>{{ region}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="control-label float-right mt-3">الوظيفة </label>
+                    <input type="text" name="employee" value="{{member.employee}}" class="col-sm-12 Boxshadow Borders4 H2 Borders7">
+                </div>
+                <div class="form-group">
+                    <label class="control-label float-right">رقم الهاتف </label>
+                    <input type="text" name="phone" value="{{member.phone}}" class="col-sm-12 Boxshadow Borders4 H2 Borders7">
+                </div>
+                <div class="form-group">
+                    <label class="control-label float-right">البريد الالكتروني</label>
+                    <input type="text" name="email" value="{{member.email}}" class="col-sm-12 Boxshadow Borders4 H2 Borders7">
+                </div>
+                <div class="form-group">
+                    <label class="control-label float-right">صورة العضو </label>
+                    <img class="mt-2 float-left" src="/media/{{ member.member_image }} " style="width:200px;height:100px;margin-right:100px">
+                    <input type="file" name="profile" class="mt-2 col-sm-12 Boxshadow Borders4 H2 Borders7 pt-3">
+                </div>
+                <!-- Modal footer -->
+                <div class="mr-5 mt-5 ml-5 mb-2">
+                    <button type="submit" name="submit" class="text-center Borders1 bg-primary border-0 text-white Boxshadow" style="width:100%;height:50px">
+                        <i class="fas fa-check"></i> حفظ
+                    </button>
+                </div>
             </div>
-        </div>
+        </form>
     </div>
 </div>
-<!-- /* ======== End Add Member Page ======== */ -->
+{% endblock main_content %}
+<!-- /* ======== End Edit Member Page ======== */ -->

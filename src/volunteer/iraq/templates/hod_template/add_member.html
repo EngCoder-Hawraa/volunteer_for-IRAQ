@@ -14,14 +14,14 @@
             <form role="form" action="/add_member_save" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="modal-body">
-                    <input type="text" name="id" value="{{user.id}}">
+                    <input type="hidden" name="id" value="{{user.id}}">
                     <div class="form-group mt-3">
                         <label class="control-label float-right">اسم العضو</label>
-                        <input type="text" name="name" class="col-sm-12 Boxshadow Borders4 H2 Borders7">
+                        <input required type="text" name="name" class="col-sm-12 Boxshadow Borders4 H2 Borders7">
                     </div>
                     <div class="form-group">
                         <label class="control-label float-right">الجنس</label>
-                        <select type="text" name="gender" class="col-sm-12 Boxshadow Borders4 H2 Borders7">
+                        <select required type="text" name="gender" class="col-sm-12 Boxshadow Borders4 H2 Borders7">
                             {% for gender in genders %}
                                 <option value="{{ gender.id }}">{{ gender }}</option>
                             {% endfor %}
@@ -29,7 +29,7 @@
                     </div>
                     <div class="form-group">
                         <label class="control-label float-right">المحافظة </label>
-                        <select name="region" class="col-sm-12 Boxshadow Borders4 H2 Borders7">
+                        <select required name="region" class="col-sm-12 Boxshadow Borders4 H2 Borders7">
                             {% for region in regions %}
                                 <option value="{{ region.id }}">{{ region }}</option>
                             {% endfor %}
@@ -37,19 +37,19 @@
                     </div>
                     <div class="form-group">
                         <label class="control-label float-right">الوظيفة </label>
-                        <input type="text" name="employee" class="col-sm-12 Boxshadow Borders4 H2 Borders7">
+                        <input required type="text" name="employee" class="col-sm-12 Boxshadow Borders4 H2 Borders7">
                     </div>
                     <div class="form-group">
                         <label class="control-label float-right">رقم الهاتف </label>
-                        <input type="text" name="phone" class="col-sm-12 Boxshadow Borders4 H2 Borders7">
+                        <input required type="text" name="phone" class="col-sm-12 Boxshadow Borders4 H2 Borders7">
                     </div>
                     <div class="form-group">
                         <label class="control-label float-right">البريد الالكتروني</label>
-                        <input type="text" name="email" class="col-sm-12 Boxshadow Borders4 H2 Borders7">
+                        <input required type="text" name="email" class="col-sm-12 Boxshadow Borders4 H2 Borders7">
                     </div>
                     <div class="form-group">
                         <label class="control-label float-right">صورة العضو </label>
-                        <input type="file" name="profile" class="pt-3 col-sm-12 Boxshadow Borders4 H2 Borders7">
+                        <input required type="file" name="profile" class="pt-3 col-sm-12 Boxshadow Borders4 H2 Borders7">
                     </div>
                     <!-- Modal footer -->
                     <div class="row">

@@ -72,10 +72,10 @@ class SearchIntitiesResultsView2(ListView):
     ordering = ['id']
     paginate_by = 6
     paginate_orphans = 1
-    def get_queryset(self,*args): # new
+    def get_queryset(self,*args,**kwargs): # new
         query = self.request.GET.get('q')
         object_list = Intity.objects.filter(
-            Q(name__icontains=query)  | Q(classification__icontains=query)
+            Q(name__icontains=query)  | Q(classification__icontains=query)|Q(region__icontains=query)
         )
         try:
             return object_list
@@ -177,7 +177,7 @@ def doLogin(request):
                     elif user.user_type =="2":
                         return HttpResponseRedirect(reverse("user_home"))
                 else:
-                    messages.error(request ,  ' هناك خطأ في اسم المستخدم او كلمة المرور !')
+                    messages.error(request ,  ' هناك خطأ في البريد الالكتروني او كلمة المرور !')
             else:
                 messages.error(request ,' invalid Recaptcha please try again!')
                 return HttpResponseRedirect("doLogin")

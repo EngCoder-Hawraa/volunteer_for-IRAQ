@@ -41,28 +41,25 @@
             <div class="col text-center mt-4">
                 <a href="{% url 'poster' %}" class="pt-3 pb-3 pr-3 pl-3 text-decoration-none rounded-circle Boxshadow mr-2 text-primary" style="width:60px;height:60px;border:3px solid">
                 الكل
-            </a>
+                </a>
             </div>
-            <div class=" col text-center">
+            <div class=" col text-center mt-1">
                 <a href="{% url 'search_PosterEdu_results' %}"><img class="p-2 text-decoration-none rounded-circle Boxshadow mr-2 text-primary" style="width:60px;height:60px;border:3px solid" src="{% static 'iraq/images/Education.png' %}" alt="Education"></a>
             </div>
-            <div class="col text-center">
+            <div class="col text-center mt-1">
                 <a href="{% url 'search_PosterEnv_results' %}"><img class="p-1 text-decoration-none rounded-circle Boxshadow mr-2 text-primary" style="width:60px;height:60px;border:3px solid" src="{% static 'iraq/images/envolution.png' %}" alt="Evolution"></a>
             </div>
-            <div class="col text-center">
+            <div class="col text-center mt-1">
                 <a href="{% url 'search_PosterHea_results' %}"><img class="p-1 text-decoration-none rounded-circle Boxshadow mr-2 text-primary" style="width:60px;height:60px;border:3px solid" src="{% static 'iraq/images/health.png' %}" alt="Health"></a>
             </div>
-            <div class="col text-center">
+            <div class="col text-center mt-1">
                 <a href="{% url 'search_PosterArt_results' %}"><img class="p-1 text-decoration-none rounded-circle Boxshadow mr-2 text-primary" style="width:60px;height:60px;border:3px solid" src="{% static 'iraq/images/art.png' %}" alt="Art"></a>
             </div>
-            <div class="col text-center">
+            <div class="col text-center mt-1">
                 <a href="{% url 'search_PosterOth_results' %}"><img class="p-1 text-decoration-none rounded-circle Boxshadow mr-2 text-primary" style="width:60px;height:60px;border:3px solid" src="{% static 'iraq/images/others.png' %}" alt="Other"></a>
             </div>
         </div>
     </div>
-
-
-
 
 
     <div class="pt-2">
@@ -85,14 +82,14 @@
         {% endif %} {% endfor %} {% endif %}
     </div>
     {% if posters %} {% for poster in posters %}
-    <div class="Boxshadow text-center pb-4 bg-white" style="margin-left:10px;border-radius: 8px;margin-right:20px">
+    <div class="Boxshadow text-center pb-4 bg-white Borders2 mr-4 ml-3">
         <div class="row container mt-3 mb-5">
             <div class="col-sm-12 col-md text-center pt-4" data-placement="top" title="المكان">
                 {{ poster.place }}
             </div>
-            <div class="col-sm-12 col-md text-center pt-4" data-placement="top" title="عدد المتطوعين ">
+            <!-- <div class="col-sm-12 col-md text-center pt-4" data-placement="top" title="عدد المتطوعين ">
                 num volunteer
-            </div>
+            </div> -->
             <div class="col-sm-12 col-md text-center pt-4" data-placement="top" title="يوم التطوع ">
                 {{ poster.date_poster }}
             </div>
@@ -114,22 +111,22 @@
                 <div class="row pt-4">
                     <div class="col-sm-12 col-md-4">
                         <a class="text-decoration-none text-center" href="{% url 'comments' %}">
-                            <p class="text-primary font-weight-bold text-center" data-placement="top" title="اسم الؤسسة">{{ poster.name }}/{{poster.region}}/{{poster.classification}}</p>
+                            <p class="text-primary font-weight-bold text-center" data-placement="top" title="اسم الؤسسة">{{ poster.name }}/{{poster.classification}}</p>
                         </a>
                     </div>
                     <div class="col-sm-12 col-md-4 text-center">
-                        <small class="font-size3"><i class="text-danger font-size">نشر  منذ...</i>{{ poster.created_at|timesince}}</small>
+                        <small class="font-size3"><i class="text-danger font-size">نشر  منذ ...</i>{{ poster.created_at|timesince}}</small>
                     </div>
                 </div>
-                <p class="p-3 mb-5 float-right font-size3" style="line-height:30px;">{{ poster.posts }}</p>
+                <p class="p-3 mb-5 float-right font-size3" style="line-height:30px">{{ poster.posts }}</p>
             </div>
         </div>
     </div>
+    {% endfor %}
     <!--  -->
     {% include 'iraq/pagination.html' with page=posters %}
     <!--  -->
-
-    {% endfor %} {% else %}
+    {% else %}
     <div class="Boxshadow text-center background Borders1 mb-3 mr-4 ml-3" style="height:440px">
         <div class="m-auto">
             <div class="mt-2 mb-2">

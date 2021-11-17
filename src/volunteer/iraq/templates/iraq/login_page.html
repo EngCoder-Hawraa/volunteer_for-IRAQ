@@ -19,6 +19,7 @@
 
 <body>
     <div class="background4">
+        <p class="pt-5 pr-5"><a class="text-decoration-none text-white bg-primary pt-2 pr-3 pb-2 pl-3 Borders Boxshadow" href="{% url 'home' %}"><i class="fa fa-arrow-circle-right fa-lg"></i></a></p>
         <div class="form-group p-5 mb-5">
             {% if messages %} {% for message in messages %} {% if message.tags == 'success' %}
             <div class="alert alert-success text-center Boxshadow border-0 Borders4">{{ message }}</div>

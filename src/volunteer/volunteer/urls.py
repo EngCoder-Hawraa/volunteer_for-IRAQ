@@ -22,7 +22,7 @@ from django.urls import path, include
 from volunteer import settings
 from  iraq import views
 from iraq.views import SearchIntitiesResultsView2
-from django.contrib.auth import views as authviews
+from django.contrib.auth import views as auth_views
 from django.contrib.auth.views import LogoutView
 
 
@@ -44,12 +44,12 @@ urlpatterns = [
     path('logout', LogoutView.as_view(template_name= "iraq/logout.html"), name='logout'),
 
 
-    # path('oauth/', include('social_django.urls', namespace='social')),
+    # # path('oauth/', include('social_django.urls', namespace='social')),
     
-    # # for Reset Password
-    path('reset_password/' , authviews.PasswordResetView.as_view(template_name= "iraq/password_reset.html"), name="reset_password"),
-    path('reset_password_sent/' , authviews.PasswordResetDoneView.as_view(template_name= "iraq/password_reset_sent.html"), name="password_reset_done"),
-    path('reset/<uidb64>/<token>/' , authviews.PasswordResetConfirmView.as_view(template_name= "iraq/password_reset_form.html"), name="password_reset_confirm"),
-    path('reset_password_complete/' , authviews.PasswordResetCompleteView.as_view(template_name= "iraq/password_reset_done.html"), name="password_reset_complete"),  
+    # # # for Reset Password
+    path('reset_password/' , auth_views.PasswordResetView.as_view(template_name= "iraq/password_reset.html"), name="reset_password"),
+    path('reset_password_sent/' , auth_views.PasswordResetDoneView.as_view(template_name= "iraq/password_reset_sent.html"), name="password_reset_done"),
+    path('reset/<uidb64>/<token>/' , auth_views.PasswordResetConfirmView.as_view(template_name= "iraq/password_reset_form.html"), name="password_reset_confirm"),
+    path('reset_password_complete/' , auth_views.PasswordResetCompleteView.as_view(template_name= "iraq/password_reset_done.html"), name="password_reset_complete"),  
 
 ]+static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)+static(settings.STATIC_URL,document_root=settings.STATIC_ROOT)

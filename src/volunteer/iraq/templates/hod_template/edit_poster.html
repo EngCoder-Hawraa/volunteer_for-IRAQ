@@ -2,11 +2,16 @@
 <!-- /* ======== Start Edit Poster Page ======== */ -->
 
 {% block main_content %}
-<div class="pb-5 pt-3 background4">
-    <div class="bg-white container mt-4 Boxshadow pb-5 Borders">
-        <p class="text-primary text-center font-weight-bolder pt-5">تعديل اعلان</p>
+
+<div class="background2 pb-5 pt-5">
+    <div class="row background Boxshadow" style="margin-right:20px;margin-left:20px;border-radius:10px 10px 0px 0px">
+        <div class="col pr-5 pt-4 pb-4">تعديل الاعلان</div>
+    </div>
+    <div class="bg-white Boxshadow pb-5 Borders mr-4 ml-4">
         <form role="form" action="{% url 'edit_poster' %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
             <div class="modal-body">
+                <input type="hidden" value="{{ poster.id }}" name="id">
                 <div class="form-group mt-3">
                     <label class="control-label float-right">اسم المؤسسة</label>
                     <input type="text" class="col-sm-12 Boxshadow Borders4 H2 Borders7" name="name" value="{{poster.name}}">
@@ -48,30 +53,20 @@
                 <label class="control-label float-right">التاريخ</label>
                 <div class="col-sm-12 bg-white Boxshadow mt-5 pt-3 Borders4 H2 Borders7" style="height:50px">
                     <span>{{ poster.date_poster}}</span>
-                    <input type="date" name="date_poster" class="float-left border-0" placeholder="تاريخ الميلاد">
+                    <input type="date" required name="date_poster" class="float-left border-0" placeholder="تاريخ الميلاد">
                 </div>
-                <!-- <input type="date" class="col-sm-12 Boxshadow Borders4 H2 Borders7" name="date_poster"> -->
-                <!-- <div class="form-group">
-      <label class="control-label float-right">الوقت</label>
-      <input type="time" class="col-sm-12 Boxshadow" style="border: 1px solid #44A5E4;height:50px;border-radius:8px;" name="time_poster">
-    </div>  -->
-                <!-- Modal footer -->
-                <div class="row">
-                    <div class="col-sm-11 col-md-5 mr-5 ml-3 mt-5">
-                        <button type="submit" name="submit" class="text-center Borders1 bg-primary border-0 text-white Boxshadow" style="width:100%;height:45px">
-                    <i class="fas fa-check"></i> حفظ
-              </button>
-                        <input type="hidden" value="{{ poster.id }}" name="id"> {% csrf_token %}
-                    </div>
-                    <div class="col-sm-11 col-md-5 mr-3 ml-3 mt-5">
-                        <button data-dismiss="modal" class="text-center Borders1 bg-danger border-0 text-white Boxshadow" style="width:100%;height:45px"> 
-                  <i class="fas fa-times"></i> اغلاق
-              </button>
-                    </div>
+                <div class="mr-5 mt-5 ml-5 mb-2">
+                    <button type="submit" name="submit" class="text-center Borders1 bg-primary border-0 text-white Boxshadow" style="width:100%;height:50px">
+                        <i class="fas fa-check"></i> حفظ
+                    </button>
                 </div>
             </div>
         </form>
-        <!-- form end -->
+        <!-- <div class="ml-5 mb-2" style="margin-right:55px">
+            <button class="text-center Borders1 bg-danger border-0 text-white Boxshadow" onclick=document.location="{% url 'poster' %}" style="width:97%;height:50px">
+                <i class="fas fa-times"></i> اغلاق
+            </button>
+        </div> -->
     </div>
 </div>
 {% endblock main_content %}

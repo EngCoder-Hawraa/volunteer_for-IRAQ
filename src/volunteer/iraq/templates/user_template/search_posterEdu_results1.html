@@ -41,21 +41,21 @@
             <div class="col text-center mt-4">
                 <a href="{% url 'poster1' %}" class="pt-3 pb-3 pr-3 pl-3 text-decoration-none rounded-circle Boxshadow mr-2 text-primary" style="width:60px;height:60px;border:3px solid">
                 الكل
-            </a>
+                </a>
             </div>
-            <div class=" col text-center">
+            <div class=" col text-center mt-1">
                 <a href="{% url 'search_PosterEdu_results1' %}"><img class="p-2 text-decoration-none rounded-circle Boxshadow mr-2 text-primary" style="width:60px;height:60px;border:3px solid" src="{% static 'iraq/images/Education.png' %}" alt="Education"></a>
             </div>
-            <div class="col text-center">
+            <div class="col text-center mt-1">
                 <a href="{% url 'search_PosterEnv_results1' %}"><img class="p-1 text-decoration-none rounded-circle Boxshadow mr-2 text-primary" style="width:60px;height:60px;border:3px solid" src="{% static 'iraq/images/envolution.png' %}" alt="Evolution"></a>
             </div>
-            <div class="col text-center">
+            <div class="col text-center mt-1">
                 <a href="{% url 'search_PosterHea_results1' %}"><img class="p-1 text-decoration-none rounded-circle Boxshadow mr-2 text-primary" style="width:60px;height:60px;border:3px solid" src="{% static 'iraq/images/health.png' %}" alt="Health"></a>
             </div>
-            <div class="col text-center">
+            <div class="col text-center mt-1">
                 <a href="{% url 'search_PosterArt_results1' %}"><img class="p-1 text-decoration-none rounded-circle Boxshadow mr-2 text-primary" style="width:60px;height:60px;border:3px solid" src="{% static 'iraq/images/art.png' %}" alt="Art"></a>
             </div>
-            <div class="col text-center">
+            <div class="col text-center mt-1">
                 <a href="{% url 'search_PosterOth_results1' %}"><img class="p-1 text-decoration-none rounded-circle Boxshadow mr-2 text-primary" style="width:60px;height:60px;border:3px solid" src="{% static 'iraq/images/others.png' %}" alt="Other"></a>
             </div>
         </div>
@@ -70,14 +70,14 @@
         {% endif %} {% endfor %} {% endif %}
     </div>
     {% if object_list %} {% for poster in object_list %}
-    <div class="Boxshadow text-center pb-4 bg-white" style="margin-left:10px;border-radius: 8px;margin-right:20px">
+    <div class="Boxshadow text-center pb-4 bg-white Borders2 mr-4 ml-3">
         <div class="row container mt-3 mb-5">
             <div class="col-sm-12 col-md text-center pt-4" data-placement="top" title="المكان">
                 {{ poster.place }}
             </div>
-            <div class="col-sm-12 col-md text-center pt-4" data-placement="top" title="عدد المتطوعين ">
+            <!-- <div class="col-sm-12 col-md text-center pt-4" data-placement="top" title="عدد المتطوعين ">
                 num volunteer
-            </div>
+            </div> -->
             <div class="col-sm-12 col-md text-center pt-4" data-placement="top" title="يوم التطوع ">
                 {{ poster.date_poster }}
             </div>

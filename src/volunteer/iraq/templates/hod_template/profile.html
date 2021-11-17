@@ -1,43 +1,43 @@
 {% extends 'hod_template/base_template.html' %} {% load static %}
 <!-- /* ======== Start Profile Page ======== */ -->
+{% block custom_css %}
 
-{% block main_content %}
+<style>
+    .custom-file {
+        background-color: #6F2DBD;
+        width: 50px;
+        height: 30px;
+        position: relative;
+        margin: 0px 200px 20px 360px;
+        z-index: 1;
+    }
+    
+    .custom-file>span {
+        font-size: 12px;
+    }
+    
+    .custom-file input[type="file"] {
+        width: 100%;
+        height: 100%;
+        margin: -40px -10px 0px 30px;
+        opacity: 0;
+        border-radius: 27px;
+    }
+</style>
+{% endblock custom_css %} {% block main_content %}
 <div class="pb-5 pt-3 background4">
-    <div class="bg-white m-4 Boxshadow pb-5 Borders">
+    <div class="bg-white mt-4 mr-4 ml-3 Boxshadow pb-5 Borders">
         <form role="form" action="{% url 'profile_edit_admin' %}" method="post" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="row">
                 <div class="col-sm-6 col-md-4">
                     <p class="font-weight-bold text-primary mt-5 text-center"> الملف الشخصي</p>
-                    <img style="width:190px;height:200px;border:10px solid white;margin-right:25%" class="mt-5 bg-primary rounded-circle Boxshadow" src="/media/{{user.adminhod.profile_pic}}" alt="الصورة الشخصية">
-                    <div style="margin-right:46%;margin-top:-36px">
-                        <span class="Boxshadow border-0 row badge badge-warning rounded-circle text-white" style="width:30px;height:30px" data-placement="top">
-                        <i data-toggle="modal" data-target="#profile_pic" class="dd fas fa-camera fa-lg mt-1" data-placement="top" title="تعديل صورة الملف الشخصي"></i>
+                    <img style="width:50%;height:170px;border:9px solid white;margin-right:25%" class="mt-sm-2 mt-md-5 bg-primary rounded-circle Boxshadow" src="/media/{{user.adminhod.profile_pic}}" alt="الصورة الشخصية">
+                    <div style="margin-top:-34px">
+                        <span class="Boxshadow border-0 row badge badge-warning rounded-circle text-white custom-file" style="width:31px;height:31px;margin-right:46%;" data-placement="top">
+                            <i  data-target="#profile_pic" class="dd fas fa-camera fa-lg mr-1 mt-1" data-placement="top" title="تعديل صورة الملف الشخصي"></i>
+    					    <input style="margin-right:-50px;margin-top:0px;opacity:0" type="file" name="profile" />
                         </span>
-                    </div>
-                    <!-- The Modal -->
-                    <div class="modal" id="profile_pic">
-                        <div class="modal-dialog">
-                            <div class="modal-content border-0">
-                                <!-- Modal Header -->
-                                <div class="modal-header bg-primary Boxshadow">
-                                    <button type="button" class="close" data-dismiss="modal" style="color:white">&times;</button>
-                                    <p class="modal-title text-center font-weight-bolder" style="font-size:15px;color:white">تعديل الملف الشخصي</p>
-                                </div>
-
-                                <!-- Modal body -->
-                                <div class="modal-body">
-                                    <div class="form-group">
-                                        <img class="mb-4" src="/media/{{user.adminhod.profile_pic}}" style="width:200px;height:100px;margin-right:100px">
-                                        <label class="control-label float-right">صورة الملف الشخصي</label>{{user.adminhod.profile_pic}}
-                                        <input type="file" name="profile" class="col-sm-12 Boxshadow pt-3" style="border: 1px solid #44A5E4;height:50px;border-radius:8px;">
-                                        <button type="menu" class="bg-primary text-center font-weight-bolder text-white m-4 Borders1 border-0 font-size" style="width:204px;height:41px">
-                                            <i class="fas fa-check"></i> حفظ
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                     <!-- <h5 class="mt-5 text-center" style="margin-right:120px">{{user.username}}</h5> -->
                 </div>
@@ -58,7 +58,7 @@
                         <div class="row">
                             <div class="col-sm-11 col-lg-6">
                                 <label class="mr-4 font-size3 text-dark font-weight-bold mt-3">رقم الهاتف</label>
-                                <input style="height:50px" type="tel" class="mr-4 mt-2 form-control border-0 Boxshadow bg-dark text-white" name="phone" value="{{ user.adminhod.phone }}">
+                                <input placeholder="964-7000000000" style="height:50px" type="tel" class="mr-4 mt-2 form-control border-0 Boxshadow bg-dark text-white" name="phone" value="{{ user.adminhod.phone }}">
                             </div>
                             <div class="col-sm-11 col-lg-6">
                                 <label class="mr-4 font-size3 text-dark font-weight-bold mt-3">المحافظة</label>
@@ -77,7 +77,7 @@
                                 <label class="mr-4 font-size3 text-dark font-weight-bold mt-3">تاريخ الميلاد</label>
                                 <div class="mr-4 pt-3 form-control border-0 Boxshadow bg-dark text-white mt-2" style="height:50px">
                                     <span>{{ user.adminhod.birth }}</span>
-                                    <input type="date" class="float-left border-0 bg-dark text-white" placeholder="تاريخ الميلاد" name="birth">
+                                    <input required type="date" class="float-left border-0 bg-dark text-white" placeholder="تاريخ الميلاد" name="birth">
                                 </div>
                             </div>
                             <div class="col-sm-11 col-lg-6">
@@ -103,7 +103,7 @@
                             </div>
                         </div>
                         <input type="hidden" value="{{ user.id }}" name="user_id">
-                        <button style="width:100%;height:60px" type="submit" class="mt-5 mb-5 mr-5 font-weight-bolder border-0 text-center text-white Borders1 bg-primary">حفظ/button>
+                        <button style="width:100%;height:60px" type="submit" class="mt-5 mb-5 mr-5 font-weight-bolder border-0 text-center text-white Borders1 bg-primary">حفظ</button>
                     </div>
                 </div>
             </div>
@@ -117,10 +117,5 @@
         {% endif %} {% endfor %} {% endif %}
     </div>
 </div>
-
-
-
-
-
 {% endblock main_content %}
-<!-- /* ======== End Profile Page ======== */ -->
+<!-- /* ======== End Profile Profile Page  ======== */ -->

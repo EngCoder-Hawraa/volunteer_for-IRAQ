@@ -68,8 +68,8 @@ urlpatterns = [
 # # url Path For user
     path('user_home',UserViews.user_home,name="user_home"),
     path('profile1',UserViews.Profile1,name="profile1"),
-    path('profile_update1/<str:user_id>', UserViews.ProfileUpdate, name='profile_update1'),
-    path('profile_edit_user', UserViews.ProfileEdit, name='profile_edit_user'),
+    path('profile_update1/<str:user_id>', UserViews.ProfileUpdate1, name='profile_update1'),
+    path('profile_edit_user', UserViews.ProfileEdit1, name='profile_edit_user'),
     path('details2/', UserViews.Details2, name='details2'),
     path('intities2/', UserViews.Intities2, name='intities2'),
     path('more_read_intities1/<str:intity_id>', UserViews.More_Read_Intities1, name='more_read_intities1'),

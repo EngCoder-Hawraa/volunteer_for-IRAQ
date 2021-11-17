@@ -153,7 +153,25 @@ def Intities(request):
     }
     return render(request, 'hod_template/intities.html', context)
 
+class SearchIntitiesResultsView(ListView):
+    model = Intity
+    model = Region
+    model = Classification
+    template_name = 'hod_template/search_intities_results.html'
 
+    ordering = ['id']
+    paginate_by = 6
+    paginate_orphans = 1
+    def get_queryset(self,*args,**kwargs): # new
+        query = self.request.GET.get('q')
+        object_list = Intity.objects.filter(
+            Q(name__icontains=query)  | Q(classification__icontains=query)|Q(region__icontains=query)
+        )
+        try:
+            return object_list
+        except Http404:
+            self['page'] =1
+            return object_list
 
 
 
@@ -284,40 +302,6 @@ def Edit_Intities_Save(request):
             intity.save()
             messages.success(request,"تم التحديث بنجاح")
             return HttpResponseRedirect("update_intities/"+str(intity.id)+"")
-
-
-
-
-
-class SearchIntitiesResultsView(ListView):
-    model = Intity
-    model = Region
-    model = Classification
-    template_name = 'hod_template/search_intities_results.html'
-
-    ordering = ['id']
-    paginate_by = 6
-    paginate_orphans = 1
-    def get_queryset(self,*args): # new
-        query = self.request.GET.get('q')
-        object_list = Intity.objects.filter(
-            Q(name__icontains=query)  | Q(classification__icontains=query)
-        )
-        try:
-            return object_list
-        except Http404:
-            self['page'] =1
-            return object_list
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -576,9 +560,9 @@ def DeletePoster(request,poster_id):
 
 class SearchPosterEduResultsView(ListView):
     model = Poster
-    regions = Region.objects.all(),
-    poster=Poster.objects.all()
-    num_poster = poster.filter(classification='تعليم').count()
+    # regions = Region.objects.all(),
+    # poster=Poster.objects.all()
+    # num_poster = poster.filter(classification='تعليم').count()
     template_name = 'hod_template/search_posterEdu_results.html'
     queryset = Poster.objects.filter(classification__icontains='تعليم')# new
     # num_poster = Poster.objects.filter(classification__icontains='تعليم').count()

@@ -46,7 +46,7 @@ def Profile1(request):
 
 
 @login_required(login_url='do_login')
-def ProfileUpdate(request,user_id):
+def ProfileUpdate1(request,user_id):
     user=People.objects.get(admin=user_id)
     if user==None:
         return HttpResponse("Intity Not Found")
@@ -55,13 +55,14 @@ def ProfileUpdate(request,user_id):
 
 
 
+
 @login_required(login_url='doLogin')
-def ProfileEdit(request):
+def ProfileEdit1(request):
     if request.method!="POST":
         return HttpResponse("<h2>Method Now Allowed</h2>")
     else:
         user_id=request.POST.get('user_id')
-        username =request.POST.get('username')
+        username =request.POST.get('user')
         email=request.POST.get('email')
         try:
             user=CustomUser.objects.get(id=user_id)
@@ -77,18 +78,21 @@ def ProfileEdit(request):
                     profile_pic=None
             if profile_pic!=None:
                 people.profile_pic= profile_pic
-                people.phone=request.POST.get('phone','')
-                people.region=request.POST.get('region','')
-                people.birth=request.POST.get('birth','')
-                people.gender=request.POST.get('gender','')
-                people.employee=request.POST.get('employee','')
-                people.facebook=request.POST.get('facebook','')
-                people.save()
+            people.phone=request.POST.get('phone','')
+            people.region=request.POST.get('region','')
+            people.birth=request.POST.get('birth','')
+            people.gender=request.POST.get('gender','')
+            people.employee=request.POST.get('employee','')
+            people.facebook=request.POST.get('facebook','')
+            people.save()
             messages.success(request,",تم التعديل بنجاح")
             return HttpResponseRedirect(reverse("profile_update1",kwargs={"user_id":user_id}))
         except:
             messages.error(request,"لا يوجد الملف الشخصي")
             return HttpResponseRedirect(reverse("profile1",kwargs={"user_id":user_id}))
+
+
+
 
 
 
@@ -139,10 +143,10 @@ class SearchIntitiesResultsView1(ListView):
     ordering = ['id']
     paginate_by = 6
     paginate_orphans = 1
-    def get_queryset(self,*args): # new
+    def get_queryset(self,*args,**kwargs): # new
         query = self.request.GET.get('q')
         object_list = Intity.objects.filter(
-            Q(name__icontains=query)  | Q(classification__icontains=query)
+            Q(name__icontains=query)  | Q(classification__icontains=query)|Q(region__icontains=query)
         )
         try:
             return object_list
@@ -224,7 +228,7 @@ class SearchPosterEnvResultsView1(ListView):
 class SearchPosterHeaResultsView1(ListView):
     model = Poster
     template_name = 'user_template/search_posterHea_results1.html'
-    queryset = Poster.objects.filter(classification__icontains='صحي') # new
+    queryset = Poster.objects.filter(classification__icontains='صحة') # new
     ordering = ['id']
     paginate_by = 6
     paginate_orphans = 1

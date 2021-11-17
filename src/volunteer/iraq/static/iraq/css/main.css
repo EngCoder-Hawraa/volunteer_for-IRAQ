@@ -187,6 +187,10 @@ html::-webkit-scrollbar-track {
     margin: 25px 20px 20px 20px;
 }
 
+.content2 {
+    background-position: center;
+}
+
 
 /* ======== End Myframework ======== */
 
@@ -245,7 +249,7 @@ nav ul li a:hover,
 
 .user_card {
     padding: 40px 40px 0px 40px;
-    margin: 150px 0px;
+    margin: 0px 0px 50px 0px;
 }
 
 .login_btn:focus {
@@ -351,10 +355,6 @@ visibility: hidden;
 
 @media (max-width: 576px) {
     /* ======== Start About ======== */
-    .content {
-        margin-right: 576px;
-        background-position: center;
-    }
     #col {
         width: 100%;
     }
