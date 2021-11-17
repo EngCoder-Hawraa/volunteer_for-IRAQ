@@ -33,7 +33,7 @@
                         <label class="float-right mt-3">تاريخ التأسيس</label>
                         <div class="col-sm-12 float-right Boxshadow H2 pt-3 Borders7 Borders4">
                             <span>{{ user.intity.created}}</span>
-                            <input class="bg-white border-0 float-left" type="date" placeholder="اكتب هنا" name="created" value="{{intity.created}}">
+                            <input required class="bg-white border-0 float-left" type="date" placeholder="اكتب هنا" name="created" value="{{intity.created}}">
                         </div>
                     </div>
                     <div class="form-group">
@@ -49,7 +49,7 @@
                     </div>
                     <div class="form-group">
                         <label class="control-label float-right mt-3">اعمالها</label>
-                        <textarea class="col-sm-12 Boxshadow Borders4 Borders7" rows="3" name="works" placeholder="اكتب ..."> 
+                        <textarea class="col-sm-12 Boxshadow Borders4 Borders7" rows="3" name="works" placeholder="اكتب ...">
                             {{user.intity.works}}
                         </textarea>
                     </div>
@@ -76,7 +76,7 @@
                             <input type="hidden" value="{{ intity.id }}" name="id"> {% endfor %}
                         </div>
                         <div class="col-sm-11 col-md-5 mr-3 ml-3 mt-2">
-                            <button data-dismiss="modal" class="text-center Borders1 bg-danger border-0 text-white Boxshadow" style="width:100%;height:45px"> 
+                            <button data-dismiss="modal" class="text-center Borders1 bg-danger border-0 text-white Boxshadow" style="width:100%;height:45px">
                                 <i class="fas fa-times"></i> اغلاق
                             </button>
                         </div>

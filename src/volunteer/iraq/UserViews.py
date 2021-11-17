@@ -292,7 +292,7 @@ def Send_Notification(request):
             region=Region.objects.get(id=request.POST.get('region',''))
             numvolunteer=NumVolunteer(name=request.POST.get('name',''),age=request.POST.get('age',''),gender=request.POST.get('gender',''),employee=request.POST.get('employee',''),volunteer_image=volunteer_img,region=region)
             numvolunteer.save()
-            messages.success(request,"تم الاضافة بنجاح")
+            messages.success(request,"تم الارسال بنجاح")
         except Exception as e:
             print(e)
             messages.error(request,"فشل في ارسال الاشعار")
