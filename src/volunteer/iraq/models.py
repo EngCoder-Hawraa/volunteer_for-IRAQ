@@ -202,7 +202,7 @@ class Member(models.Model):
    
    
 class Poster(models.Model):
-    # admin = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    admin=models.ForeignKey(CustomUser,on_delete=models.CASCADE)
     name=models.CharField(max_length=255)
     region=models.ForeignKey(Region,on_delete=models.CASCADE)
     place=models.CharField(max_length=255)
@@ -222,6 +222,7 @@ class Poster(models.Model):
     #     return self.admin
 
 class NumVolunteer(models.Model):
+    n_intity=models.CharField(max_length=255)
     name=models.CharField(max_length=255)
     age = models.PositiveIntegerField(null=True, blank=True)
     # age=models.IntegerField()

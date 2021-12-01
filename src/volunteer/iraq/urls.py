@@ -29,6 +29,7 @@ urlpatterns = [
     path('search_Intities/', SearchIntitiesResultsView.as_view(), name='search_Intities_results'),
 
     path('poster/', IntitiesViews.Declaration, name='poster'),
+    path('my_poster/<str:poster_id>', IntitiesViews.my_declaration, name='my_poster'),
     path('search_PosterEdu_results/', SearchPosterEduResultsView.as_view(), name='search_PosterEdu_results'),
     path('search_PosterEnv_results/', SearchPosterEnvResultsView.as_view(), name='search_PosterEnv_results'),
     path('search_PosterHea_results/', SearchPosterHeaResultsView.as_view(), name='search_PosterHea_results'),
@@ -56,6 +57,8 @@ urlpatterns = [
     path('update_member/<str:member_id>' , IntitiesViews.update_member, name='update_member'),
     path('edit_member' , IntitiesViews.edit_member, name='edit_member'),
     path('delete_member/<str:member_id>' , IntitiesViews.delete_member, name='delete_member'),
+    path('deletes' , IntitiesViews.deletes, name='deletes'),
+    
 
 
 

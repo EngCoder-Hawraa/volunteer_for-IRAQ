@@ -117,7 +117,7 @@ def ProfileEdit(request):
             adminhod.employee=request.POST.get('employee','')
             adminhod.facebook=request.POST.get('facebook','')
             adminhod.save()
-            messages.success(request,",تم التعديل بنجاح")
+            messages.success(request,"تم التعديل بنجاح")
             return HttpResponseRedirect(reverse("profile_update",kwargs={"user_id":user_id}))
         except:
             messages.error(request,"لا يوجد الملف الشخصي")
@@ -135,7 +135,7 @@ def Intities(request):
     region = Region.objects.all()
     classification= Classification.objects.all()
     intitys = Intity.objects.all().order_by('-created_at')
-    paginator = Paginator(intitys, 6)
+    paginator = Paginator(intitys, 12)
     page = request.GET.get('page')
     try:
         intitys = paginator.page(page)
@@ -160,7 +160,7 @@ class SearchIntitiesResultsView(ListView):
     template_name = 'hod_template/search_intities_results.html'
 
     ordering = ['id']
-    paginate_by = 6
+    paginate_by = 12
     paginate_orphans = 1
     def get_queryset(self,*args,**kwargs): # new
         query = self.request.GET.get('q')
@@ -279,18 +279,21 @@ def Edit_Intities_Save(request):
         if intity==None:
             return HttpResponse("<h2>المؤسسة غير موجودة</h2>")
         else:
-            if request.FILES.get('profile1') and request.FILES.get('profile2'):
+            if request.FILES.get('profile1'):
                 file = request.FILES['profile1']
                 fs = FileSystemStorage()
                 intities_pic = fs.save(file.name, file)
+            else:
+                intities_pic=None
+            if request.FILES.get('profile2'):
                 file1 = request.FILES['profile2']
                 fs = FileSystemStorage()
                 permission = fs.save(file1.name, file1)
             else:
-                intities_pic=None
                 permission=None
-            if (intities_pic!=None and permission!=None):
-                intity.intities_picture = intities_pic
+            if (intities_pic!=None):
+                intity.intities_pic = intities_pic
+            if ( permission!=None):
                 intity.permission=permission
             user =request.POST.get('user','')
             intity.name=request.POST.get('name','')
@@ -379,6 +382,7 @@ def Add_Member_Save(request):
             member_image=member_img,region=region,gender=gender,admin=request.user)
             member.save()
             messages.success(request,"تم الاضافة بنجاح")
+            return HttpResponseRedirect(reverse("manage_members",kwargs={"member_id":member_id}))
         except Exception as e:
             print(e)
             messages.error(request,"فشل في الاضافة")
@@ -389,11 +393,31 @@ def Add_Member_Save(request):
 @login_required(login_url='doLogin')
 def delete_member(request,member_id):
     member=Member.objects.get(id=member_id)
-    member.delete()
-    messages.error(request, "تم الحذف بنجاح")
-    return HttpResponseRedirect("/manage_members",{'member':member})
+    if member==None:
+        return HttpResponse("Member Not Found")
+    else:
+        context = {
+        'regions': Region.objects.all(),
+        'genders': Gender.objects.all(),
+        'intitys':Intity.objects.all(),
+        'member':member,
+        }
+        return render(request,"hod_template/delete_member.html", context)
 
-
+   
+@login_required(login_url='doLogin')
+def deletes(request):
+    if request.method!="POST":
+        return HttpResponse("<h2>Method Not Allowed</h2>")
+    else:
+        member=Member.objects.get(id=request.POST.get('id',''))
+        member.delete()
+        members=CustomUser.objects.get(id=request.POST.get('user_id',''))
+        messages.error(request, "تم الحذف بنجاح")
+        return HttpResponseRedirect("manage_members/"+str(members.id)+"")
+    
+    
+    
 @login_required(login_url='doLogin')
 def update_member(request,member_id):
     member=Member.objects.get(id=member_id)
@@ -411,42 +435,41 @@ def update_member(request,member_id):
 
 
 
-
 @login_required(login_url='doLogin')
 def edit_member(request):
     if request.method!="POST":
         return HttpResponse("<h2>Method Not Allowed</h2>")
     else:
+        members=CustomUser.objects.get(id=request.POST.get('user_id',''))
         member=Member.objects.get(id=request.POST.get('id',''))
         if member==None:
             return HttpResponse("<h2>Poster Not Found</h2>")
         else:
-            if request.FILES.get('profile')!=None:
-                file = request.FILES['profile']
-                fs = FileSystemStorage()
-                member_img = fs.save(file.name, file)
-            else:
-                try:
+            try:
+                if request.FILES.get('profile')!=None:
+                    file = request.FILES['profile']
+                    fs = FileSystemStorage()
+                    member_img = fs.save(file.name, file)
+                else:
                     member_img=None
-                    if member_img!=None:
-                        member.member_image=member_img
-                    member.admin =request.user
-                    member.name=request.POST.get('name','')
-                    member.gender=request.POST.get('gender','')
-                    region=Region.objects.get(id=request.POST.get('region',''))
-                    member.region=region
-                    member.employee=request.POST.get('employee','')
-                    member.phone=request.POST.get('phone','')
-                    member.email=request.POST.get('email','')
-                    member.save()
-                    messages.success(request,"تم التعديل بنجاح")
-                    return redirect("manage_members/"+str(member.id)+"")                
-                except Exception as e:
-                    print(e)
-                    messages.error(request,"فشل في التعديل")
-                    return redirect("/manage_members"+str(member.id)+"")
-
-
+                if member_img!=None:
+                    member.member_image=member_img
+                member.admin =request.user
+                member.name=request.POST.get('name','')
+                member.gender=request.POST.get('gender','')
+                region=Region.objects.get(id=request.POST.get('region',''))
+                member.region=region
+                member.employee=request.POST.get('employee','')
+                member.phone=request.POST.get('phone','')
+                member.email=request.POST.get('email','')
+                member.save()
+                messages.success(request,"تم التعديل بنجاح")
+                return HttpResponseRedirect("manage_members/"+str(members.id)+"")
+            except Exception as e:
+                print(e)
+                messages.error(request,"فشل في التعديل")
+                return HttpResponseRedirect("manage_members/"+str(members.id)+"")
+                    
 
 
 @login_required(login_url='doLogin')
@@ -474,7 +497,31 @@ def Declaration(request):
 
 
 
-
+@login_required(login_url='doLogin')
+def my_declaration(request,poster_id):
+    adminhod=CustomUser.objects.get(id=poster_id)
+    posters=adminhod.poster_set.all()
+    regions = Region.objects.all()
+    # posters=Poster.objects.order_by('-created_at')
+    classifications= Classification.objects.all()
+    paginator = Paginator(posters, 6)
+    page = request.GET.get('page')
+    try:
+        posters = paginator.page(page)
+    except PageNotAnInteger:
+        posters = paginator.page(1)
+    except EmptyPage:
+        posters = paginator.page(paginator.num_page)
+    context = {
+        'adminhod':adminhod,
+        'posters': posters,
+        'regions': regions,
+        'page': page,
+        'num_poster': Poster.objects.filter().count(),
+        'classifications': classifications,
+        'title':'الاعلانات',
+    }
+    return render(request, 'hod_template/my_poster.html', context)
 
 
 
@@ -489,15 +536,18 @@ def Save_Poster(request):
         fs=FileSystemStorage()
         poster_img=fs.save(file.name,file)
         try:
+            poster_id=request.POST.get('id')
             region=Region.objects.get(id=request.POST.get('region',''))
             classification=Classification.objects.get(id=request.POST.get('classification',''))
-            poster = Poster(name=request.POST.get('name',''),place=request.POST.get('place',''),posts=request.POST.get('posts',''),date_poster=request.POST.get('date_poster',''),poster_image=poster_img,region=region, classification=classification)
+            poster = Poster(name=request.POST.get('name',''),place=request.POST.get('place',''),posts=request.POST.get('posts',''),date_poster=request.POST.get('date_poster',''),poster_image=poster_img,region=region, classification=classification,admin=request.user)
             poster.save()
             messages.success(request,"تم الاضافة بنجاح")
+            return HttpResponseRedirect("/poster")
         except Exception as e:
             print(e)
             messages.error(request,"فشل في الاضافة")
-        return HttpResponseRedirect("/poster")
+            return HttpResponseRedirect("/poster")
+
 
 
 
@@ -579,7 +629,7 @@ class SearchPosterEduResultsView(ListView):
         except Http404:
             self.kwargs['page'] =1
             return super(SearchPosterEduResultsView,self).get_context_data(*args,**kwargs)
-   
+
 
 
 class SearchPosterEnvResultsView(ListView):
@@ -680,7 +730,7 @@ def AddVolunteer(request):
         try:
             region=Region.objects.get(id=request.POST.get('region',''))
             gender=Gender.objects.get(id=request.POST.get('gender',''))
-            numvolunteer=NumVolunteer(name=request.POST.get('name',''),age=request.POST.get('age',''),employee=request.POST.get('employee',''),volunteer_image=volunteer_img,region=region,gender=gender)
+            numvolunteer=NumVolunteer(n_intity=request.POST.get('name_intity',''),name=request.POST.get('name',''),age=request.POST.get('age',''),employee=request.POST.get('employee',''),volunteer_image=volunteer_img,region=region,gender=gender)
             numvolunteer.save()
             messages.success(request,"تم الاضافة بنجاح")
         except Exception as e:

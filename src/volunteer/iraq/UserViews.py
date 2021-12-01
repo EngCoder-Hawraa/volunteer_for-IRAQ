@@ -102,7 +102,7 @@ def Intities2(request):
     region = Region.objects.all()
     classification= Classification.objects.all()
     intitys = Intity.objects.all().order_by('-created_at')
-    paginator = Paginator(intitys, 6)
+    paginator = Paginator(intitys, 12)
     page = request.GET.get('page')
     try:
         intitys = paginator.page(page)
@@ -141,7 +141,7 @@ class SearchIntitiesResultsView1(ListView):
     template_name = 'user_template/search_intities_results.html'
 
     ordering = ['id']
-    paginate_by = 6
+    paginate_by = 12
     paginate_orphans = 1
     def get_queryset(self,*args,**kwargs): # new
         query = self.request.GET.get('q')
@@ -290,7 +290,8 @@ def Send_Notification(request):
         volunteer_img=fs.save(file.name,file)
         try:
             region=Region.objects.get(id=request.POST.get('region',''))
-            numvolunteer=NumVolunteer(name=request.POST.get('name',''),age=request.POST.get('age',''),gender=request.POST.get('gender',''),employee=request.POST.get('employee',''),volunteer_image=volunteer_img,region=region)
+            gender=Gender.objects.get(id=request.POST.get('gender',''))
+            numvolunteer=NumVolunteer(n_intity=request.POST.get('name_intity',''),name=request.POST.get('name',''),age=request.POST.get('age',''),employee=request.POST.get('employee',''),volunteer_image=volunteer_img,region=region,gender=gender)
             numvolunteer.save()
             messages.success(request,"تم الارسال بنجاح")
         except Exception as e:
